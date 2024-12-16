@@ -1,0 +1,2 @@
+2024-12-13 11:11:49.641535 - Erreur : Impossible de lire la vidéo.
+2024-12-13 14:13:08.729530 - Erreur : Sélection de la ROI nécessaire.
