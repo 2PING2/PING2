@@ -1,8 +1,12 @@
 #include <unity.h>
 #define EVERYTHING_PUBLIC
-#include "PING.hpp"
-// #include "class/BeamSwitch.cpp"
+#include "BeamSwitch.hpp"
+#include "config.h"
 
+BeamSwitch b1(P1_BEAM_R_PIN);
+BeamSwitch b2(P2_BEAM_R_PIN);
+BeamSwitch b3(P3_BEAM_R_PIN);
+BeamSwitch b4(P4_BEAM_R_PIN);
 
 /*
     mesure du temps d'activation : on allume l'émetteur et on mesure le temps que met le récepteur à détecter le signal
@@ -32,11 +36,7 @@ unsigned long start = 0, t = 0;
 
 void test_init()
 {
-    BeamSwitch::setup_common_emitter();
-    PING::player1.beamSwitch.setup();
-    PING::player2.beamSwitch.setup();
-    PING::player3.beamSwitch.setup();
-    PING::player4.beamSwitch.setup();
+    BeamSwitch::setup();
 
     delay(100);
 
@@ -55,18 +55,19 @@ void test_beamSwitch_emit()
     do
     {
         t = esp_timer_get_time() - start;
-        if (PING::player1.beamSwitch.check())
+        if (b1.getState())
             dt[0] = t;
-        if (PING::player2.beamSwitch.check())
+        if (b2.getState())
             dt[1] = t;
-        if (PING::player3.beamSwitch.check())
+        if (b3.getState())
             dt[2] = t;
-        if (PING::player4.beamSwitch.check())
+        if (b4.getState())
             dt[3] = t;
         
         if (dt[0]>0 && dt[1]>0 && dt[2]>0 && dt[3]>0)
             break;
-
+        
+        vTaskDelay(1);
     } while (t < 500000); // 500ms of timeout
 
 
@@ -89,18 +90,18 @@ void test_beamSwitch_stopEmit()
     do
     {
         t = esp_timer_get_time()-start;
-        if (!PING::player1.beamSwitch.check())
+        if (!b1.getState())
             dt[0] = t;
-        if (!PING::player2.beamSwitch.check())
+        if (!b2.getState())
             dt[1] = t;
-        if (!PING::player3.beamSwitch.check())
+        if (!b3.getState())
             dt[2] = t;
-        if (!PING::player4.beamSwitch.check())
+        if (!b4.getState())
             dt[3] = t;
-        
         if (dt[0]>0 && dt[1]>0 && dt[2]>0 && dt[3]>0)
             break;
 
+        vTaskDelay(1);
     } while (t < 500000); // 500ms of timeout
 
 
@@ -121,6 +122,7 @@ void setup()
     RUN_TEST(test_beamSwitch_emit);
     RUN_TEST(test_beamSwitch_stopEmit);
     UNITY_END();
+    
 }
 
 void loop()

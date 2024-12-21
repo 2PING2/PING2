@@ -1,6 +1,5 @@
 #include "Ping.hpp"
 
-TaskHandle_t PING::beamSwitch_task_handle;
 TaskHandle_t PING::solenoid_overtemp_task_handle;
 
 
@@ -10,18 +9,6 @@ Player PING::player3 = Player(P3_STEP_PIN, P3_DIR_PIN, TMC3_ADDRESS, P3_SOLENOID
 Player PING::player4 = Player(P4_STEP_PIN, P4_DIR_PIN, TMC4_ADDRESS, P4_SOLENOID_PIN, P4_BEAM_R_PIN);
 
 RaspComManagement PING::raspComManager = RaspComManagement(RASP_BAUD_RATE);
-
-void PING::beamSwitch_task(void *pvParameters)
-{
-    for (;;)
-    {
-        PING::player1.beamSwitch.check();
-        PING::player2.beamSwitch.check();
-        PING::player3.beamSwitch.check();
-        PING::player4.beamSwitch.check();
-        vTaskDelay(TASK_BEAM_CHECK_DELAY_MS / portTICK_PERIOD_MS);
-    }
-}
 
 void PING::solenoid_overtemp_task(void *pvParameters)
 {
@@ -39,22 +26,12 @@ void PING::solenoid_overtemp_task(void *pvParameters)
 void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
-    BeamSwitch::setup_common_emitter();
+    BeamSwitch::setup();
     raspComManager.setup();
     PING::player1.setup();
     PING::player2.setup();
     PING::player3.setup();
     PING::player4.setup();
-
-    xTaskCreatePinnedToCore(
-        PING::beamSwitch_task,         /* Function to implement the task */
-        "beamSwitch_task",             /* Name of the task */
-        10000,                                /* Stack size in words */
-        NULL,                                 /* Task input parameter */
-        TASK_BEAM_CHECK_PRIORITY,          /* Priority of the task */
-        &PING::beamSwitch_task_handle, /* Task handle. */
-        TASK_BEAM_CHECK_CORE               /* Core where the task should run */
-    );
 
     xTaskCreatePinnedToCore(
         PING::solenoid_overtemp_task,         /* Function to implement the task */
