@@ -9,7 +9,7 @@ class RaspComManagement
 {
   
 public:
-    RaspComManagement(int txPin, int rxPin, int baudRate);
+    RaspComManagement(int baudRate);
     ~RaspComManagement();
 
     void setup();

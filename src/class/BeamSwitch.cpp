@@ -1,57 +1,52 @@
 #include "BeamSwitch.hpp"
 
-IRsend BeamSwitch::emitter = IRsend(BEAM_T_PIN);
-bool BeamSwitch::emit = true;
-int64_t BeamSwitch::lastEmitTime = 0;
-TaskHandle_t BeamSwitch::emit_task_handle;
-uint16_t BeamSwitch::rawSignal[] = {300, 700};  // Un signal de X µs on, Y µs off
+bool BeamSwitch::emit = false;
 
-
-void BeamSwitch::emit_task(void *pvParameters)
+BeamSwitch::BeamSwitch(int beamSwitchRPin) : beamSwitchRPin(beamSwitchRPin)
 {
-    for (;;)
-    {
-        if (emit)
-        {
-            // emitter.sendRaw(rawSignal, 2, 38);  // 38kHz
-            emitter.sendNEC(0x20DF10EF, 38);
-            lastEmitTime = esp_timer_get_time();
-        }
-        vTaskDelay(TASK_BEAM_EMITTER_DELAY_MS / portTICK_PERIOD_MS);  // Short delay for timing
-    }
 }
+
 
 void BeamSwitch::setup_common_emitter()
 {
-    emitter.begin();           // Start the IR LED
-    xTaskCreatePinnedToCore (
-    BeamSwitch::emit_task,   /* Function to implement the task */
-    "emit_task",                     /* Name of the task */
-    1000,                           /* Stack size in words */
-    NULL,                            /* Task input parameter */
-    TASK_BEAM_EMITTER_PRIORITY,                               /* Priority of the task */
-    &BeamSwitch::emit_task_handle,  /* Task handle. */
-    TASK_BEAM_EMITTER_CORE           /* Core where the task should run */
-);
+    pinMode(BEAM_T_PIN, OUTPUT);
+    ledcSetup(IR_PWM_CHANNEL, IR_PWM_FREQUENCY, 8);
+    ledcAttachPin(BEAM_T_PIN, IR_PWM_CHANNEL);
+    ledcWrite(IR_PWM_CHANNEL, 0);
+}
+
+void BeamSwitch::startEmit()
+{
+    emit = true;
+    ledcWrite(IR_PWM_CHANNEL, 128);
+}
+
+void BeamSwitch::stopEmit()
+{
+    emit = false;
+    ledcWrite(IR_PWM_CHANNEL, 0);
 }
 
 
 void BeamSwitch::setup()
 {
-    irRecv.enableIRIn();
+    pinMode(beamSwitchRPin, INPUT);
+    if (emit)
+        startEmit();
+    else
+        stopEmit();
 }
 
-void BeamSwitch::check(uint64_t currentTime)
+bool BeamSwitch::check(uint64_t currentTime)
 {
-    if (irRecv.decode(&results))
-        {
-            irRecv.resume();
-            lastReceiveTime = currentTime;
-        }
+    if ((GPIO.in & (1 << beamSwitchRPin)) == 0)
+        lastReceiveTime = currentTime;
     
-    int dt = lastEmitTime - lastReceiveTime;
+    int dt = currentTime - lastReceiveTime;
     if (dt > BEAM_SWITCH_TIMEOUT_MS * 1000)
         state = true;
     else
         state = false;
+
+    return state;
 }

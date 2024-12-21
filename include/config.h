@@ -22,6 +22,8 @@
 #define STALL_VALUE 60                        // [0..255]
 
 #define ANALOG_WRITE_RESOLUTION 8
+#define IR_PWM_FREQUENCY 38000
+#define IR_PWM_CHANNEL 0
 // TMC Serial port settings
 #define TMC_SERIAL_PORT Serial2
 #define TMC_SERIAL_BAUD_RATE 115200
@@ -47,38 +49,38 @@
 #define TMC_R_SENSE 0.11f
 
 // solenoid settings
-#define P1_SOLENOID_PIN GPIO_NUM_25 // ok
-#define P2_SOLENOID_PIN GPIO_NUM_26 // pas ok
-#define P3_SOLENOID_PIN GPIO_NUM_27 // pas ok
-#define P4_SOLENOID_PIN GPIO_NUM_14 // pas ok
+#define P1_SOLENOID_PIN GPIO_NUM_25
+#define P2_SOLENOID_PIN GPIO_NUM_26
+#define P3_SOLENOID_PIN GPIO_NUM_27
+#define P4_SOLENOID_PIN GPIO_NUM_14
 
 // beam switch settings
-#define BEAM_SWITCH_TIMEOUT_MS 60
-#define BEAM_T_PIN GPIO_NUM_5
+#define BEAM_SWITCH_TIMEOUT_MS 20
+#define BEAM_T_PIN GPIO_NUM_25
 
-#define P1_BEAM_R_PIN GPIO_NUM_12
+
+// #define P1_BEAM_R_PIN GPIO_NUM_12
+#define P1_BEAM_R_PIN GPIO_NUM_13
 #define P2_BEAM_R_PIN GPIO_NUM_15
 #define P3_BEAM_R_PIN GPIO_NUM_34
 #define P4_BEAM_R_PIN GPIO_NUM_13
 
 // communication settings
-#define RASP_TX_PIN -1
-#define RASP_RX_PIN -1
 #define RASP_BAUD_RATE 115200
 
 // TASKS CORES ASSIGNMENT, default code use core 1 (like content of setup and loop functions in main.cpp)
-#define TASK_BEAM_EMITTER_CORE 1
-#define TASK_BEAM_RECEIVER_CORE 1
+#define TASK_BEAM_CHECK_CORE 1
 #define TASK_LINEAR_ACTUATOR_CORE 0
-#define TASK_SOLENOID_CORE 1
-#define TASK_RASP_COMMUNICATION_CORE 1
+#define TASK_SOLENOID_OVERTEMP_CORE 1
+// #define TASK_RASP_COMMUNICATION_CORE 1
 // TASKS PRIORITY ASSIGNMENT, 0 is the lowest priority (inactive task)
-#define TASK_BEAM_EMITTER_PRIORITY 2
-#define TASK_BEAM_RECEIVER_PRIORITY 2
+#define TASK_BEAM_CHECK_PRIORITY 2
 #define TASK_LINEAR_ACTUATOR_PRIORITY 3
-#define TASK_SOLENOID_PRIORITY 3
-#define TASK_RASP_COMMUNICATION_PRIORITY 1
-// TASKS delay between each call, to free the CPU
-#define TASK_BEAM_EMITTER_DELAY_MS 10
+#define TASK_SOLENOID_OVERTEMP_PRIORITY 3
+// #define TASK_RASP_COMMUNICATION_PRIORITY 1
+// TASKS DELAY
+#define TASK_BEAM_CHECK_DELAY_MS 5
+#define TASK_SOLENOID_OVERTEMP_DELAY_MS 100
+
 
 #endif
