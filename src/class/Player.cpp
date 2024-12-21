@@ -12,6 +12,7 @@ int Player::setup()
 {
     beamSwitch.setup();
     actuator.setup();
+    solenoid.setup();
     return 0;
 }
 

@@ -13,7 +13,8 @@ void BeamSwitch::emit_task(void *pvParameters)
     {
         if (emit)
         {
-            emitter.sendRaw(rawSignal, 2, 38);  // 38kHz
+            // emitter.sendRaw(rawSignal, 2, 38);  // 38kHz
+            emitter.sendNEC(0x20DF10EF, 38);
             lastEmitTime = esp_timer_get_time();
         }
         vTaskDelay(TASK_BEAM_EMITTER_DELAY_MS / portTICK_PERIOD_MS);  // Short delay for timing
@@ -40,9 +41,8 @@ void BeamSwitch::setup()
     irRecv.enableIRIn();
 }
 
-void BeamSwitch::check()
+void BeamSwitch::check(uint64_t currentTime)
 {
-    uint64_t currentTime = esp_timer_get_time();
     if (irRecv.decode(&results))
         {
             irRecv.resume();

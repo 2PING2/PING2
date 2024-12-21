@@ -15,7 +15,7 @@ public:
     ~BeamSwitch() {};
     static void setup_common_emitter();
     void setup();
-    void check();
+    void check(uint64_t currentTime = esp_timer_get_time());
     bool getState() { return state; };
 
 #ifndef EVERYTHING_PUBLIC

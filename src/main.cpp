@@ -1,37 +1,95 @@
-// #define EVERYTHING_PUBLIC
-// #include "PING.hpp"
+#define EVERYTHING_PUBLIC
+#include "PING.hpp"
 
-// void setup()
+void setup()
+{
+    Serial.begin(115200);
+    PING::setup();
+    Serial.println("Setup done");
+    // PING::player1.actuator.moveRight();
+    // PING::player1.actuator.setCurrentPosition(0);
+}
+unsigned long lastTime = 0;
+float target = 150;
+void loop()
+{
+
+    // // PING::player1.actuator.run();
+    // if (millis() - lastTime > 100)
+    // {
+    //     lastTime = millis();
+    //     Serial.print(PING::player1.beamSwitch.getState());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player2.beamSwitch.getState());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player3.beamSwitch.getState());
+    //     Serial.print("\t");
+    //     Serial.println(PING::player4.beamSwitch.getState());
+    // }
+    //     lastTime = millis();
+    //     Serial.print(PING::player1.actuator.currentPosition());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player1.actuator.currentSpeed());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player1.actuator.currentAcceleration());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player1.actuator.maxSpeed());
+    //     Serial.print("\t");
+    //     Serial.print(PING::player1.actuator.driver.getStallGuardResult());
+    //     Serial.print("\t");
+    //     Serial.println(PING::player1.actuator.driver.isSetupAndCommunicating());
+
+    // }
+    // vTaskDelay(2000);
+    // Serial.println("Activating solenoids");
+    // PING::player1.solenoid.activate();
+    // PING::player2.solenoid.activate();
+    // PING::player3.solenoid.activate();
+    // PING::player4.solenoid.activate();
+    // vTaskDelay(1000);
+    // Serial.println("Deactivating solenoids");
+    // PING::player1.solenoid.deactivate();
+    // PING::player2.solenoid.deactivate();
+    // PING::player3.solenoid.deactivate();
+    // PING::player4.solenoid.deactivate();
+
+}
+
+// // #include <unity.h>
+// // #define EVERYTHING_PUBLIC
+// // #include "PING.hpp"
+// #include "config.h"
+// #include <Arduino.h>
+
+// /*
+//     mesure du temps d'activation : on allume l'émetteur et on mesure le temps que met le récepteur à détecter le signal
+//     mesure du temps de désactivation : on éteint l'émetteur et on mesure le temps que met le récepteur à ne plus détecter le signal
+
+//     protocole de test :
+//     - initialisation de l'émetteur avec 'emit' à false et on lance la tâche d'émission avec 'setup_common_emitter'
+//     - initialisation du récepteur avec 'setup' et on lance la tâche de réception
+//     - on allume l'émetteur en mettant 'emit' à true et en déclenchant le chrono
+//     - on arrête le chrono quand le récepteur détecte le signal, avec un timeout de 500ms
+//     - on envoie sur le moniteur série le temps mesuré
+//     - on éteint l'émetteur en mettant 'emit' à false et en déclenchant le chrono
+//     - on arrête le chrono quand le récepteur ne détecte plus le signal, avec un timeout de 500ms
+// */
+
+// void setup() 
 // {
 //     Serial.begin(115200);
-//     PING::setup();
-//     Serial.println("Setup done");
-//     PING::player1.actuator.moveRight();
-//     PING::player1.actuator.setCurrentPosition(0);
+//     // pinMode(OUTPUT, 13);
+//     // digitalWrite(13, HIGH);
 // }
-// unsigned long lastTime = 0;
-// float target = 150;
+
 // void loop()
 // {
-//     PING::player1.actuator.run();
-//     if (millis() - lastTime > 1000)
-//     {
-//         lastTime = millis();
-//         Serial.print(PING::player1.actuator.currentPosition());
-//         Serial.print("\t");
-//         Serial.print(PING::player1.actuator.currentSpeed());
-//         Serial.print("\t");
-//         Serial.print(PING::player1.actuator.currentAcceleration());
-//         Serial.print("\t");
-//         Serial.print(PING::player1.actuator.maxSpeed());
-//         Serial.print("\t");
-//         Serial.print(PING::player1.actuator.driver.getStallGuardResult());
-//         Serial.print("\t");
-//         Serial.println(PING::player1.actuator.driver.isSetupAndCommunicating());
-
-//     }
-//     // vTaskDelay(1);
+//     delay(100);
 // }
+
+
+// Activation times :9988 9988 9988 9988
+// Deactivation times :500000 0 0 0
 
 // /**
 //  * Author Teemu Mäntykallio

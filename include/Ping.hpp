@@ -24,8 +24,8 @@ private:
 #endif
     static Player player1, player2, player3, player4;
     static RaspComManagement raspComManager;
-    static TaskHandle_t BeamSwitchReceive_task_handle;
-    static void BeamSwitchReceive_task(void *pvParameters);
+    static TaskHandle_t run_task_handle;
+    static void run_task(void *pvParameters);
 };
 
 #endif
