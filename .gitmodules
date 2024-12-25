@@ -18,3 +18,7 @@
 	path = hardware/raspberry
 	url = https://github.com/robinAZERTY/PING2.git
 	branch = hardware/raspberry
+[submodule "UICorner"]
+	path = UICorner
+	url = https://github.com/robinAZERTY/PING2.git
+	branch = hardware/UICorner
