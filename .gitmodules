@@ -34,3 +34,7 @@
 	path = gameController3buttons
 	url = https://github.com/robinAZERTY/PING2.git
 	branch = hardware/gameController3buttons
+[submodule "raspberry"]
+	path = raspberry
+	url = https://github.com/robinAZERTY/PING2.git
+	branch = hardware/raspberry
