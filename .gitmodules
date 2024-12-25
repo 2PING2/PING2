@@ -30,3 +30,7 @@
 	path = gameController2buttons1joystick
 	url = https://github.com/robinAZERTY/PING2.git
 	branch = hardware/gameController2buttons1joystick
+[submodule "gameController3buttons"]
+	path = gameController3buttons
+	url = https://github.com/robinAZERTY/PING2.git
+	branch = hardware/gameController3buttons
