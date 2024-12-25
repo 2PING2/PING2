@@ -1,0 +1,4 @@
+[submodule "hardware/UICorner"]
+	path = hardware/UICorner
+	url = https://github.com/robinAZERTY/PING2.git
+	branch = hardware/UICorner
