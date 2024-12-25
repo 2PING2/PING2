@@ -74,7 +74,7 @@ Le choix des noms de variables ou d’objets est crucial. Un nom plus long, comp
 
 5 - Noms des fichiers :
 - Convention : ```camelCase```. Comme pour les attributs et variables.
-- Exemple : ```linearActuator.cpp```, ```ball_tracker.py```.
+- Exemple : ```linearActuator.cpp```, ```ballTracker.py```.
     
 ### Exemple :
 
