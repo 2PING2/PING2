@@ -2,3 +2,7 @@
 	path = hardware/UICorner
 	url = https://github.com/robinAZERTY/PING2.git
 	branch = hardware/UICorner
+[submodule "hardware/esp32"]
+	path = hardware/esp32
+	url = https://github.com/robinAZERTY/PING2.git
+	branch = hardware/esp32
