@@ -1,38 +1,37 @@
-# Projet PING²
+# 🚀 Branche dev – Intégration et Tests des Codes Hardware
+## 📚 Description de la Branche
+La branche ```dev``` sert de plateforme d'intégration et de test pour tous les codes destinés aux différents matériels (hardware) du projet PING².
 
-Bienvenue sur le dépôt GitHub du projet **PING²**. Ce projet est un jeu de plateau interactif avec des surfaces de rebond robotisées, conçu pour aider à la rééducation et à la stimulation de la motricité, notamment pour les personnes à mobilité réduite.
+Elle regroupe les programmes à flasher sur chaque composant matériel du projet (ESP32, Raspberry Pi, Arduino Nano, etc.), tout en offrant un environnement centralisé pour les tests fonctionnels et la validation globale du système.
 
-## Description du projet
+## 🛠️ Organisation de la Branche
+Chaque matériel dispose de son propre dossier à la racine de cette branche, contenant le code spécifique à flasher et les instructions de déploiement :
 
-PING² est un système modulaire composé de deux sous-systèmes principaux :
+```bash
+dev/
+├── esp32/      # Code pour l'ESP32
+├── raspberry/  # Code pour le Raspberry Pi
+├── UICorner/   # Code pour le coin d'interface utilisateur
+└── README.md   # Ce fichier explicatif (ici)
+```
 
-1. **ESP32** – Dirige la plateforme mécanique, incluant les moteurs, capteurs et solénoïdes.
-2. **Raspberry Pi** – Gère le déroulement de l'activité, les interfaces, la reconnaissance de la balle et la gestion des joueurs.
+## ✅ Objectif de la Branche ```dev```
+- Centraliser les développements matériels.
+- Assurer une intégration fonctionnelle entre les différents matériels.
+- Valider la stabilité et la fiabilité du système avant un déploiement final.
+  
+## 🔄 Workflow de Développement
+- Développement Fonctionnel : Chaque branche ```hardware/*``` est dédiée au développement et à l'amélioration du code pour un matériel spécifique.
+- Intégration dans dev : Les branches ```hardware/*``` sont ajoutées en tant que sous-modules à la branche dev. **Aucune modification du code source ne doit être effectué depuis la branche ```dev```.**
+- Phase de Test : Les codes sont testés ensemble pour s'assurer qu'ils fonctionnent de manière cohérente sur l'ensemble du système.
+- Validation : Une fois les tests concluants, la branche dev est fusionnée (merge) dans la branche main, qui représente alors la version stable et prête pour la production du projet.
 
-L'architecture est pensée pour évoluer facilement, avec un matériel modulaire permettant de nombreuses options de connexion.
+### 🎯 En Résumé :
+dev = Branche de test et d'intégration du code hardware.
 
-## Branche principale
+main = Branche stable pour la version finale.
 
-La branche principale contient les versions stables et testées des différentes fonctionnalités du projet. Assurez-vous de mettre à jour régulièrement pour profiter de la meilleure expérience de jeu.
-
-## Autres branches
-
-- `esp32-dev` : Développement du firmware pour l'ESP32.
-- `raspberry-dev` : Développement du logiciel pour le Raspberry Pi.
-- `test` : test d'intégration pour valider les différents codes afin de créer la version suivante de l'application.
-
-## Documentation
-
-Toute la documentation relative au projet se trouve dans le dossier [docs/](docs/).
-
-## Installation
-
-Pour la première installation, écrasez le contenu de la carte microSD du Raspberry Pi. Connectez la carte à votre PC, formatez-la, puis transférez-y l'image du système préalablement téléchargée. Si vous souhaitez que la plateforme se mette à jour automatiquement lorsqu'une mise à jour est disponible, connectez-la au Wi-Fi.
-
-## Contribution
-
-### Pour les contributeurs du projet
-
+## 📄 Instructions pour les Contributeurs
 Voici comment vous pouvez participer :
 
 1. **Forker le dépôt** : Cliquez sur "Fork" en haut de cette page pour créer une copie de ce dépôt sur votre compte.
@@ -70,7 +69,7 @@ Le choix des noms de variables ou d’objets est crucial. Un nom plus long, comp
 
 5 - Noms des fichiers :
 - Convention : ```camelCase```. Comme pour les attributs et variables.
-- Exemple : ```linearActuator.cpp```, ```ball_tracker.py```.
+- Exemple : ```linearActuator.cpp```, ```ballTracker.py```.
     
 ### Exemple :
 
@@ -98,6 +97,9 @@ int myAttribut;
 void my_methode();
 };
 ```
+
+### 📬 Contact
+Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de développement ou à ouvrir une Issue sur le dépôt GitHub.
 
 ## Licence
 
