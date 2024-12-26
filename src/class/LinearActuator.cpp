@@ -11,16 +11,16 @@ void LinearActuator::setup()
     // driver.enable();
     // driver.enableAutomaticCurrentScaling();
     driver.setRunCurrent(RMS_CURRENT);
-    driver.setStallGuardThreshold(STALL_VALUE);
+    // driver.setStallGuardThreshold(STALL_VALUE);
     driver.setMicrostepsPerStepPowerOfTwo(MICROSTEP_POWER_OF_2);
     driver.enable();
 }
 
 bool LinearActuator::calibrateRight()
 {
-    setMaxSpeed(CALIBRATION_COARSE_SPEED);
+    setMaxSpeed(COARSE_CALIBRATION_SPEED);
     moveRight();
-    if (status != RunStatus::COLLISION)
+    if (driver.getStallGuardResult() > COARSE_CALIBRATION_STALL_VALUE)
         return false;
     rightLimit = currentPosition();
     if (leftLimit > INT_MIN)
@@ -36,9 +36,9 @@ bool LinearActuator::checkRightCalibration()
 
 bool LinearActuator::calibrateLeft()
 {
-    setMaxSpeed(CALIBRATION_COARSE_SPEED);
+    setMaxSpeed(COARSE_CALIBRATION_SPEED);
     moveLeft();
-    if (status != RunStatus::COLLISION)
+    if (driver.getStallGuardResult() > COARSE_CALIBRATION_STALL_VALUE)
         return false;
     leftLimit = currentPosition();
     if (rightLimit < INT_MAX)
@@ -56,11 +56,6 @@ void LinearActuator::instantStop()
 int LinearActuator::run()
 {
     motor.run();
-    if (driver.getStallGuardResult() > STALL_VALUE)
-    {
-        instantStop();
-        return RunStatus::COLLISION;
-    }
     return RunStatus::RUNNING;
 }
 
