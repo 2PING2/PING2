@@ -18,12 +18,12 @@ public:
     void setup();
     void activate();
     void deactivate();
-    void setPower(int power){this->power = power;}
-    float getPower(){return power;}
+    void set_power(int power){this->power = power;}
+    float get_power(){return power;}
 
-    float getState(){return state;}
+    float get_state(){return state;}
 
-    bool overTempProtect(uint64_t currentTime = esp_timer_get_time());
+    bool over_temp_protect(uint64_t currentTime = esp_timer_get_time());
 };
 
 #endif

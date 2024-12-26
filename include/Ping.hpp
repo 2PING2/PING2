@@ -24,7 +24,7 @@ private:
 #endif
     static Player player1, player2, player3, player4;
     static RaspComManagement raspComManager;
-    static TaskHandle_t solenoid_overtemp_task_handle;
+    static TaskHandle_t solenoidOvertempTaskHandle;
     static void solenoid_overtemp_task(void *pvParameters);
 };
 
