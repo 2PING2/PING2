@@ -3,7 +3,7 @@
 import os
 import hpp2plantuml
 
-folder2watch = "esp32"
+folder2watch = "include"
 puml_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder2watch+".puml")
 
 
