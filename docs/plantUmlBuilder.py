@@ -4,7 +4,7 @@ import os
 import hpp2plantuml
 
 folder2watch = "include"
-puml_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder2watch+".puml")
+puml_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "esp32"+".puml")
 
 
 if __name__ == "__main__":
