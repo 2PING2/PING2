@@ -3,7 +3,7 @@ name: Generate UML Diagrams
 on:
   push:
     paths:
-      - 'esp32/include/**'
+      - 'include/**'
 
 jobs:
   plantuml:
