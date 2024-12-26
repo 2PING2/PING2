@@ -51,17 +51,17 @@ void test_beamSwitch_emit()
     dt[2] = -1;
     dt[3] = -1;
     start = esp_timer_get_time();
-    BeamSwitch::startEmit();
+    BeamSwitch::start_emit();
     do
     {
         t = esp_timer_get_time() - start;
-        if (b1.getState())
+        if (b1.get_state())
             dt[0] = t;
-        if (b2.getState())
+        if (b2.get_state())
             dt[1] = t;
-        if (b3.getState())
+        if (b3.get_state())
             dt[2] = t;
-        if (b4.getState())
+        if (b4.get_state())
             dt[3] = t;
         
         if (dt[0]>0 && dt[1]>0 && dt[2]>0 && dt[3]>0)
@@ -86,17 +86,17 @@ void test_beamSwitch_stopEmit()
     dt[2] = -1;
     dt[3] = -1;
     start = esp_timer_get_time();
-    BeamSwitch::stopEmit();
+    BeamSwitch::stop_emit();
     do
     {
         t = esp_timer_get_time()-start;
-        if (!b1.getState())
+        if (!b1.get_state())
             dt[0] = t;
-        if (!b2.getState())
+        if (!b2.get_state())
             dt[1] = t;
-        if (!b3.getState())
+        if (!b3.get_state())
             dt[2] = t;
-        if (!b4.getState())
+        if (!b4.get_state())
             dt[3] = t;
         if (dt[0]>0 && dt[1]>0 && dt[2]>0 && dt[3]>0)
             break;

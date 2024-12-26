@@ -4,7 +4,7 @@ bool BeamSwitch::emit = false;
 
 Vector<BeamSwitch*> BeamSwitch::all;
 
-TaskHandle_t BeamSwitch::check_all_task_handle;
+TaskHandle_t BeamSwitch::checkAllTaskHandle;
 
 BeamSwitch::BeamSwitch(int beamSwitchRPin) : beamSwitchRPin(beamSwitchRPin)
 {
@@ -17,13 +17,13 @@ BeamSwitch::~BeamSwitch()
 }
 
 
-void BeamSwitch::startEmit()
+void BeamSwitch::start_emit()
 {
     emit = true;
     ledcWrite(IR_PWM_CHANNEL, 128);
 }
 
-void BeamSwitch::stopEmit()
+void BeamSwitch::stop_emit()
 {
     emit = false;
     ledcWrite(IR_PWM_CHANNEL, 0);
@@ -56,7 +56,7 @@ void BeamSwitch::setup()
         10000,                                /* Stack size in words */
         NULL,                                 /* Task input parameter */
         TASK_BEAM_CHECK_PRIORITY,          /* Priority of the task */
-        &check_all_task_handle, /* Task handle. */
+        &checkAllTaskHandle, /* Task handle. */
         TASK_BEAM_CHECK_CORE               /* Core where the task should run */
     );
 }

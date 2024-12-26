@@ -37,7 +37,7 @@ void Solenoid::deactivate()
     ledcWrite(0, 0);
 }
 
-bool Solenoid::overTempProtect(uint64_t currentTime)
+bool Solenoid::over_temp_protect(uint64_t currentTime)
 {
     float dt = (currentTime - lastTempCheck) / 1000000.0;
     lastTempCheck = currentTime;
