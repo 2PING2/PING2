@@ -25,6 +25,8 @@
 #define DECREMENT_ACTION_KEY "decrement"
 
 #define ANTI_NOISE_THRESHOLD 5
+#define DEBOUNCE_DELAY 50
+#define NB_MODES 8
 
 // output
 #define STATUS_LED 3

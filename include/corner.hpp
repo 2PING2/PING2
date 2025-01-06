@@ -1,4 +1,12 @@
-#include "config.hpp"
+#include "config.hpp" 
+#include <Arduino.h>
+#pragma once
+unsigned long lastDebounceTimeA = 0;
+unsigned long lastDebounceTimeB = 0;
+bool stableModeA = false; // État stable de mode_a
+bool stableModeB = false; // État stable de mode_b
+unsigned long lastDebounceTimePB = 0; // Timer anti-rebond pour mode_pb
+bool stableModePB = false;            // État stable de mode_pb
 
 struct Inputs
 {
@@ -91,20 +99,45 @@ private:
                 send(MODE_PB_KEY, RELEASE_ACTION_KEY);
         }
         
-        if (inputs.mode_a != lastInputs.mode_a)
+        // Gestion des boutons mode
+        if ((inputs.mode_a != stableModeA) && (millis() - lastDebounceTimeA > DEBOUNCE_DELAY))
         {
-            if (!inputs.mode_a)
-                if (!inputs.mode_b)
-                    send(MODE_KEY, INCREMENT_ACTION_KEY);
-        }
-        
-        if (inputs.mode_b != lastInputs.mode_b)
-        {
-            if (!inputs.mode_b)
-                    if (!inputs.mode_a)
+            lastDebounceTimeA = millis(); // Réinitialisation du timer anti-rebond
+            stableModeA = inputs.mode_a;  // Mise à jour de l'état stable pour mode_a
 
-                        send(MODE_KEY, DECREMENT_ACTION_KEY);
+            if (stableModeA) // Si un appui stable est détecté sur mode_a
+            {
+                if (inputs.mode_b)
+                {
+                    inputs.mode++;
+                    if (inputs.mode > NB_MODES)
+                    {
+                        inputs.mode = 0;
+                    }
+                    send(MODE_KEY, INCREMENT_ACTION_KEY, inputs.mode);
+                }
+            }
         }
+
+        if ((inputs.mode_b != stableModeB) && (millis() - lastDebounceTimeB > DEBOUNCE_DELAY))
+        {
+            lastDebounceTimeB = millis(); // Réinitialisation du timer anti-rebond
+            stableModeB = inputs.mode_b;  // Mise à jour de l'état stable pour mode_b
+
+            if (stableModeB) // Si un appui stable est détecté sur mode_b
+            {
+                if (inputs.mode_a)
+                {
+                    inputs.mode--;
+                    if (inputs.mode < 0)
+                    {
+                        inputs.mode = NB_MODES;
+                    }
+                    send(MODE_KEY, DECREMENT_ACTION_KEY, inputs.mode);
+                }
+            }
+        }
+
         
         if (inputs.reset != lastInputs.reset)
         {
