@@ -1,43 +1,42 @@
 #include <Arduino.h>
 
-// Déclaration des broches
-const int JoystickPin = A0; // Axe X du joystick
-const int Bouton2Pin = 4; // Pin du bouton
-const int ledPin = 6;     // LED connectée à D6
+// Pin declarations
+const int JOYSTICK_PIN = A0; // X-axis of the joystick
+const int BUTTON_SHOOT_PIN = 4; // Button pin
+const int LED_PIN = 6;     // LED connected to D6
 
-// Etats précédents
+// Previous states
 String prevJoystickState = "center";
 bool prevButtonState = HIGH;
 
-// pour l'anti rebond 
+// For debounce handling
 unsigned long lastDebounceTime2 = 0;
 bool prevButton2State = HIGH;
-const unsigned long debounceDelay = 50; // 50 ms pour l'antirebond
+const unsigned long debounceDelay = 50; // 50 ms for debounce
 
 void setup() {
-  // Initialiser la communication série
+  // Initialize serial communication
   Serial.begin(115200);
 
-  // Configurer les broches comme entrées
-  pinMode(JoystickPin, INPUT);
-  pinMode(Bouton2Pin, INPUT_PULLUP);
+  // Configure pins as inputs
+  pinMode(JOYSTICK_PIN, INPUT);
+  pinMode(BUTTON_SHOOT_PIN, INPUT_PULLUP);
   Serial.println("left/release");
   Serial.println("right/release");
-
 }
 
 void loop() {
-  // Lire la valeur analogique de l'axe X du joystick
-  int JoystickValue = analogRead(JoystickPin);
-  bool button2State = digitalRead(Bouton2Pin) == LOW;
+  // Read the analog value from the joystick X-axis
+  int joystickValue = analogRead(JOYSTICK_PIN);
+  bool button2State = digitalRead(BUTTON_SHOOT_PIN) == LOW;
   unsigned long currentTime = millis();
 
-  // Déterminer l'état actuel du joystick
+  // Determine the current state of the joystick
   String currentJoystickState;
-  if (JoystickValue < 450) {
+  if (joystickValue < 450) {
     currentJoystickState = "left";
   } 
-  else if (JoystickValue > 600) 
+  else if (joystickValue > 600) 
   {
     currentJoystickState = "right";
   } 
@@ -45,7 +44,7 @@ void loop() {
     currentJoystickState = "center";
   }
 
-  // Détection de changement pour le joystick
+  // Detect changes in joystick state
   if (currentJoystickState != prevJoystickState) {
     if (prevJoystickState != "center") {
       Serial.println(prevJoystickState + "/release");
@@ -56,7 +55,7 @@ void loop() {
     prevJoystickState = currentJoystickState;
   }
 
-  // pour le bouton
+  // Handle button with debounce
   if (button2State != prevButton2State && (currentTime - lastDebounceTime2) > debounceDelay) {
     lastDebounceTime2 = currentTime;
     prevButton2State = button2State;
