@@ -1,38 +1,8 @@
-# Projet PING²
+# 🚀 Branche ```gameController2buttons1joystick```
+## 📚 Description de la Branche
+Cette branche sert au dévelopement du code de la manette avec deux boutons et un joystick.
 
-Bienvenue sur le dépôt GitHub du projet **PING²**. Ce projet est un jeu de plateau interactif avec des surfaces de rebond robotisées, conçu pour aider à la rééducation et à la stimulation de la motricité, notamment pour les personnes à mobilité réduite.
-
-## Description du projet
-
-PING² est un système modulaire composé de deux sous-systèmes principaux :
-
-1. **ESP32** – Dirige la plateforme mécanique, incluant les moteurs, capteurs et solénoïdes.
-2. **Raspberry Pi** – Gère le déroulement de l'activité, les interfaces, la reconnaissance de la balle et la gestion des joueurs.
-
-L'architecture est pensée pour évoluer facilement, avec un matériel modulaire permettant de nombreuses options de connexion.
-
-## Branche principale
-
-La branche principale contient les versions stables et testées des différentes fonctionnalités du projet. Assurez-vous de mettre à jour régulièrement pour profiter de la meilleure expérience de jeu.
-
-## Autres branches
-
-- `esp32-dev` : Développement du firmware pour l'ESP32.
-- `raspberry-dev` : Développement du logiciel pour le Raspberry Pi.
-- `test` : test d'intégration pour valider les différents codes afin de créer la version suivante de l'application.
-
-## Documentation
-
-Toute la documentation relative au projet se trouve dans le dossier [docs/](docs/).
-
-## Installation
-
-Pour la première installation, écrasez le contenu de la carte microSD du Raspberry Pi. Connectez la carte à votre PC, formatez-la, puis transférez-y l'image du système préalablement téléchargée. Si vous souhaitez que la plateforme se mette à jour automatiquement lorsqu'une mise à jour est disponible, connectez-la au Wi-Fi.
-
-## Contribution
-
-### Pour les contributeurs du projet
-
+## 📄 Instructions pour les Contributeurs
 Voici comment vous pouvez participer :
 
 1. **Forker le dépôt** : Cliquez sur "Fork" en haut de cette page pour créer une copie de ce dépôt sur votre compte.
@@ -70,7 +40,7 @@ Le choix des noms de variables ou d’objets est crucial. Un nom plus long, comp
 
 5 - Noms des fichiers :
 - Convention : ```camelCase```. Comme pour les attributs et variables.
-- Exemple : ```linearActuator.cpp```, ```ball_tracker.py```.
+- Exemple : ```linearActuator.cpp```, ```ballTracker.py```.
     
 ### Exemple :
 
@@ -98,6 +68,9 @@ int myAttribut;
 void my_methode();
 };
 ```
+
+### 📬 Contact
+Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de développement ou à ouvrir une Issue sur le dépôt GitHub.
 
 ## Licence
 
