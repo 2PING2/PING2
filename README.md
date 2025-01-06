@@ -13,6 +13,7 @@ Cette branche contient le code de développement pour le Raspberry Pi, chargé d
 ## Structure des dossiers
 
 ...
+![image](https://github.com/user-attachments/assets/63302ffd-5dc2-40ce-90e0-7ddd2f351778)
 
 
 ## Installation et exécution
