@@ -26,6 +26,8 @@ void setup() {
   pinMode(BUTTON_SHOOT_PIN, INPUT_PULLUP);
   pinMode(BUTTON_RIGHT_PIN, INPUT_PULLUP);
 
+
+robin il est pas beau 
   // Configure LED pins as output
   pinMode(LED_ON_PIN, OUTPUT);
   pinMode(LED_LEFT_PIN, OUTPUT);
