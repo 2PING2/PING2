@@ -20,6 +20,8 @@ void setup() {
 
   // Configure pins as inputs
   pinMode(JOYSTICK_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
   pinMode(BUTTON_SHOOT_PIN, INPUT_PULLUP);
   Serial.println("left/release");
   Serial.println("right/release");
