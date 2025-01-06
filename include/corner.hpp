@@ -1,12 +1,15 @@
 #include "config.hpp" 
 #include <Arduino.h>
 #pragma once
-unsigned long lastDebounceTimeA = 0;
-unsigned long lastDebounceTimeB = 0;
-bool stableModeA = false; // État stable de mode_a
-bool stableModeB = false; // État stable de mode_b
-unsigned long lastDebounceTimePB = 0; // Timer anti-rebond pour mode_pb
+unsigned long lastDebounceTimeA = 0; // Anti-bounce timer for mode_a
+unsigned long lastDebounceTimeB = 0; // Anti-bounce timer for mode_b
+bool stableModeA = false;
+bool stableModeB = false;
+unsigned long lastDebounceTimePB = 0; // Anti-bounce timer for mode_pb
 bool stableModePB = false;            // État stable de mode_pb
+bool lastModeA = false;
+bool lastModeB = false;
+
 
 struct Inputs
 {
@@ -59,6 +62,40 @@ public:
         // writeOutputs();
     }
 
+    void handleEncoder()
+    {
+        // Read the current state of mode_a and mode_b
+        bool currentModeA = inputs.mode_a;
+        bool currentModeB = inputs.mode_b;
+
+        // Detection of a rising edge on mode_a
+        if (lastModeA == false && currentModeA == true) 
+        {
+            if (currentModeB == false) // mode_b is 0: clockwise
+            {
+                inputs.mode--;
+                if (inputs.mode < 0)
+                {
+                    inputs.mode = NB_MODES; // Cycle to NB_MODES if below 0
+                }
+                send(MODE_KEY, DECREMENT_ACTION_KEY, inputs.mode);
+            }
+            else // mode_b is 1: counter-clockwise
+            {
+                inputs.mode++;
+                if (inputs.mode > NB_MODES)
+                {
+                    inputs.mode = 0; // Cycle to 0 if NB_MODES is exceeded
+                }
+                send(MODE_KEY, INCREMENT_ACTION_KEY, inputs.mode);
+            }
+        }
+
+        // Update the last state of mode_a and mode_b
+        lastModeA = currentModeA;
+        lastModeB = currentModeB;
+    }
+
 private:
     void readInputs()
     {
@@ -91,66 +128,52 @@ private:
             lastInputs.light = inputs.light;
         }
 
-        if (inputs.mode_pb != lastInputs.mode_pb)
+        
+
+        // Mode PB
+        if (inputs.mode_pb != stableModePB && millis() - lastDebounceTimePB > DEBOUNCE_DELAY)
         {
-            if (inputs.mode_pb)
+            lastDebounceTimePB = millis(); // Reset the anti-bounce timer
+            stableModePB = inputs.mode_pb; // Update the stable state of mode_pb
+
+            if (stableModePB)
+            {
                 send(MODE_PB_KEY, PUSH_ACTION_KEY);
+            }
             else
+            {
                 send(MODE_PB_KEY, RELEASE_ACTION_KEY);
-        }
-        
-        // Gestion des boutons mode
-        if ((inputs.mode_a != stableModeA) && (millis() - lastDebounceTimeA > DEBOUNCE_DELAY))
-        {
-            lastDebounceTimeA = millis(); // Réinitialisation du timer anti-rebond
-            stableModeA = inputs.mode_a;  // Mise à jour de l'état stable pour mode_a
-
-            if (stableModeA) // Si un appui stable est détecté sur mode_a
-            {
-                if (inputs.mode_b)
-                {
-                    inputs.mode++;
-                    if (inputs.mode > NB_MODES)
-                    {
-                        inputs.mode = 0;
-                    }
-                    send(MODE_KEY, INCREMENT_ACTION_KEY, inputs.mode);
-                }
-            }
-        }
-
-        if ((inputs.mode_b != stableModeB) && (millis() - lastDebounceTimeB > DEBOUNCE_DELAY))
-        {
-            lastDebounceTimeB = millis(); // Réinitialisation du timer anti-rebond
-            stableModeB = inputs.mode_b;  // Mise à jour de l'état stable pour mode_b
-
-            if (stableModeB) // Si un appui stable est détecté sur mode_b
-            {
-                if (inputs.mode_a)
-                {
-                    inputs.mode--;
-                    if (inputs.mode < 0)
-                    {
-                        inputs.mode = NB_MODES;
-                    }
-                    send(MODE_KEY, DECREMENT_ACTION_KEY, inputs.mode);
-                }
             }
         }
 
         
-        if (inputs.reset != lastInputs.reset)
+        if (stableModePB){
+            handleEncoder(); // Handle the encoder only if mode_pb is pressed
+        }
+        
+                
+        
+
+        
+
+        // Reset
+
+        if (inputs.reset != lastInputs.reset) 
         {
             if (inputs.reset)
+            {
                 send(RESET, PUSH_ACTION_KEY);
+            }
             else
+            {
                 send(RESET, RELEASE_ACTION_KEY);
+            }
         }
         lastInputs.refresh(inputs);
     }
 
-    template <typename T>
-    void send(String key, String action, T value)
+    template <typename T> 
+    void send(String key, String action, T value) // method to send a message
     {
         Serial.print(key);
         Serial.print("/");
