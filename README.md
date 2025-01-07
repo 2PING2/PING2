@@ -13,31 +13,17 @@ Cette branche contient le code de développement pour le Raspberry Pi, chargé d
 ## Structure des dossiers
 ![image](https://github.com/user-attachments/assets/63302ffd-5dc2-40ce-90e0-7ddd2f351778)
 
-doc : tous les documents explicatifs de cette branche.
-
-src/config/ : Ce dossier contient les fichiers de configuration nécessaires au fonctionnement du Raspberry Pi.
-
-src/init/ : Ce dossier contient trois fichiers principaux :
-      init.py : Script exécuté au démarrage du Raspberry Pi.
-      index.html : La page web utilisée pour permettre à l'utilisateur de connecter la plateforme à Internet. L'utilisateur entre les informations du réseau Wi-Fi via cette interface.
-      style.css : Le fichier CSS associé à la page HTML, qui permet de personnaliser l'apparence de l'interface utilisateur.
+- doc : tous les documents explicatifs de cette branche.
+- src/config/ : fichiers de configuration nécessaires au fonctionnement du Raspberry Pi.
+- src/init/ : trois fichiers principaux :
+      
+  - init.py : Script exécuté au démarrage du Raspberry Pi.
+  - index.html : La page web utilisée pour permettre à l'utilisateur de connecter la plateforme à Internet. L'utilisateur entre les informations du réseau Wi-Fi via cette interface.
+  - style.css : Le fichier CSS associé à la page HTML, qui permet de personnaliser l'apparence de l'interface utilisateur.
 
 ## Installation et exécution
 
-1. Cloner le dépôt et se positionner sur la branche `raspberry-dev` :
-   ```bash
-   git checkout raspberry-dev
-   ```
-
-2. Installer les dépendances :
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Exécuter le script principal :
-   ```bash
-   python main.py
-   ```
+Pour installer ces codes, il faut simplement mettre l'image du logiciel dans la carte micro SD de la Raspberry-pi.
 
 ## Contribution
 
