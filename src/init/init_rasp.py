@@ -21,12 +21,13 @@ from datetime import datetime
 from threading import Thread
 from flask import Flask, request, send_from_directory
 
-from log import create_log_file, write_in_log
+from ..classes import logFile
+log = logFile.LogFile()
 
 app = Flask(__name__)
 
 # Create the log file of the day
-create_log_file(datetime.now().strftime("%Y-%m-%d"))
+log.create_log_file()
 
 # Paths and files
 pathDirectory = '/home/pi/python_environnement/bin/activate' # python environment path
@@ -64,8 +65,10 @@ def update_git():
         if subprocess.run(['git', 'diff', '--name-only', 'origin/main'], stdout=subprocess.PIPE).stdout.decode().strip().find(file) != -1:
             # Cloning in progress...
             subprocess.run(['git', 'checkout', 'origin/main', '--', file], check=True)
+            log.write_in_log("INFO", "init_rasp", "update_git", 'Git file updated: ')
+            # Check if the file is the firmware of the ESP32
             if file == "firmware.bin":
-                # write_in_log(datetime.now().strftime("%Y-%m-%d"), "INFO", "init_rasp", "update_git", "firmware.bin has been modified")
+                log.write_in_log("INFO", "init_rasp", "update_git", "ESP32 firmware updated")
                 subprocess.run(['esptool.py', '--port', '/dev/ttyUSB0', 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
 
 # Flask route for Wi-Fi configuration page
@@ -118,9 +121,9 @@ method=ignore
         outputLatch = ((currentTime - startingTime).seconds > watchdogTime)
         if outputLatch:
             start_services()
-            # write_in_log(datetime.now().strftime("%Y-%m-%d"), "ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
-        # else:
-            # write_in_log(datetime.now().strftime("%Y-%m-%d"), "INFO", "init_rasp", "index", "Wi-Fi configuration successful")
+            log.write_in_log("ERROR", "init_rasp", "index", "Wi-Fi configuration failed: Connection could not be established within the timeout period")
+        else:
+            log.write_in_log("INFO", "init_rasp", "index", "Wi-Fi configuration successful")
             
         return 
     return send_from_directory(os.path.dirname(pathHTML), os.path.basename(pathHTML))  # Serve the HTML file
@@ -138,8 +141,7 @@ def start_services():
     os.system('sudo systemctl start hostapd')
     os.system('sudo systemctl start dnsmasq')
     Thread(target=monitor_services).start()  # Run service monitoring in a separate thread
-    
-    # write_in_log(datetime.now().strftime("%Y-%m-%d"), "INFO", "init_rasp", "start_services", "Services have been started")
+    log.write_in_log("INFO", "init_rasp", "start_services", "Wi-Fi setup services started")
 
 # Function to stop services after a delay if not connected
 def monitor_services():
@@ -149,6 +151,7 @@ def monitor_services():
             should_stop = True
             stop_services()  # Stop services if connected
             shutdown_server()  # Stop the Flask server
+            log.write_in_log("INFO", "init_rasp", "monitor_services", "Wi-Fi setup successful")
             return
         
         time.sleep(5)  # Check connection
@@ -171,11 +174,11 @@ def main():
     global should_stop
     should_stop = False
     if check_wifi():
-        # write_in_log(datetime.now().strftime("%Y-%m-%d"), "INFO", "init_rasp", "main", "Raspberry Pi is connected to a network")
+        log.write_in_log("INFO", "init_rasp", "main", "Raspberry Pi is connected to a network")
         update_git()  # Update Git files
         subprocess.run(['python3', pathPrincipalMain])  # Run main.py
     else:
-        # write_in_log(datetime.now().strftime("%Y-%m-%d"), "INFO", "init_rasp", "main", "Raspberry Pi is not connected to a network")
+        log.write_in_log("INFO", "init_rasp", "main", "Raspberry Pi is not connected to a network")
         start_services()  # Start services for Wi-Fi setup
         app.run(host='0.0.0.0', port=80)  # Start Flask server
 
