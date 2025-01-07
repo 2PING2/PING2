@@ -16,7 +16,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 import os
 from datetime import datetime
 
-pathLogFolder = "/home/pi/Documents/Log_folder" # Path to the log folder
+pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
 class LogFile:
     def __init__(self, log_folder=pathLogFolder):
