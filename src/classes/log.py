@@ -13,33 +13,45 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
+import os
 from datetime import datetime
 
-pathLogFolder = '/home/pi/Documents/Log_folder' # Path to the log folder
+pathLogFolder = "/home/pi/Documents/Log_folder" # Path to the log folder
 
-class LogFile:    
-    def create_log_file(Date):
+class LogFile:
+    def __init__(self, log_folder=pathLogFolder):
+        self.log_folder = log_folder
         # Create the log folder if it does not exist
-        logFilename = f"{pathLogFolder}/Log_file_{Date}.log"
+        os.makedirs(self.log_folder, exist_ok=True)
+
+    def create_log_file(self):
+        today = datetime.now().strftime("%d-%m-%Y")
+        logFilename = os.path.join(self.log_folder, f"Log_file_{today}.log")
         if not os.path.exists(logFilename):
             print(f"Log file: {logFilename} is created")
             with open(logFilename, 'w') as file:
-                file.write(f"---- PING^2 : LOG FILE OF {Date} ----\n")
+                file.write(f"---- PING^2 : LOG FILE OF {today} ----\n")
         else:
             print(f"Log file: {logFilename} already exists")
 
-    def write_in_log(Date, Status, Programme, Function, Message):
-        # open the log file of the day
-        logFilename = f"{pathLogFolder}/Log_file_{Date}.log"
-        with open(logFilename, 'a') as file:
-            # write the date
-            file.write(str(datetime.now()) + ' ')
-            # write the status
-            file.write(Status + ' ')
-            # write the programme
-            file.write(Programme + ' ')
-            # write the function
-            file.write(Function + ' ')
-            # write the message
-            file.write(Message + '\n')
+    def write_in_log(self, status, programme, function, message):
+        today = datetime.now().strftime("%d-%m-%Y")      
+        logFilename = os.path.join(self.log_folder, f"Log_file_{today}.log")
+        try:
+            with open(logFilename, 'a') as file:
+                file.write(f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S.%f')[:-3]} {status} {programme} {function} {message}\n")
+
+        except Exception as e:
+            print(f"Failed to write in log file {logFilename}: {e}")
+
+if __name__ == "__main__":    
+    # Init the log handler
+    log = LogFile()
+
+    # Create the log file
+    log.create_log_file()
     
+    # Write in log (examples)
+    log.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
+    log.write_in_log("ERROR", "ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
+    log.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")
