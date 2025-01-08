@@ -1,5 +1,6 @@
 #include "corner.hpp"
-
+#include <Arduino.h>
+#include <stdlib.h>
 Corner corner;
 
 void setup() {
@@ -9,7 +10,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   corner.loop();
-  delay(50);
+  delay(10);
 }

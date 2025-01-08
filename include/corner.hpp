@@ -18,7 +18,6 @@ struct Inputs
     int light;
     bool mode_pb;
     bool mode_a, mode_b;
-    int mode;
     bool reset;
 
     void refresh(Inputs inputs)
@@ -26,7 +25,6 @@ struct Inputs
         mode_pb = inputs.mode_pb;
         mode_a = inputs.mode_a;
         mode_b = inputs.mode_b;
-        mode = inputs.mode;
         reset = inputs.reset;
     }
 };
@@ -35,6 +33,14 @@ struct Outputs
 {
     bool status_led;
 };
+
+struct Messages
+{
+    String key;
+    String action;
+    bool valid;
+};
+
 
 class Corner
 {
@@ -57,9 +63,9 @@ public:
         readInputs();
         sendInputs();
         // process inputs
-        // update outputs
+        updateOutputs();
         // write outputs
-        // writeOutputs();
+        writeOutputs();
     }
 
     void handleEncoder()
@@ -73,21 +79,11 @@ public:
         {
             if (currentModeB == false) // mode_b is 0: clockwise
             {
-                inputs.mode--;
-                if (inputs.mode < 0)
-                {
-                    inputs.mode = NB_MODES; // Cycle to NB_MODES if below 0
-                }
-                send(MODE_KEY, DECREMENT_ACTION_KEY, inputs.mode);
+                send(MODE_KEY, DECREMENT_ACTION_KEY);
             }
             else // mode_b is 1: counter-clockwise
             {
-                inputs.mode++;
-                if (inputs.mode > NB_MODES)
-                {
-                    inputs.mode = 0; // Cycle to 0 if NB_MODES is exceeded
-                }
-                send(MODE_KEY, INCREMENT_ACTION_KEY, inputs.mode);
+                send(MODE_KEY, INCREMENT_ACTION_KEY);
             }
         }
 
@@ -186,6 +182,58 @@ private:
         Serial.print(key);
         Serial.print("/");
         Serial.println(action);
+    }
+
+    Messages receive() {
+        Messages msg = {"", "", false}; // Initialise un message vide
+
+        if (Serial.available() > 0) {
+            String message = Serial.readStringUntil('\n'); // Lire la ligne jusqu'à '\n'
+            int separatorIndex = message.indexOf('/');
+
+            if (separatorIndex != -1) {
+                msg.key = message.substring(0, separatorIndex);
+                msg.action = message.substring(separatorIndex + 1);
+                msg.valid = true; // Le message est valide
+            } else {
+                msg.key = "Error";
+                msg.action = "Invalid format";
+                msg.valid = false;
+            }
+        }
+
+        return msg;
+    }
+
+    void updateOutputs()
+    {
+        Messages msg = receive();
+        if (!msg.valid) return; // Ignore invalid messages
+        if (msg.key == STATUS_LED_KEY)
+        {
+            if (msg.action == STATUS_LED_ON)
+            {
+                outputs.status_led = true;
+                //Serial.println("status_led on");
+            }
+            else if (msg.action == STATUS_LED_OFF)
+            {
+                outputs.status_led = false;
+                //Serial.println("status_led off");
+            }
+        }
+    }
+
+    void writeOutputs()
+    {
+        if (outputs.status_led)
+        {
+            digitalWrite(STATUS_LED, HIGH);
+        }
+        else
+        {
+            digitalWrite(STATUS_LED, LOW);
+        }
     }
     Inputs inputs, lastInputs;
     Outputs outputs;
