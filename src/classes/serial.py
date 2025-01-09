@@ -5,19 +5,8 @@ import time
 import os
 from config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
 from logFile import LogFile
-
 # Initialize the logs
 log = LogFile()
-
-ports = {
-    "UI_Corner": "/dev/ttyS0",
-    "Player1": "/dev/ttyUSB1",
-    "Player2": "/dev/ttyUSB2",
-    "Player3": "/dev/ttyUSB3",
-    "Player4": "/dev/ttyUSB4",
-    "ESP32": "/dev/ttyUSB5"
-}
-
 
 class Serial:
     def __init__(self, port, BAUD_RATE, TIMEOUT):
