@@ -14,12 +14,12 @@ RETRY_ATTEMPTS = 3  # Number of attempts to reset a port in case of a failed con
 RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)
 
 ports = {
-    "UICorner": "/dev/ttyS0",
-    "Player1": "/dev/ttyUSB1",
-    "Player2": "/dev/ttyUSB2",
-    "Player3": "/dev/ttyUSB3",
-    "Player4": "/dev/ttyUSB4",
-    "ESP32": "/dev/ttyUSB5"
+    "UICorner": "/dev/UICorner",
+    "Player1": "/dev/Player1",
+    "Player2": "/dev/Player2",
+    "Player3": "/dev/Player3",
+    "Player4": "/dev/Player4",
+    "ESP32": "/dev/ESP32"
 }
 
 ####################################
