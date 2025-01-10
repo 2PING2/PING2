@@ -89,51 +89,63 @@ class Serial:
 
 
 class UICornerSerial(Serial):
-    def process_data(self, last_data):
-        """ Process the data specific to the UI corner."""
-        if "volume" in last_data:
-            volume_received = last_data.split(":")[1]
-            volume_new = int((volume_received / 1023) * 100)
-            try:
-                subprocess.run(["amixer", "sset", "Master", f"{volume_new}%"], check=True)
-            except subprocess.CalledProcessError as e:
-                log.write_in_log("ERROR", "UICorner", "set_volume", "Error setting volume")
+    
+    pass
 
-        elif "level" in last_data:
-            level_received = last_data.split(":")[1]
-            # Implement logic to process level data
+    # ne pas oublier de metttre les vairable 'volume, level..."  dans le config
+    
+    
+    # def process_data(self, last_data):
+    #     """ Process the data specific to the UI corner."""
+    #     if "volume" in last_data:
+    #         volume_received = last_data.split(":")[1]
+    #         volume_new = int((volume_received / 1023) * 100)
+    #         try:
+    #             subprocess.run(["amixer", "sset", "Master", f"{volume_new}%"], check=True)
+        #     except subprocess.CalledProcessError as e:
+        #         log.write_in_log("ERROR", "UICorner", "set_volume", "Error setting volume")
+
+        # elif "level" in last_data:
+        #     level_received = last_data.split(":")[1]
+        #     # Implement logic to process level data
             
-        elif "light" in last_data:
-            brightness_received = last_data.split(":")[1]
-            brightness_new = int((brightness_received / 1023) * MAX_BRIGTHNESS)
-            # Implement logic to process brightness data
+        # elif "light" in last_data:
+        #     brightness_received = last_data.split(":")[1]
+        #     brightness_new = int((brightness_received / 1023) * MAX_BRIGTHNESS)
+        #     # Implement logic to process brightness data
             
-        elif "reset" in last_data:
-            # depend push / realease
-            pass
+        # elif "reset" in last_data:
+        #     # depend push / realease
+        #     pass
         
-        elif "mode_pb" in last_data:
-            # depend push / realease
-            pass
+        # elif "mode_pb" in last_data:
+        #     # depend push / realease
+        #     pass
         
-        elif "mode" in last_data:
-            # depend increment / decrement
-            pass
+        # elif "mode" in last_data:
+        #     # depend increment / decrement
+        #     pass
         
 class ControlerSerial(Serial):
-    def process_data(self, last_data):
-        """ Process the data specific to the controler."""
-        if "right" in last_data:
-            # depend push / realease
-            pass
-        if "left" in last_data:
-            # depend push / realease
-            pass
-        if "shoot" in last_data:
-            # depend push / realease
-            pass
+    
+    pass
+
+    # def process_data(self, last_data):
+    #     """ Process the data specific to the controler."""
+    #     if "right" in last_data:
+    #         # depend push / realease
+    #         pass
+    #     if "left" in last_data:
+    #         # depend push / realease
+    #         pass
+    #     if "shoot" in last_data:
+    #         # depend push / realease
+    #         pass
         
 class ESP32Serial(Serial):
-    def process_data(self, last_data):
-        """ Process the data specific to the ESP32."""
-        pass
+    
+    pass
+
+    # def process_data(self, last_data):
+    #     """ Process the data specific to the ESP32."""
+    #     pass
