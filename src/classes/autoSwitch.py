@@ -15,19 +15,17 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 import RPi.GPIO as GPIO
 import threading
-from config import AUTO_SWITCH1_PIN, AUTO_SWITCH2_PIN, AUTO_SWITCH3_PIN, AUTO_SWITCH4_PIN, AUTO_LED1_PIN, AUTO_LED2_PIN, AUTO_LED3_PIN, AUTO_LED4_PIN
 from logFile import LogFile
 log = LogFile()
 
-AUTO_SWITCHS_PIN = [AUTO_SWITCH1_PIN, AUTO_SWITCH2_PIN, AUTO_SWITCH3_PIN, AUTO_SWITCH4_PIN]
-AUTO_LEDS_PIN = [AUTO_LED1_PIN, AUTO_LED2_PIN, AUTO_LED3_PIN, AUTO_LED4_PIN]
-
+''' This class includes 1 switch and 1 LED. it will be used to select auto mode '''
 class AutoSwitch:
-    def __init__(self):
+    def __init__(self, AUTO_SWITCH_PIN, AUTO_LED_PIN):
         """Init states"""
-        self.led_states = [False] * len(AUTO_LEDS_PIN)
-        self.auto_modes = [False] * len(AUTO_SWITCHS_PIN)
-        self.running = False
+        self.ledState = False
+        self.autoMode = False
+        self.autoSwitchPin = AUTO_SWITCH_PIN
+        self.autoLedPin = AUTO_LED_PIN
         self.monitor_thread = None 
 
     def setup(self):
@@ -35,32 +33,31 @@ class AutoSwitch:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
 
-        for AUTO_LED_PIN in AUTO_LEDS_PIN:
-            GPIO.setup(AUTO_LED_PIN, GPIO.OUT)
-            GPIO.output(AUTO_LED_PIN, GPIO.LOW)
+        # SWITCH
+        GPIO.setup(self.autoSwitchPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        for AUTO_SWITCH_PIN in AUTO_SWITCHS_PIN:
-            GPIO.setup(AUTO_SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # LED
+        GPIO.setup(self.autoLedPin, GPIO.OUT)
+        GPIO.output(self.autoLedPin, GPIO.LOW)
+        
+        log.write_in_log("INFO", "autoSwitch", "setup", "Autoswitch and Autoled is initalized")
             
-        log.write_in_log("INFO", "AutoSwitch", "setup", "AutoSwitchs and AutoLeds initialized")  
-
-    def start(self):
-        """Start monitoring switches"""
-        self.monitor_thread = threading.Thread(target=self.monitor_switchs, daemon=True)
+        # start monitor_switch in a thread
+        self.monitor_thread = threading.Thread(target=self.monitor_switch(self.autoSwitchPin, self.autoLedPin), daemon=True)
         self.monitor_thread.start()
 
-    def monitor_switchs(self):
-        """Read the state of the switches and update the LEDs"""
-        button_states = [False] * len(AUTO_SWITCHS_PIN)
-        for i, button_pin in enumerate(AUTO_SWITCHS_PIN):
-            if GPIO.input(button_pin) == GPIO.LOW: # switch pushed
-                if not button_states[i]: # if the button is not already pushed
-                    self.led_states[i] = not self.led_states[i]
-                    self.auto_modes[i] = self.led_states[i]
+    def monitor_switch(self):
+        """Read the state of the switch and update the LED"""
+        buttonStates = False         
+        if GPIO.input(self.autoSwitchPin) == GPIO.LOW: # switch pushed
+            if not buttonStates: # if the button is not already pushed
+                self.ledState = not self.ledState
+                self.autoMode = self.ledState
 
-                    # Put the LED on or off
-                    GPIO.output(AUTO_LEDS_PIN[i], GPIO.HIGH if self.led_states[i] else GPIO.LOW)
+                # Put the LED on or off
+                GPIO.output(self.autoLedPin, GPIO.HIGH if self.ledState else GPIO.LOW)
 
-                    button_states[i] = True # record the button state
-            else:
-                button_states[i] = False # switch released
+                buttonStates = True # record the button state
+        else:
+            buttonStates = False # switch released
+                
