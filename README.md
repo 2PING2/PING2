@@ -28,7 +28,7 @@ Cette branche contient le code de développement pour l'ESP32, responsable de la
 ## Avancement
    - [X] Initialisation du .ini
    - [X] Implémentation du contrôle moteur
-   - [ ] Gestion des solénoïdes
+   - [X] Gestion des solénoïdes
    - [X] Détection des buts
    - [X] Calibration automatique
    - [ ] Tests unitaires

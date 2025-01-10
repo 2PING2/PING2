@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(int stepPin, int dirPin, TMC2209::SerialAddress address, int solenoidPin, int beamSwitchRPin) : actuator(stepPin, dirPin, address), solenoid(solenoidPin), beamSwitch(beamSwitchRPin)
+Player::Player(int stepPin, int dirPin, uint8_t address, bool motorShaft, int solenoidPin, int beamSwitchRPin) : actuator(stepPin, dirPin, address, motorShaft), solenoid(solenoidPin), beamSwitch(beamSwitchRPin)
 {
 }
 
@@ -12,6 +12,7 @@ int Player::setup()
 {
     actuator.setup();
     solenoid.setup();
+    beamSwitch.setup();
     return 0;
 }
 

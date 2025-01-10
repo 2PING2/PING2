@@ -36,7 +36,11 @@ unsigned long start = 0, t = 0;
 
 void test_init()
 {
-    BeamSwitch::setup();
+    BeamSwitch::setup_emitter();
+    b1.setup();
+    b2.setup();
+    b3.setup();
+    b4.setup();
 
     delay(100);
 

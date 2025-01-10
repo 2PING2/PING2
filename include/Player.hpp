@@ -8,7 +8,7 @@
 class Player
 {
 public:
-    Player(int stepPin, int dirPin, TMC2209::SerialAddress address, int solenoidPin, int beamSwitchRPin);
+    Player(int stepPin, int dirPin, uint8_t address,bool motorShaft, int solenoidPin, int beamSwitchRPin);
     int setup();
     int loop();
     ~Player();

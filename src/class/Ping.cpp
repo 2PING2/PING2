@@ -20,8 +20,9 @@ void PING::solenoid_overtemp_task(void *pvParameters)
 void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
-    BeamSwitch::setup();
+    BeamSwitch::setup_emitter();
     raspComManager.setup();
+    LinearActuator::setup_Serial();
     PING::player1.setup();
     PING::player2.setup();
     PING::player3.setup();

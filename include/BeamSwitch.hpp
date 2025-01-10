@@ -11,9 +11,10 @@ public:
     BeamSwitch() = delete;
     BeamSwitch(int beamSwitchRPin);
     ~BeamSwitch();
-    static void setup();
+    static void setup_emitter();
     static void start_emit();
     static void stop_emit();
+    void setup();
     bool get_state() { return state; };
     
 

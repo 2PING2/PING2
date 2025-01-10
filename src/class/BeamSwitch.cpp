@@ -8,7 +8,7 @@ TaskHandle_t BeamSwitch::checkAllTaskHandle;
 
 BeamSwitch::BeamSwitch(int beamSwitchRPin) : beamSwitchRPin(beamSwitchRPin)
 {
-    all.push_back(this);
+    // all.push_back(this);
 }
 
 BeamSwitch::~BeamSwitch()
@@ -39,16 +39,22 @@ void BeamSwitch::check_all_task(void *pvParameters)
     }
 }
 
-
 void BeamSwitch::setup()
+{
+    pinMode(beamSwitchRPin, INPUT);
+    all.push_back(this);
+}
+
+
+void BeamSwitch::setup_emitter()
 {
     pinMode(BEAM_T_PIN, OUTPUT);
     ledcSetup(IR_PWM_CHANNEL, IR_PWM_FREQUENCY, 8);
     ledcAttachPin(BEAM_T_PIN, IR_PWM_CHANNEL);
     ledcWrite(IR_PWM_CHANNEL, 0);
 
-    for (int i = 0; i < all.size(); i++)
-        pinMode(all[i]->beamSwitchRPin, INPUT);
+    // for (int i = 0; i < all.size(); i++)
+    //     pinMode(all[i]->beamSwitchRPin, INPUT);
 
     xTaskCreatePinnedToCore(
         BeamSwitch::check_all_task,         /* Function to implement the task */
@@ -63,6 +69,7 @@ void BeamSwitch::setup()
 
 void BeamSwitch::check_all(uint64_t currentTime)
 {
+    // Serial.println(all.size());
     for (int i = 0; i < all.size(); i++)
         all[i]->check(currentTime);
 }
