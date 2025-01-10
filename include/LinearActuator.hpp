@@ -39,8 +39,8 @@ public:
             {
                 if (la->askForStallGuard)
                 {
-                    Serial.print("psg ");
-                    Serial.println(LinearActuator::all.findFirst(la));
+                    // Serial.print("psg ");
+                    // Serial.println(LinearActuator::all.findFirst(la));
                     la->stallGuardValue = la->driver.SG_RESULT();
                     la->newStallGuardAvailable = true;
                 }
