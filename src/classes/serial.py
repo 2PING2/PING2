@@ -31,8 +31,8 @@ class Serial:
         self.timeout = TIMEOUT
         self.ser = None
         self.running = False
-        self.last_data = None
-        self.retry_count = 0
+        self.lastData = None
+        self.retryCount = 0
         log.write_in_log("INFO", "SerialPortHandler", "__init__", f"SerialPortHandler initialized for port {self.port}")
 
     def setup(self):
@@ -68,9 +68,9 @@ class Serial:
         while self.running:
             try:
                 data = self.ser.readline().decode('utf-8').strip()
-                if data and data != self.last_data:
-                    self.last_data = data
-                    self.process_data(self.last_data)                   
+                if data and data != self.lastData:
+                    self.lastData = data
+                    self.process_data(self.lastData)                   
             except serial.SerialException as e:
                 log.write_in_log("ERROR", "SerialPortHandler", "read_data", f"Error reading from {self.port}: (Exception)")
                 self.running = False
