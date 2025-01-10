@@ -23,6 +23,7 @@ from logFile import LogFile
 # Initialize the logs
 log = LogFile()
 
+''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
 class Serial:
     def __init__(self, port, BAUD_RATE, TIMEOUT):
         """Initialize the serial port handler."""
