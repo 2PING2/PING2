@@ -25,7 +25,7 @@ ports = {
 ####################################
 # LED STRIP SETTINGS
 ####################################
-GPIO_PIN = 10
+LED_STRIP_PIN = 10
 NUMBER_OF_LEDS = 176
 FREQUENCY = 800000
 DMA_CHANNEL = 10
@@ -41,5 +41,20 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 ORANGE = (255, 165, 0)
 YELLOW = (255, 255, 0)
+
+
+####################################
+# AUTO SWITCH / LED SETTINGS 
+####################################
+AUTO_SWITCH1_PIN = 5
+AUTO_LED1_PIN = 6
+AUTO_SWITCH2_PIN = 17
+AUTO_LED2_PIN = 27
+AUTO_SWITCH3_PIN = 26
+AUTO_LED3_PIN = 21
+AUTO_SWITCH4_PIN = 16
+AUTO_LED4_PIN = 20
+
+
 
 
