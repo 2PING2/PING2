@@ -6,10 +6,10 @@ log = LogFile()
 
 
 class LedStrip:
-    def __init__(self, GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
+    def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
         """Init the LED strip."""        
         try:
-            self.strip = PixelStrip(NUMBER_OF_LEDS, GPIO_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
+            self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
             self.strip.begin()
             log.write_in_log("INFO", "ledStrip", "__init__", "LED strip initialized")
         except Exception as e:
@@ -65,7 +65,7 @@ from led_strip import LedStrip, PlayerLedStrip
 
 ''' 
 # Création d'un objet LedStrip (pour un bandeau LED complet)
-led_strip = LedStrip(GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS) 
+led_strip = LedStrip(LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS) 
 
 player1led = PlayerLedStrip(led_strip, PLAYER_OFFSETS[1])
 
