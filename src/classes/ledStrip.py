@@ -19,7 +19,7 @@ from config import MAX_BRIGTHNESS
 from logFile import*
 log = LogFile()
 
-
+''' LedStrip class useful for the management of the LED strip. '''
 class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
         """Init the LED strip.""" 
