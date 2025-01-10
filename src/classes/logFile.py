@@ -20,13 +20,13 @@ pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
 class LogFile:
     def __init__(self, log_folder=pathLogFolder):
-        self.log_folder = log_folder
+        self.logFolder = log_folder
         # Create the log folder if it does not exist
-        os.makedirs(self.log_folder, exist_ok=True)
+        os.makedirs(self.logFolder, exist_ok=True)
 
     def create_log_file(self):
         today = datetime.now().strftime("%d-%m-%Y")
-        logFilename = os.path.join(self.log_folder, f"Log_file_{today}.log")
+        logFilename = os.path.join(self.logFolder, f"Log_file_{today}.log")
         if not os.path.exists(logFilename):
             print(f"Log file: {logFilename} is created")
             with open(logFilename, 'w') as file:
@@ -36,7 +36,7 @@ class LogFile:
 
     def write_in_log(self, status, programme, function, message):
         today = datetime.now().strftime("%d-%m-%Y")      
-        logFilename = os.path.join(self.log_folder, f"Log_file_{today}.log")
+        logFilename = os.path.join(self.logFolder, f"Log_file_{today}.log")
         try:
             with open(logFilename, 'a') as file:
                 file.write(f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S.%f')[:-3]} {status} {programme} {function} {message}\n")
