@@ -12,15 +12,7 @@
 #define saturate(a, low, high) (min(max(a, low), high))
 
 #define LINEAR_ACTUATOR_MIN_AMPLITUDE (LINEAR_ACTUATOR_RAILHEAD - MAX_BUMPER_WIDTH)
-namespace RunStatus
-{
-    enum Status
-    {
-        IDLE,
-        RUNNING,
-        COLLISION
-    };
-}
+
 
 class LinearActuator
 {
@@ -39,8 +31,6 @@ public:
             {
                 if (la->askForStallGuard)
                 {
-                    // Serial.print("psg ");
-                    // Serial.println(LinearActuator::all.findFirst(la));
                     la->stallGuardValue = la->driver.SG_RESULT();
                     la->newStallGuardAvailable = true;
                 }
@@ -52,8 +42,6 @@ public:
     LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
-    int calibrate_right();
-    int calibrate_left();
     uint16_t get_stallGuardValue() { 
         askForStallGuard = true; 
         if (!newStallGuardAvailable)
@@ -66,8 +54,6 @@ public:
         }
     void reset_right_limit() { rightLimit = INT_MIN; }
     void reset_left_limit() { leftLimit = INT_MAX; }
-    // bool check_right_calibration();
-    // bool check_left_calibration();
     void invert(bool shaft) { motor.setPinsInverted(shaft); }
     void set_speed(float speed) { motor.setSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
     void set_max_speed(float speed) { motor.setMaxSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
@@ -104,7 +90,6 @@ private:
     TMC2209Stepper driver;
     AccelStepper motor;
     void set_current_position(float position) { motor.setCurrentPosition(position * MICRO_STEPS_PER_MM); }
-    RunStatus::Status status = RunStatus::IDLE;
     int64_t chrono = 0;
     bool shaft;
     int currentCalibrationSteps = 0;
@@ -287,7 +272,6 @@ private:
 
     bool calibration(int64_t time = esp_timer_get_time())
     {
-        // Serial.print("c");
         switch (currentCalibrationSteps)
         {
         case 0:
@@ -363,9 +347,7 @@ private:
                 currentCalibrationSteps = 11;
             break;
         default:
-        {
-            // Serial.println("bad calibration step");
-        }
+            break;
         }
         return false;
     }
