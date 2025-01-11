@@ -253,7 +253,7 @@ bool LinearActuator::c_step16()
     return true;
 }
 
-bool LinearActuator::calibration(int64_t time = esp_timer_get_time())
+bool LinearActuator::calibration(int64_t time)
 {
     switch (currentCalibrationSteps)
     {
