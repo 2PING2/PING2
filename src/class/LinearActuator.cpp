@@ -6,8 +6,8 @@ void LinearActuator::setup_Serial()
 {
     TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
     xTaskCreatePinnedToCore(
-        stallGuardTask,
-        "stallGuardTask",
+        stall_guard_task,
+        "stall_guard_task",
         10000,
         NULL,
         TASK_STALLGUARD_PRIORITY,
@@ -15,7 +15,7 @@ void LinearActuator::setup_Serial()
         TASK_STALLGUARD_CORE);
 }
 
-void LinearActuator::stallGuardTask(void *pvParameters)
+void LinearActuator::stall_guard_task(void *pvParameters)
 {
     for (;;)
     {
@@ -50,7 +50,7 @@ void LinearActuator::setup()
     driver.pwm_autoscale(true); // Needed for stealthChop
 }
 
-uint16_t LinearActuator::get_stallGuardValue()
+uint16_t LinearActuator::get_stall_guard_value()
 {
     askForStallGuard = true;
     if (!newStallGuardAvailable)
@@ -104,7 +104,7 @@ bool LinearActuator::c_step2(int64_t time)
 
 bool LinearActuator::c_step3(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stallGuardValue() < COARSE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 20000 && get_stall_guard_value() < COARSE_CALIBRATION_STALL_VALUE))
         return false;
     instant_stop();
     askForStallGuard = false;
@@ -142,7 +142,7 @@ bool LinearActuator::c_step6(int64_t time)
 
 bool LinearActuator::c_step7(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stallGuardValue() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
         return false;
     askForStallGuard = false;
     instant_stop();
@@ -185,7 +185,7 @@ bool LinearActuator::c_step10(int64_t time)
 
 bool LinearActuator::c_step11(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stallGuardValue() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
         return false;
     askForStallGuard = false;
     instant_stop();
@@ -222,7 +222,7 @@ bool LinearActuator::c_step14(int64_t time)
 
 bool LinearActuator::c_step15(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stallGuardValue() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
         return false;
     askForStallGuard = false;
     instant_stop();

@@ -18,12 +18,12 @@ class LinearActuator
 {
 public:
     static void setup_Serial();
-    static void stallGuardTask(void *pvParameters);
+    static void stall_guard_task(void *pvParameters);
 
     LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
-    uint16_t get_stallGuardValue();
+    uint16_t get_stall_guard_value();
     void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
     void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
     void invert(bool shaft) { motor.setPinsInverted(shaft); }
