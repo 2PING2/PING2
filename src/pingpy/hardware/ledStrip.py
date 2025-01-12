@@ -13,10 +13,14 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
-from rpi_ws281x import PixelStrip, Color
+try:
+    from rpi_ws281x import PixelStrip, Color
+except ImportError:
+    from .rpi_ws281xMock import PixelStrip, Color
+
 import time
-from config import MAX_BRIGTHNESS
-from classes.debug.logFile import*
+from config.config import MAX_BRIGTHNESS
+from pingpy.debug.logFile import*
 log = LogFile()
 
 ''' LedStrip class useful for the management of the LED strip. '''

@@ -20,6 +20,7 @@ pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
 class LogFile:
     def __init__(self, log_folder=pathLogFolder):
+        print(f"Logger initialized with log folder: {log_folder}")
         self.logFolder = log_folder
         # Create the log folder if it does not exist
         os.makedirs(self.logFolder, exist_ok=True)

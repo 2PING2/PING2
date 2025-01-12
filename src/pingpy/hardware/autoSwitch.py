@@ -13,9 +13,13 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO  # Sur Raspberry Pi
+except ImportError:
+    from .gpioMock import GPIO  # Sur PC ou autre environnement
+    
 import threading
-from classes.debug.logFile import LogFile
+from pingpy.debug.logFile import LogFile
 log = LogFile()
 
 ''' This class includes 1 switch and 1 LED. it will be used to select auto mode '''

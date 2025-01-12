@@ -1,7 +1,7 @@
 from .gameMode import GameMode
 from ..output.output import Output
 import time
-from classes.debug.logFile import*   
+from pingpy.debug.logFile import*   
 from config.config import GREEN, ORANGE, YELLOW, RED
 log = LogFile()
 
