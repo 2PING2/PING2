@@ -1,5 +1,9 @@
 # mock_rpi_ws281x.py
 
+from pingpy.debug import logger
+
+logger.write_in_log("INFO", "rpi_ws281xMock", "__init__", "rpi_ws281x mock loaded")
+
 class PixelStrip:
     def __init__(self, num_pixels, pin, freq_hz, dma_channel, invert=False, brightness=255):
         self.num_pixels = num_pixels

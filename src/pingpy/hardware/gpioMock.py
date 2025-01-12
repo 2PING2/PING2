@@ -1,4 +1,9 @@
 # mock_gpio.py
+from pingpy.debug import logger
+
+
+logger.write_in_log("INFO", "gpioMock", "__init__", "GPIO mock loaded")
+
 class GPIO:
     BCM = "BCM"
     BOARD = "BOARD"
