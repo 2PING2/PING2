@@ -47,12 +47,12 @@ class LogFile:
 
 if __name__ == "__main__":    
     # Init the log handler
-    log = LogFile()
+    logger = LogFile()
 
     # Create the log file
-    log.create_log_file()
+    logger.create_log_file()
     
     # Write in log (examples)
-    log.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
-    log.write_in_log("ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
-    log.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")
+    logger.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
+    logger.write_in_log("ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
+    logger.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")

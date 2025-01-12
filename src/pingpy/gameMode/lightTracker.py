@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from classes.input.input import Input
-from classes.output.output import Output
+from pingpy.input.input import Input
+from pingpy.output.output import Output
 from datetime import datetime
 from gameMode import GameMode
 from config.config import YELLOW
 import time
-from classes.debug.logFile import LogFile
+import pingpy.debug.logFile
 import random
 
 #Creation du logfile
-log = LogFile()
 
 
 class LightTracker(GameMode):

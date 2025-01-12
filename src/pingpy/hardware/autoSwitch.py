@@ -19,8 +19,9 @@ except ImportError:
     from .gpioMock import GPIO  # Sur PC ou autre environnement
     
 import threading
-from pingpy.debug.logFile import LogFile
-log = LogFile()
+import pingpy.debug.logFile
+
+
 
 ''' This class includes 1 switch and 1 LED. it will be used to select auto mode '''
 class AutoSwitch:
@@ -44,7 +45,7 @@ class AutoSwitch:
         GPIO.setup(self.autoLedPin, GPIO.OUT)
         GPIO.output(self.autoLedPin, GPIO.LOW)
         
-        log.write_in_log("INFO", "autoSwitch", "setup", "Autoswitch and Autoled is initalized")
+        logger.write_in_log("INFO", "autoSwitch", "setup", "Autoswitch and Autoled is initalized")
             
         # start monitor_switch in a thread
         self.monitor_thread = threading.Thread(target=self.monitor_switch(self.autoSwitchPin, self.autoLedPin), daemon=True)

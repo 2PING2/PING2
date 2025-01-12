@@ -20,8 +20,7 @@ except ImportError:
 
 import time
 from config.config import MAX_BRIGTHNESS
-from pingpy.debug.logFile import*
-log = LogFile()
+import pingpy.debug.logFile
 
 ''' LedStrip class useful for the management of the LED strip. '''
 class LedStrip:
@@ -33,17 +32,17 @@ class LedStrip:
         """Config the LED strip."""
         try:
             self.strip.begin()
-            log.write_in_log("INFO", "ledStrip", "__init__", "LED strip initialized")
+            logger.write_in_log("INFO", "ledStrip", "__init__", "LED strip initialized")
         except Exception as e:
-            log.write_in_log("ERROR", "ledStrip", "__init__", f"Failed to initialize LED strip: {e}")
+            logger.write_in_log("ERROR", "ledStrip", "__init__", f"Failed to initialize LED strip: {e}")
                          
     def setLedStrip(self, color, OFFSET_MIN, OFFSET_MAX):
         """Set the LED strip between OFFSET_MIN and OFFSET_MAX to a color."""
         if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
-            log.write_in_log("ERROR", "LedStrip", "setLedStrip", "Invalid offset")
+            logger.write_in_log("ERROR", "LedStrip", "setLedStrip", "Invalid offset")
             return
         if not isinstance(color, int) or color < 0:
-            log.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Invalid color value: {color}")
+            logger.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Invalid color value: {color}")
             return
        
         for i in range(OFFSET_MIN, OFFSET_MAX):
@@ -53,7 +52,7 @@ class LedStrip:
     def setBrightness(self, brightness):
         """Set the brightness of the LED strip."""
         if not isinstance(brightness, int) or brightness < 0 or brightness > MAX_BRIGTHNESS:
-            log.write_in_log("ERROR", "LedStrip", "setBrightness", f"Invalid brightness value: {brightness}")
+            logger.write_in_log("ERROR", "LedStrip", "setBrightness", f"Invalid brightness value: {brightness}")
             return
         self.strip.setBrightness(brightness)
         self.strip.show()
