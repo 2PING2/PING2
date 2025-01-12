@@ -53,5 +53,5 @@ if __name__ == "__main__":
     
     # Write in log (examples)
     log.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
-    log.write_in_log("ERROR", "ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
+    log.write_in_log("ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
     log.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")
