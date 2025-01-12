@@ -1,2 +1,2 @@
-from autoSwitch import AutoSwitch
-from ledStrip import LedStrip
+from .autoSwitch import AutoSwitch
+from .ledStrip import LedStrip
