@@ -19,7 +19,7 @@ import subprocess
 import time
 import os
 from config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
-from logFile import LogFile
+from classes.debug.logFile import LogFile
 # Initialize the logs
 log = LogFile()
 

@@ -5,7 +5,7 @@ from datetime import datetime
 from gameMode import GameMode
 from config.config import YELLOW
 import time
-from classes.logFile import LogFile
+from classes.debug.logFile import LogFile
 import random
 
 #Creation du logfile
