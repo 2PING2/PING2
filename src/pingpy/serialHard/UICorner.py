@@ -1,5 +1,5 @@
 from serial import Serial
 
 class UICornerSerial(Serial):
-    
-    pass
+    def __init__(self):
+        print("UICorner class created")

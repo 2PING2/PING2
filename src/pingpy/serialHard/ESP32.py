@@ -1,5 +1,5 @@
 from serial import Serial
   
 class ESP32Serial(Serial):
-    
-    pass
+    def __init__(self):
+        print("ESP32 class created")
