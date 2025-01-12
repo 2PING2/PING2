@@ -16,7 +16,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 from rpi_ws281x import PixelStrip, Color
 import time
 from config import MAX_BRIGTHNESS
-from logFile import*
+from classes.debug.logFile import*
 log = LogFile()
 
 ''' LedStrip class useful for the management of the LED strip. '''

@@ -15,7 +15,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 import RPi.GPIO as GPIO
 import threading
-from logFile import LogFile
+from classes.debug.logFile import LogFile
 log = LogFile()
 
 ''' This class includes 1 switch and 1 LED. it will be used to select auto mode '''
