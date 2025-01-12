@@ -3,7 +3,7 @@ from classes.input.input import Input
 from classes.output.output import Output
 from datetime import datetime
 from gameMode import GameMode
-from classes.config import YELLOW
+from config.config import YELLOW
 import time
 from classes.logFile import LogFile
 import random

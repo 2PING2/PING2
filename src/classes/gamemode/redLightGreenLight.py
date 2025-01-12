@@ -2,7 +2,7 @@ from classes.gameMode import GameMode
 from classes.output.output import Output
 import time
 from logFile import*   
-from classes.config import GREEN, ORANGE, YELLOW, RED
+from config.config import GREEN, ORANGE, YELLOW, RED
 log = LogFile()
 
 class RedLightGreenLight(GameMode):
