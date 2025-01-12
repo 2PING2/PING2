@@ -1,8 +1,4 @@
-# from atYourCommand import AtYourCommand
-# from battleRoyale import BattleRoyale
-# from lightTracker import LightTracker
-# from memoryChain import MemoryChain
-# from pingGame import PingGame
-from redLightGreenLight import RedLightGreenLight
-# from sandBox import SandBox
-
+if __name__ == '__main__':
+    from redLightGreenLight import RedLightGreenLight
+else:
+    from .redLightGreenLight import RedLightGreenLight

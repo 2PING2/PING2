@@ -1,4 +1,4 @@
-from classes.ping import Ping
+from classes import Ping
 
 
 def main():
