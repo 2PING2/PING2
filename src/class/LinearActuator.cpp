@@ -159,10 +159,11 @@ bool LinearActuator::c_step7(int64_t time)
 
 bool LinearActuator::c_step8()
 {
-    if (!true)
+    if (calibrationGoodSamples < FINE_CALIBRATION_SAMPLES)
         return false; // don't forget to implement counter condition in main calibration method
+    leftLimit = calibrationFirstWallPosition;
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-    move(FINE_CALIBRATION_WITHDRAWAL_DISTANCE);
+    move(-LINEAR_ACTUATOR_MIN_AMPLITUDE);
     return true;
 }
 
@@ -170,14 +171,14 @@ bool LinearActuator::c_step9()
 {
     if (!motor.distanceToGo() == 0)
         return false;
-    set_max_speed(FINE_CALIBRATION_SPEED);
+    set_max_speed(COARSE_CALIBRATION_SPEED);
     move_right();
     return true;
 }
 
 bool LinearActuator::c_step10(int64_t time)
 {
-    if (!(FINE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
+    if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
     return true;
@@ -185,7 +186,7 @@ bool LinearActuator::c_step10(int64_t time)
 
 bool LinearActuator::c_step11(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 20000 && get_stall_guard_value() < COARSE_CALIBRATION_STALL_VALUE))
         return false;
     askForStallGuard = false;
     instant_stop();
@@ -199,7 +200,7 @@ bool LinearActuator::c_step12()
     if (!true)
         return false; // don't forget to implement counter condition in main calibration method
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-    move(-LINEAR_ACTUATOR_MIN_AMPLITUDE);
+    move(FINE_CALIBRATION_WITHDRAWAL_DISTANCE);
     return true;
 }
 
@@ -252,7 +253,6 @@ bool LinearActuator::c_step16()
     move_to(0);
     return true;
 }
-
 bool LinearActuator::calibration(int64_t time)
 {
     switch (currentCalibrationSteps)
