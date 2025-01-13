@@ -3,6 +3,7 @@ from pingpy.config.config import BAUD_RATE, TIMEOUT, ports
 from pingpy.input import Input
 from pingpy.output import Output
 from pingpy.debug import logger
+
 class Ping:
     def __init__(self):
         self.input = Input()
