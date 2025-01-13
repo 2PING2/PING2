@@ -27,7 +27,7 @@ class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
         """Init the LED strip.""" 
         self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
-     
+        self.color = None
     def setup(self):
         """Config the LED strip."""
         try:
@@ -70,6 +70,7 @@ class PlayerLedStrip:
         """Init the player LED strip."""
         self.ledStrip = ledStrip
         self.min, self.max = minAndMax
+        self.color = None
         
     def onPlayer(self, color):
         """Turn on all the LEDs."""

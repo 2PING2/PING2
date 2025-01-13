@@ -6,15 +6,14 @@ import time
 from unittest.mock import MagicMock
 from datetime import datetime
 
-# Ajoutez le chemin vers le dossier `src` au sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 # Importer les classes nécessaires
-from classes.gameMode import RedLightGreenLight
-from classes.input.input import Input, PlayerInput, BeamSwitch, LinearActuatorInput, GameController3button, OtherInput
-from classes.output.output import Output, PlayerOutput, Led, LinearActuatorOutput
-from classes.ledStrip import LedStrip, PlayerLedStrip
-from config.config import GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS, PLAYER_OFFSETS
+from pingpy.gameMode import RedLightGreenLight
+from pingpy.input.input import *
+from pingpy.output.output import *
+from pingpy.hardware import *
+from config import LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, MAX_BRIGTHNESS, PLAYER_OFFSETS
 
 
 
@@ -35,8 +34,8 @@ class TestRedLightGreenLight(unittest.TestCase):
             id_player=0
         )
         self.input_data = Input(
-            ListPlayerInput=[player_input_1],
-            OtherInput=OtherInput(ballPose=(10, 20))
+            
+            ListPlayerInput=[player_input_1]
         )
 
         # Configuration des joueurs (sorties)

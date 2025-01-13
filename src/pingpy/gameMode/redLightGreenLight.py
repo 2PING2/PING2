@@ -14,7 +14,7 @@ class RedLightGreenLight(GameMode):
         self.timeInit = time.time()
         self.durationGreenLight = 3  # Temps du feu vert
         self.reactionTime = 0.5      # Temps de réaction
-        self.outputData = Output([])  # Initialisation des données de sortie
+        self.outputData = Output()  # Initialisation des données de sortie
 
     def can_move(self, currentTime):
         """
@@ -23,7 +23,7 @@ class RedLightGreenLight(GameMode):
         elapsedTime = currentTime - self.timeInit
         if elapsedTime<0:
             logger.write_in_log("ERROR", "gameMode", "can_move", "elaspsed time has a negative value")
-        return elapsedTime < self.durationGreenLight
+        return elapsedTime < self.durationGreenLight + self.reactionTime
 
     def check_action(self, playerInput, currentTime):
         """
@@ -36,11 +36,13 @@ class RedLightGreenLight(GameMode):
                 # light green : allowed to move
                 playerOutput.LinearActuatorOutput.move_to_right = True
                 playerOutput.LinearActuatorOutput.move_to_leftLimit = False
-                playerOutput.PlayerLedStrip.onPlayer(GREEN)
+                #playerOutput.PlayerLedStrip.onPlayer(GREEN)
+                playerOutput.PlayerLedStrip.color(GREEN)
             else:
                 # light red : not allowed to move
                 playerOutput.LinearActuatorOutput.move_to_leftLimit = True
-                playerOutput.PlayerLedStrip.onPlayer(ORANGE)
+                #playerOutput.PlayerLedStrip.onPlayer(ORANGE)
+                playerOutput.PlayerLedStrip.color(ORANGE)
         else:
             playerOutput = self.outputData.ListPlayerOutput[playerInput.idPlayer]
             playerOutput.LinearActuatorOutput.move_to_right = False
@@ -64,7 +66,9 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", "gameMode", "cycle", "elaspsed time has a negative value")
         self.isLightGreen = elapsedTime < self.durationGreenLight
 
-        self.outputData.ledStrip.onLedStrip(GREEN) if self.isLightGreen else self.outputData.ledStrip.onLedStrip(RED)
+        #self.outputData.ledStrip.onLedStrip(GREEN) if self.isLightGreen else self.outputData.ledStrip.onLedStrip(RED)
+        self.outputData.ledStrip.color=GREEN if self.isLightGreen else RED
+
 
     def run(self, inputData):
         """
@@ -90,6 +94,7 @@ class RedLightGreenLight(GameMode):
         """
         for playerInput in inputData.ListPlayerInput:
             playerOutput = self.outputData.ListPlayerOutput[playerInput.idPlayer]
-            playerOutput.PlayerLedStrip.clearPlayer()
+            #playerOutput.PlayerLedStrip.clearPlayer()
+            playerOutput.PlayerLedStrip.color(None)
             playerOutput.LinearActuatorOutput.move_to_right = False
             playerOutput.LinearActuatorOutput.move_to_leftLimit = True
