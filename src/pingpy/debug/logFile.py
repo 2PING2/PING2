@@ -35,7 +35,7 @@ class LogFile:
         else:
             print(f"Log file: {logFilename} already exists")
 
-    def write_in_log(self, status, programme, function, message):
+    def write_in_log(self, status, programme, function, message=""):
         today = datetime.now().strftime("%d-%m-%Y")      
         logFilename = os.path.join(self.logFolder, f"Log_file_{today}.log")
         try:

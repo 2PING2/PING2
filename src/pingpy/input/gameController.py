@@ -1,4 +1,4 @@
-class GameControllerInput(ABC):
-    @abstractmethod
-    def __init__(self, newAction, newActionleft, newActionright, newActionShoot):
-        pass
+class GameControllerInput():
+
+    def __init__(self):
+        self.inAction = False
