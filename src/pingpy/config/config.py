@@ -37,6 +37,20 @@ ports = {
 }
 
 ####################################
+# CONTROLLER TYPES KEYS
+####################################
+CONTROLLER_TYPE_3BUTTONS = "3buttons"
+CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
+
+
+####################################
+# SERIAL KEYS
+####################################
+
+PUSH_KEY = "push"
+RELEASE_KEY = "release"
+
+####################################
 # LED STRIP SETTINGS
 ####################################
 LED_STRIP_PIN = 10

@@ -1,8 +1,8 @@
 from .gameMode import GameMode
 from ..output.output import Output
 import time
-import pingpy.debug.logFile   
-from config.config import GREEN, ORANGE, YELLOW, RED
+from pingpy.debug import logger
+from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
 
 
 class RedLightGreenLight(GameMode):

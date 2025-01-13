@@ -18,13 +18,11 @@ import threading
 import subprocess
 import time
 import os
-from ....config.config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
-from classes.debug.logFile import LogFile
-# Initialize the logs
-log = LogFile()
+from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
+from pingpy.debug import logger
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
-class Serial:
+class SerialCom:
     def __init__(self, port, BAUD_RATE, TIMEOUT):
         """Initialize the serial port handler."""
         self.port = port
@@ -34,7 +32,7 @@ class Serial:
         self.running = False
         self.lastData = None
         self.retryCount = 0
-        log.write_in_log("INFO", "SerialPortHandler", "__init__", f"SerialPortHandler initialized for port {self.port}")
+        logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.port}")
 
     def setup(self):
         """Configure and start reading the serial port."""
@@ -42,9 +40,9 @@ class Serial:
         if self.ser:
             self.running = True
             threading.Thread(target=self.read_data, daemon=True).start()
-            log.write_in_log("INFO", "SerialPortHandler", "setup", f"Reading started on {self.port}")
+            logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.port}")
         else:
-            log.write_in_log("WARNING", "SerialPortHandler", "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+            logger.write_in_log("WARNING", __name__, "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
         """Try to open the serial port."""
@@ -52,15 +50,15 @@ class Serial:
             try:
                 # Check if the port exists
                 if not os.path.exists(self.port):
-                    log.write_in_log("WARNING", "SerialPortHandler", "open_port", f"Port {self.port} does not exist.")
+                    logger.write_in_log("WARNING", __name__, "open_port", f"Port {self.port} does not exist.")
                     return None
 
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
-                log.write_in_log("INFO", "SerialPortHandler", "open_port", f"Connected to port {self.port}")
+                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 return ser
             except serial.SerialException as e:
-                log.write_in_log("ERROR", "SerialPortHandler", "open_port", f"Error connecting to port {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: (Exception)")
                 time.sleep(RETRY_DELAY)
         return None
 
@@ -70,20 +68,24 @@ class Serial:
             try:
                 data = self.ser.readline().decode('utf-8').strip()
                 if data and data != self.lastData:
-                    self.lastData = data
-                    self.process_data(self.lastData)                   
+                    self.lastData = self.parse_data()                 
             except serial.SerialException as e:
-                log.write_in_log("ERROR", "SerialPortHandler", "read_data", f"Error reading from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: (Exception)")
                 self.running = False
                 break
             except Exception as e:
-                log.write_in_log("ERROR", "SerialPortHandler", "read_data", f"Error processing data from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}: (Exception)")
                 self.running = False
                 break
+            
+    def parse_data(self):
+        """Parse the data received from the serial port."""
+        parsed_data = self.lastData.split('/')
+        return parsed_data
 
     def stop_reading(self):
         """Stop reading from the serial port."""
         self.running = False
         if self.ser:
             self.ser.close()
-            log.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
+            logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
