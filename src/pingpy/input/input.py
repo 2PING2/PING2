@@ -1,12 +1,13 @@
 
+from pingpy.debug import logger
+from pingpy.input.player import PlayerInput
+from pingpy.config.config import BAUD_RATE, TIMEOUT, ports
+
 """
 Mother class to all inputs 
 Inputs : PlayerInput (linearActuatorInput, BeamSwitch...), GameController3button
 """
-
-from pingpy.debug import logger
-
 class Input:
     def __init__(self):
-        logger.write_in_log("INFO", "input", "__init__")
-        pass
+        self.player = [PlayerInput(ports["Player"+str(i)], BAUD_RATE, TIMEOUT) for i in range(1, 5)]
+        logger.write_in_log("INFO", __name__, "__init__")

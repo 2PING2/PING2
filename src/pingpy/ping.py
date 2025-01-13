@@ -10,9 +10,9 @@ class Ping:
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], BAUD_RATE, TIMEOUT)
-        logger.write_in_log("INFO", "ping", "__init__")
+        logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self):
         self.esp32.setup()
         self.UICorner.setup()
-        logger.write_in_log("INFO", "ping", "setup")
+        logger.write_in_log("INFO", __name__, "setup")

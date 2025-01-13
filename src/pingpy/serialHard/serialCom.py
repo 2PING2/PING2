@@ -32,7 +32,7 @@ class SerialCom:
         self.running = False
         self.lastData = None
         self.retryCount = 0
-        logger.write_in_log("INFO", "SerialCom", "__init__", f"SerialCom constructed for port {self.port}")
+        logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.port}")
 
     def setup(self):
         """Configure and start reading the serial port."""
@@ -40,9 +40,9 @@ class SerialCom:
         if self.ser:
             self.running = True
             threading.Thread(target=self.read_data, daemon=True).start()
-            logger.write_in_log("INFO", "SerialCom", "setup", f"Reading started on {self.port}")
+            logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.port}")
         else:
-            logger.write_in_log("WARNING", "SerialCom", "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+            logger.write_in_log("WARNING", __name__, "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
         """Try to open the serial port."""
@@ -50,15 +50,15 @@ class SerialCom:
             try:
                 # Check if the port exists
                 if not os.path.exists(self.port):
-                    logger.write_in_log("WARNING", "SerialCom", "open_port", f"Port {self.port} does not exist.")
+                    logger.write_in_log("WARNING", __name__, "open_port", f"Port {self.port} does not exist.")
                     return None
 
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
-                logger.write_in_log("INFO", "SerialCom", "open_port", f"Connected to port {self.port}")
+                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 return ser
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", "SerialCom", "open_port", f"Error connecting to port {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: (Exception)")
                 time.sleep(RETRY_DELAY)
         return None
 
@@ -70,11 +70,11 @@ class SerialCom:
                 if data and data != self.lastData:
                     self.lastData = self.parse_data()                 
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", "SerialCom", "read_data", f"Error reading from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: (Exception)")
                 self.running = False
                 break
             except Exception as e:
-                logger.write_in_log("ERROR", "SerialCom", "read_data", f"Error processing data from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}: (Exception)")
                 self.running = False
                 break
             
