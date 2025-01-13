@@ -22,7 +22,7 @@
 
 // Calibration Settings
 #define COARSE_CALIBRATION_SPEED           76   // mm/s
-#define COARSE_CALIBRATION_STALL_VALUE     190
+#define COARSE_CALIBRATION_STALL_VALUE     200
 #define FINE_CALIBRATION_SPEED             44   // mm/s
 #define FINE_CALIBRATION_STALL_VALUE       180
 #define FINE_CALIBRATION_SAMPLES            2   // good samples needed
@@ -115,6 +115,6 @@
 ////////////////////////////////////
 #define TASK_BEAM_CHECK_DELAY_MS       5
 #define TASK_SOLENOID_OVERTEMP_DELAY_MS 100
-#define TASK_STALLGUARD_DELAY_MS       1
+#define TASK_STALLGUARD_DELAY_MS       3
 
 #endif // CONFIG_H

@@ -12,76 +12,26 @@
 #define saturate(a, low, high) (min(max(a, low), high))
 
 #define LINEAR_ACTUATOR_MIN_AMPLITUDE (LINEAR_ACTUATOR_RAILHEAD - MAX_BUMPER_WIDTH)
-namespace RunStatus
-{
-    enum Status
-    {
-        IDLE,
-        RUNNING,
-        COLLISION
-    };
-}
+
 
 class LinearActuator
 {
 public:
-    static void setup_Serial() { 
-        TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE); 
-        xTaskCreatePinnedToCore(stallGuardTask, "stallGuardTask", 10000, NULL, TASK_STALLGUARD_PRIORITY, NULL, TASK_STALLGUARD_CORE);
+    static void setup_Serial();
+    static void stall_guard_task(void *pvParameters);
 
-    }
-    // stallGuardTask
-    static void stallGuardTask(void *pvParameters)
-    {
-        for (;;)
-        {   
-            for (LinearActuator *la : LinearActuator::all)
-            {
-                if (la->askForStallGuard)
-                {
-                    // Serial.print("psg ");
-                    // Serial.println(LinearActuator::all.findFirst(la));
-                    la->stallGuardValue = la->driver.SG_RESULT();
-                    la->newStallGuardAvailable = true;
-                }
-            }
-            vTaskDelay(TASK_STALLGUARD_DELAY_MS / portTICK_PERIOD_MS);
-        }
-    }
-    // static 
     LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
-    int calibrate_right();
-    int calibrate_left();
-    uint16_t get_stallGuardValue() { 
-        askForStallGuard = true; 
-        if (!newStallGuardAvailable)
-            return COARSE_CALIBRATION_STALL_VALUE+1;
-        else
-        {
-            newStallGuardAvailable = false;
-            return stallGuardValue;
-        }
-        }
-    void reset_right_limit() { rightLimit = INT_MIN; }
-    void reset_left_limit() { leftLimit = INT_MAX; }
-    // bool check_right_calibration();
-    // bool check_left_calibration();
+    bool get_stall_result();
+    void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
+    void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
     void invert(bool shaft) { motor.setPinsInverted(shaft); }
     void set_speed(float speed) { motor.setSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
     void set_max_speed(float speed) { motor.setMaxSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
     void set_acceleration(float acceleration) { motor.setAcceleration(min(acceleration, LINEAR_ACTUATOR_MAX_ACCELERATION) * MICRO_STEPS_PER_MM); }
-    bool move_to(float position)
-    {
-        motor.moveTo(position * MICRO_STEPS_PER_MM);
-        return motor.distanceToGo() == 0;
-    }
-    bool move(float relativePosition)
-    {
-        motor.move(relativePosition * MICRO_STEPS_PER_MM);
-        return motor.distanceToGo() == 0;
-    }
+    bool move_to(float position);
+    bool move(float relativePosition);
     void move_right() { move_to(rightLimit); }
     void move_left() { move_to(leftLimit); }
     void stop() { motor.stop(); }
@@ -104,7 +54,6 @@ private:
     TMC2209Stepper driver;
     AccelStepper motor;
     void set_current_position(float position) { motor.setCurrentPosition(position * MICRO_STEPS_PER_MM); }
-    RunStatus::Status status = RunStatus::IDLE;
     int64_t chrono = 0;
     bool shaft;
     int currentCalibrationSteps = 0;
@@ -112,263 +61,28 @@ private:
     int calibrationGoodSamples = 0;
     bool askForStallGuard = false;
     bool newStallGuardAvailable = false;
-    int16_t stallGuardValue = COARSE_CALIBRATION_STALL_VALUE+1;
+    uint8_t updateSgTh = 0;
+    bool stallResult = false;
 
     // calibrationSteps
-    bool c_step1()
-    {
-        if (!true)
-            return false;
-        set_max_speed(COARSE_CALIBRATION_SPEED);
-        move_left();
-        return true;
-    }
+    bool c_step1();
+    bool c_step2(int64_t time = esp_timer_get_time());
+    bool c_step3(int64_t time = esp_timer_get_time());
+    bool c_step4();
+    bool c_step5();
+    bool c_step6(int64_t time = esp_timer_get_time());
+    bool c_step7(int64_t time = esp_timer_get_time());
+    bool c_step8();
+    bool c_step9();
+    bool c_step10(int64_t time = esp_timer_get_time());
+    bool c_step11(int64_t time = esp_timer_get_time());
+    bool c_step12();
+    bool c_step13();
+    bool c_step14(int64_t time = esp_timer_get_time());
+    bool c_step15(int64_t time = esp_timer_get_time());
+    bool c_step16();
 
-    bool c_step2(int64_t time = esp_timer_get_time())
-    {
-
-        if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
-            return false;
-        chrono = time;
-        return true;
-    }
-
-    bool c_step3(int64_t time = esp_timer_get_time())
-    {
-        if (!(time - chrono > 20000 && get_stallGuardValue() < COARSE_CALIBRATION_STALL_VALUE))
-            return false;
-        instant_stop();
-        askForStallGuard = false;
-        calibrationFirstWallPosition = current_position();
-        calibrationGoodSamples = 1;
-
-        return true;
-    }
-
-    bool c_step4()
-    {
-        if (!true)
-            return false;
-        set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-        move(-FINE_CALIBRATION_WITHDRAWAL_DISTANCE);
-        return true;
-    }
-
-    bool c_step5()
-    {
-        if (!motor.distanceToGo() == 0)
-            return false;
-        set_max_speed(FINE_CALIBRATION_SPEED);
-        move_left();
-        return true;
-    }
-
-    bool c_step6(int64_t time = esp_timer_get_time())
-    {
-        if (!(FINE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
-            return false;
-        chrono = time;
-        return true;
-    }
-
-    bool c_step7(int64_t time = esp_timer_get_time())
-    {
-        if (!(time - chrono > 20000 && get_stallGuardValue() < FINE_CALIBRATION_STALL_VALUE))
-            return false;
-        askForStallGuard = false;
-        instant_stop();
-        calibrationNewWallPosition = current_position();
-        if (abs(calibrationNewWallPosition - calibrationFirstWallPosition) < FINE_CALIBRATION_ERROR_THRESHOLD)
-            calibrationGoodSamples++;
-        else
-        {
-            calibrationGoodSamples = 1;
-            calibrationFirstWallPosition = calibrationNewWallPosition;
-        }
-        return true;
-    }
-
-    bool c_step8()
-    {
-        if (calibrationGoodSamples < FINE_CALIBRATION_SAMPLES)
-            return false; // don't forget to implement counter condition in main calibration method
-        leftLimit = calibrationFirstWallPosition;
-        set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-        move(-LINEAR_ACTUATOR_MIN_AMPLITUDE);
-        return true;
-    }
-
-    bool c_step9()
-    {
-        if (!motor.distanceToGo() == 0)
-            return false;
-        set_max_speed(COARSE_CALIBRATION_SPEED);
-        move_right();
-        return true;
-    }
-
-    bool c_step10(int64_t time = esp_timer_get_time())
-    {
-        if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
-            return false;
-        chrono = time;
-        return true;
-    }
-
-    bool c_step11(int64_t time = esp_timer_get_time())
-    {
-        if (!(time - chrono > 20000 && get_stallGuardValue() < COARSE_CALIBRATION_STALL_VALUE))
-            return false;
-        askForStallGuard = false;
-        instant_stop();
-        calibrationFirstWallPosition = current_position();
-        calibrationGoodSamples = 1;
-        return true;
-    }
-
-    bool c_step12()
-    {
-        if (!true)
-            return false; // don't forget to implement counter condition in main calibration method
-        set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-        move(FINE_CALIBRATION_WITHDRAWAL_DISTANCE);
-        return true;
-    }
-
-    bool c_step13()
-    {
-        if (!motor.distanceToGo() == 0)
-            return false;
-        set_max_speed(FINE_CALIBRATION_SPEED);
-        move_right();
-        return true;
-    }
-
-    bool c_step14(int64_t time = esp_timer_get_time())
-    {
-        if (!(FINE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
-            return false;
-        chrono = time;
-        return true;
-    }
-
-    bool c_step15(int64_t time = esp_timer_get_time())
-    {
-        if (!(time - chrono > 20000 && get_stallGuardValue() < FINE_CALIBRATION_STALL_VALUE))
-            return false;
-        askForStallGuard = false;
-        instant_stop();
-        calibrationNewWallPosition = current_position();
-        if (abs(calibrationNewWallPosition - calibrationFirstWallPosition) < FINE_CALIBRATION_ERROR_THRESHOLD)
-            calibrationGoodSamples++;
-        else
-        {
-            calibrationGoodSamples = 1;
-            calibrationFirstWallPosition = calibrationNewWallPosition;
-        }
-        return true;
-    }
-
-    bool c_step16()
-    {
-        if (calibrationGoodSamples < FINE_CALIBRATION_SAMPLES)
-            return false;
-        rightLimit = calibrationFirstWallPosition;
-        float amplitude = leftLimit - rightLimit;
-
-        rightLimit = -amplitude / 2 + NO_COLLISION_MARGIN;
-        leftLimit = amplitude / 2 - NO_COLLISION_MARGIN;
-        
-        motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
-        set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
-        move_to(0);
-        return true;
-    }
-
-    bool calibration(int64_t time = esp_timer_get_time())
-    {
-        // Serial.print("c");
-        switch (currentCalibrationSteps)
-        {
-        case 0:
-            if (c_step1())
-                currentCalibrationSteps++;
-            break;
-        case 1:
-            if (c_step2(time))
-                currentCalibrationSteps++;
-            break;
-        case 2:
-            if (c_step3(time))
-                currentCalibrationSteps++;
-            break;
-        case 3:
-            if (c_step4())
-                currentCalibrationSteps++;
-            break;
-        case 4:
-            if (c_step5())
-                currentCalibrationSteps++;
-            break;
-        case 5:
-            if (c_step6(time))
-                currentCalibrationSteps++;
-            break;
-        case 6:
-            if (c_step7(time))
-                currentCalibrationSteps++;
-            break;
-        case 7:
-            if (c_step8())
-                currentCalibrationSteps++;
-            else
-                currentCalibrationSteps = 3;
-            break;
-        case 8:
-            if (c_step9())
-                currentCalibrationSteps++;
-            break;
-        case 9:
-            if (c_step10(time))
-                currentCalibrationSteps++;
-            break;
-        case 10:
-            if (c_step11(time))
-                currentCalibrationSteps++;
-            break;
-        case 11:
-            if (c_step12())
-                currentCalibrationSteps++;
-            break;
-        case 12:
-            if (c_step13())
-                currentCalibrationSteps++;
-            break;
-        case 13:
-            if (c_step14(time))
-                currentCalibrationSteps++;
-            break;
-        case 14:
-            if (c_step15(time))
-                currentCalibrationSteps++;
-            break;
-        case 15:
-            if (c_step16())
-            {
-                
-                currentCalibrationSteps= 0;
-                return true;
-            }
-            else
-                currentCalibrationSteps = 11;
-            break;
-        default:
-        {
-            // Serial.println("bad calibration step");
-        }
-        }
-        return false;
-    }
+    bool calibration(int64_t time = esp_timer_get_time());
 };
 
 #endif
