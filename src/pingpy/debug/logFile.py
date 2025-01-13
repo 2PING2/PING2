@@ -20,6 +20,7 @@ pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
 class LogFile:
     def __init__(self, log_folder=pathLogFolder):
+        print(f"Logger initialized with log folder: {log_folder}")
         self.logFolder = log_folder
         # Create the log folder if it does not exist
         os.makedirs(self.logFolder, exist_ok=True)
@@ -46,12 +47,12 @@ class LogFile:
 
 if __name__ == "__main__":    
     # Init the log handler
-    log = LogFile()
+    logger = LogFile()
 
     # Create the log file
-    log.create_log_file()
+    logger.create_log_file()
     
     # Write in log (examples)
-    log.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
-    log.write_in_log("ERROR", "ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
-    log.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")
+    logger.write_in_log("INFO", "MainProgram", "InitFunction", "Application started successfully.")
+    logger.write_in_log("ERROR", "init_rasp", "index", "Wi-Fi configuration failed")
+    logger.write_in_log("DEBUG", "MainProgram", "ComputeFunction", "The result is xx.")

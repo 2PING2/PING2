@@ -10,10 +10,3 @@ class Input:
         self.ListPlayerInput=ListPlayerInput
         self.OtherInput=OtherInput
     pass
-
-
-
-
-
-
-

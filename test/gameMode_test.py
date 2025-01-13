@@ -14,7 +14,7 @@ from classes.gameMode import RedLightGreenLight
 from classes.input.input import Input, PlayerInput, BeamSwitch, LinearActuatorInput, GameController3button, OtherInput
 from classes.output.output import Output, PlayerOutput, Led, LinearActuatorOutput
 from classes.ledStrip import LedStrip, PlayerLedStrip
-from classes.config import GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS, PLAYER_OFFSETS
+from config.config import GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS, PLAYER_OFFSETS
 
 
 

@@ -21,7 +21,7 @@ from datetime import datetime
 from threading import Thread
 from flask import Flask, request, send_from_directory
 
-from ..classes import logFile
+from ..classes.debug import logFile
 log = logFile.LogFile()
 
 app = Flask(__name__)

@@ -1,9 +1,9 @@
-from classes.gameMode import GameMode
-from classes.output.output import Output
+from .gameMode import GameMode
+from ..output.output import Output
 import time
-from logFile import*   
-from classes.config import GREEN, ORANGE, YELLOW, RED
-log = LogFile()
+import pingpy.debug.logFile   
+from config.config import GREEN, ORANGE, YELLOW, RED
+
 
 class RedLightGreenLight(GameMode):
     """
@@ -22,7 +22,7 @@ class RedLightGreenLight(GameMode):
         """
         elapsedTime = currentTime - self.timeInit
         if elapsedTime<0:
-            log.write_in_log("ERROR", "gameMode", "can_move", "elaspsed time has a negative value")
+            logger.write_in_log("ERROR", "gameMode", "can_move", "elaspsed time has a negative value")
         return elapsedTime < self.durationGreenLight
 
     def check_action(self, playerInput, currentTime):
@@ -61,7 +61,7 @@ class RedLightGreenLight(GameMode):
         """
         elapsedTime = currentTime - self.timeInit
         if elapsedTime<0:
-            log.write_in_log("ERROR", "gameMode", "cycle", "elaspsed time has a negative value")
+            logger.write_in_log("ERROR", "gameMode", "cycle", "elaspsed time has a negative value")
         self.isLightGreen = elapsedTime < self.durationGreenLight
 
         self.outputData.ledStrip.onLedStrip(GREEN) if self.isLightGreen else self.outputData.ledStrip.onLedStrip(RED)
@@ -71,7 +71,7 @@ class RedLightGreenLight(GameMode):
         Executes an iteration of the game mode.
         """
         if not inputData.ListPlayerInput:
-            log.write_in_log("ERROR", "gameMode", "run", "no player was connected")
+            logger.write_in_log("ERROR", "gameMode", "run", "no player was connected")
         for playerInput in inputData.ListPlayerInput:
             if self.check_victory(playerInput):
                 self.stop(inputData)
