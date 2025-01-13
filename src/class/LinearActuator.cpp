@@ -21,9 +21,14 @@ void LinearActuator::stall_guard_task(void *pvParameters)
     {
         for (LinearActuator *la : LinearActuator::all)
         {
+            if (la->updateSgTh>0)
+            {
+                la->driver.SGTHRS(la->updateSgTh/2);
+                la->updateSgTh = 0;
+            }
             if (la->askForStallGuard)
             {
-                la->stallGuardValue = la->driver.SG_RESULT();
+                la->stallResult = la->driver.diag();
                 la->newStallGuardAvailable = true;
             }
         }
@@ -50,15 +55,15 @@ void LinearActuator::setup()
     driver.pwm_autoscale(true); // Needed for stealthChop
 }
 
-uint16_t LinearActuator::get_stall_guard_value()
+bool LinearActuator::get_stall_result()
 {
     askForStallGuard = true;
     if (!newStallGuardAvailable)
-        return COARSE_CALIBRATION_STALL_VALUE + 1;
+        return false;
     else
     {
         newStallGuardAvailable = false;
-        return stallGuardValue;
+        return stallResult;
     }
 }
 
@@ -99,12 +104,13 @@ bool LinearActuator::c_step2(int64_t time)
     if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
+    updateSgTh = COARSE_CALIBRATION_STALL_VALUE;
     return true;
 }
 
 bool LinearActuator::c_step3(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stall_guard_value() < COARSE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 30000 && get_stall_result()))
         return false;
     instant_stop();
     askForStallGuard = false;
@@ -137,12 +143,13 @@ bool LinearActuator::c_step6(int64_t time)
     if (!(FINE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
+    updateSgTh = FINE_CALIBRATION_STALL_VALUE;
     return true;
 }
 
 bool LinearActuator::c_step7(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 30000 && get_stall_result()))
         return false;
     askForStallGuard = false;
     instant_stop();
@@ -181,12 +188,13 @@ bool LinearActuator::c_step10(int64_t time)
     if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
+    updateSgTh = COARSE_CALIBRATION_STALL_VALUE;
     return true;
 }
 
 bool LinearActuator::c_step11(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stall_guard_value() < COARSE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 30000 && get_stall_result()))
         return false;
     askForStallGuard = false;
     instant_stop();
@@ -218,12 +226,13 @@ bool LinearActuator::c_step14(int64_t time)
     if (!(FINE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
+    updateSgTh = FINE_CALIBRATION_STALL_VALUE;
     return true;
 }
 
 bool LinearActuator::c_step15(int64_t time)
 {
-    if (!(time - chrono > 20000 && get_stall_guard_value() < FINE_CALIBRATION_STALL_VALUE))
+    if (!(time - chrono > 30000 && get_stall_result()))
         return false;
     askForStallGuard = false;
     instant_stop();

@@ -23,7 +23,7 @@ public:
     LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
-    uint16_t get_stall_guard_value();
+    bool get_stall_result();
     void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
     void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
     void invert(bool shaft) { motor.setPinsInverted(shaft); }
@@ -61,7 +61,8 @@ private:
     int calibrationGoodSamples = 0;
     bool askForStallGuard = false;
     bool newStallGuardAvailable = false;
-    int16_t stallGuardValue = COARSE_CALIBRATION_STALL_VALUE+1;
+    uint8_t updateSgTh = 0;
+    bool stallResult = false;
 
     // calibrationSteps
     bool c_step1();
