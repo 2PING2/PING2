@@ -18,7 +18,7 @@ import threading
 import subprocess
 import time
 import os
-from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
+from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
@@ -46,7 +46,7 @@ class SerialCom:
 
     def open_port(self):
         """Try to open the serial port."""
-        for attempt in range(RETRY_ATTEMPTS):
+        for _ in range(RETRY_ATTEMPTS):
             try:
                 # Check if the port exists
                 if not os.path.exists(self.port):
@@ -58,7 +58,7 @@ class SerialCom:
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 return ser
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
                 time.sleep(RETRY_DELAY)
         return None
 
@@ -70,11 +70,11 @@ class SerialCom:
                 if data and data != self.lastData:
                     self.lastData = self.parse_data()                 
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
                 self.running = False
                 break
             except Exception as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
                 self.running = False
                 break
             
