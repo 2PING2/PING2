@@ -36,6 +36,12 @@ ports = {
     "ESP32": "/dev/ESP32"
 }
 
+####################################
+# CONTROLLER TYPES KEYS
+####################################
+CONTROLLER_TYPE_3BUTTONS = "3buttons"
+CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
+
 
 ####################################
 # SERIAL KEYS
