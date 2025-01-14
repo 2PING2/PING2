@@ -10,5 +10,5 @@ class ESP32Serial(SerialCom):
         """Read the next data from the serial port."""
         new_line = self.consume_older_data()
         # process the data
-        if last_line is not None:
+        if new_line is not None:
             logger.write_in_log("INFO", __name__, "read", f"Read {new_line}")
