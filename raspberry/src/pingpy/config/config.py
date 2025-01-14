@@ -53,7 +53,7 @@ ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
 FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", 
                 ESP_FIRMWARE_PATH]
 
-HOTSPOT_TIMEOUT = 30  # Timeout for the hotspot setup in seconds
+HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
 CHECK_WIFI_DELAY = 5  # Delay between each Wi-Fi check in seconds
 
 
