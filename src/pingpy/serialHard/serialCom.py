@@ -16,6 +16,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 import serial
 import time
 import os
+from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 
@@ -53,29 +54,32 @@ class SerialCom:
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
+                # begin asynchronous reading
+                Thread(target=self.read_data_task, daemon = True).start()
                 return ser
             except serial.SerialException as e:
                 logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
                 time.sleep(RETRY_DELAY)
         return None
 
-    def read_data(self):
+    def read_data_task(self):
         """Read the next data from the serial port."""
-        if not self.running:
-            return
-        
-        try:
-            new = self.ser.readline().decode('utf-8').strip()
-            if new:
-                self.queue.append(new)
-                 
-        except serial.SerialException as e:
-            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
-            self.running = False
+        while True :
+            if not self.running:
+                continue
             
-        except Exception as e:
-            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
-            self.running = False
+            try:
+                new = self.ser.readline().decode('utf-8').strip()
+                if new:
+                    self.queue.append(new)
+                    
+            except serial.SerialException as e:
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
+                self.running = False
+                
+            except Exception as e:
+                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
+                self.running = False
             
     def consume_older_data(self):
         """Consume the older data in the queue."""

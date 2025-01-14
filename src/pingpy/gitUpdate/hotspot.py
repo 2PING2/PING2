@@ -1,5 +1,5 @@
 from pingpy.debug import logger
-from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, HTML_PATH, CSS_PATH
+from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH
 import os
 import subprocess
 import time
@@ -35,11 +35,18 @@ class Hotspot:
         
     def check_git_update(self):
         os.chdir(GIT_CLONE_PATH)
-        subprocess.run(['git', 'fetch', 'origin'], check=True)
+        try:
+            subprocess.run(['git', 'fetch', 'origin'], check=True)
+            logger.write_in_log("INFO", __name__, "check_git_update", "Git fetch successful")
+        except subprocess.CalledProcessError:
+            logger.write_in_log("ERROR", __name__, "check_git_update", "Git fetch failed")
+            return
+        
         for fileOrFolder in FILE_AND_FOLDER_TO_CHECK:
             try:
-                subprocess.run(['git', 'diff', '--name-only', 'origin/main', fileOrFolder], check=True)
-                subprocess.run(['git', 'checkout', 'origin/main', '--', fileOrFolder], check=True)
+                subprocess.run(['git', 'diff', '--name-only', GIT_BRANCH, fileOrFolder], check=True)
+                subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
+                            
                 logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
             except subprocess.CalledProcessError:
                 logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
@@ -67,7 +74,6 @@ class Hotspot:
             if self.check_wifi():
                 self.should_stop = True
                 self.stop_services()  # Stop services if connected
-                self.shutdown_server()  # Stop the Flask server
                 logger.write_in_log("INFO", __name__, "monitor_services", "Wi-Fi setup successful")
                 return
             time.sleep(CHECK_WIFI_DELAY)  # Check connection
