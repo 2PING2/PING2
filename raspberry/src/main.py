@@ -3,4 +3,4 @@ from pingpy import ping
 ping.setup()
 
 while True:
-    pass
+    ping.run()
