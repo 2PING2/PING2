@@ -1,0 +1,84 @@
+/*
+This file is part of the PING² project.
+Copyright (c) 2024 PING² Team
+
+This code is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+You may share this file as long as you credit the original author.
+
+RESTRICTIONS:
+- Commercial use is prohibited.
+- No modifications or adaptations are allowed.
+- See the full license at: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+For inquiries, contact us at: projet.ping2@gmail.com
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* Limite la largeur maximale du formulaire sur les grands écrans */
+    margin: auto; /* Centre le formulaire */
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+p {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Media Query pour les écrans de moins de 768px de large (téléphones et tablettes) */
+@media (max-width: 768px) {
+    body {
+        padding: 10px; /* Réduit le padding pour les petits écrans */
+    }
+
+    form {
+        padding: 15px; /* Réduit l’espace autour du formulaire */
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"] {
+        padding: 7px; /* Réduit le padding des champs de formulaire */
+    }
+}
