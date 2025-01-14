@@ -1,6 +1,7 @@
 from pingpy.debug import logger
 
-class SpeakerOutput:
+class PlayerLedStripOutput:
     def __init__(self):
-        self.audioPiste = None
+        self.area = None
+        self.color = None
         logger.write_in_log("INFO", __name__, "__init__")
