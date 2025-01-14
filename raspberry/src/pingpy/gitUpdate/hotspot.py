@@ -40,6 +40,7 @@ class Hotspot:
             try:
                 subprocess.run(['git', 'diff', '--name-only', 'origin/main', fileOrFolder], check=True)
                 subprocess.run(['git', 'checkout', 'origin/main', '--', fileOrFolder], check=True)
+                            
                 logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
             except subprocess.CalledProcessError:
                 logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
