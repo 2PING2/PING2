@@ -1,3 +1,0 @@
-[submodule "hardware/raspberry"]
-	path = hardware/raspberry
-	url = https://github.com/2PING2/PING2.git
