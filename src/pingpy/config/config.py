@@ -13,6 +13,7 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
+
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
