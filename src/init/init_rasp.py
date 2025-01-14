@@ -29,6 +29,8 @@ app = Flask(__name__)
 # Create the log file of the day
 log.create_log_file()
 
+PORT_ESP32 = '/dev/ESP32'
+
 # Paths and files
 pathDirectory = '/home/pi/python_environnement/bin/activate' # python environment path
 pathRepoGithub = '/home/pi/Documents/PING2' # Github repository path
@@ -69,7 +71,7 @@ def update_git():
             # Check if the file is the firmware of the ESP32
             if file == "firmware.bin":
                 log.write_in_log("INFO", "init_rasp", "update_git", "ESP32 firmware updated")
-                subprocess.run(['esptool.py', '--port', '/dev/ttyUSB0', 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
+                subprocess.run(['esptool.py', '--port', PORT_ESP32, 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
 
 # Flask route for Wi-Fi configuration page
 @app.route("/", methods=["GET", "POST"])
