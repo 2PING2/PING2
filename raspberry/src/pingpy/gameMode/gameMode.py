@@ -12,7 +12,11 @@ class GameMode(ABC):
     based on the inputs (game controller, ball pose, and player pose). additional, it take UI panel as settings.
     """
     @abstractmethod
-    def run(self,Input):
+    def setup(self, output):
+        pass
+    
+    @abstractmethod
+    def compute(self, input, output):
         pass
 
     @abstractmethod
