@@ -14,11 +14,9 @@ For inquiries, contact us at: projet.ping2@gmail.com
 """
 
 import serial
-import threading
-import subprocess
 import time
 import os
-from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY, MAX_BRIGTHNESS
+from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
@@ -30,8 +28,8 @@ class SerialCom:
         self.timeout = TIMEOUT
         self.ser = None
         self.running = False
-        self.lastData = None
         self.retryCount = 0
+        self.queue = []
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.port}")
 
     def setup(self):
@@ -39,14 +37,13 @@ class SerialCom:
         self.ser = self.open_port()
         if self.ser:
             self.running = True
-            threading.Thread(target=self.read_data, daemon=True).start()
             logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.port}")
         else:
             logger.write_in_log("WARNING", __name__, "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
         """Try to open the serial port."""
-        for attempt in range(RETRY_ATTEMPTS):
+        for _ in range(RETRY_ATTEMPTS):
             try:
                 # Check if the port exists
                 if not os.path.exists(self.port):
@@ -58,31 +55,35 @@ class SerialCom:
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 return ser
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: (Exception)")
+                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
                 time.sleep(RETRY_DELAY)
         return None
 
     def read_data(self):
-        """Read data from the serial port."""
-        while self.running:
-            try:
-                data = self.ser.readline().decode('utf-8').strip()
-                if data and data != self.lastData:
-                    self.lastData = self.parse_data()                 
-            except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: (Exception)")
-                self.running = False
-                break
-            except Exception as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}: (Exception)")
-                self.running = False
-                break
+        """Read the next data from the serial port."""
+        if not self.running:
+            return
+        
+        try:
+            new = self.ser.readline().decode('utf-8').strip()
+            if new:
+                self.queue.append(new)
+                 
+        except serial.SerialException as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
+            self.running = False
             
-    def parse_data(self):
-        """Parse the data received from the serial port."""
-        parsed_data = self.lastData.split('/')
-        return parsed_data
-
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
+            self.running = False
+            
+    def consume_older_data(self):
+        """Consume the older data in the queue."""
+        if self.queue:
+            return self.queue.pop(0)
+        else:
+            return None
+            
     def stop_reading(self):
         """Stop reading from the serial port."""
         self.running = False
