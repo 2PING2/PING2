@@ -1,0 +1,161 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+class BeamSwitch {
+	+BeamSwitch(int beamSwitchRPin)
+	+~BeamSwitch()
+	-check(uint64_t currentTime) : bool
+	+getState() : bool
+	-state : bool
+	-beamSwitchRPin : const int
+	-lastReceiveTime : int
+	-{static} check_all_task_handle : static TaskHandle_t
+	-{static} all : static Vector<BeamSwitch*>
+	-{static} emit : static bool
+	-{static} check_all(uint64_t currentTime) : void
+	-{static} check_all_task(void* pvParameters) : void
+	+{static} setup() : void
+	+{static} startEmit() : void
+	+{static} stopEmit() : void
+}
+
+
+class LinearActuator {
+	+LinearActuator(int stepPin, int dirPin, TMC2209::SerialAddress address)
+	+~LinearActuator()
+	-motor : AccelStepper
+	-status : RunStatus::Status
+	-driver : TMC2209
+	+calibrateLeft() : bool
+	+calibrateRight() : bool
+	+checkRightCalibration() : bool
+	+isCalibrated() : bool
+	+isLeftCalibrated() : bool
+	+isRightCalibrated() : bool
+	+moveTo(float position) : bool
+	+amplitude() : float
+	+currentAcceleration() : float
+	+currentPosition() : float
+	+currentSpeed() : float
+	-leftLimit : float
+	+maxSpeed() : float
+	-rightLimit : float
+	+run() : int
+	+instantStop() : void
+	+moveLeft() : void
+	+moveRight() : void
+	+setAcceleration(float acceleration) : void
+	-setCurrentPosition(float position) : void
+	+setMaxSpeed(float speed) : void
+	+setSpeed(float speed) : void
+	+setup() : void
+	+{static} setup_Serial() : void
+	+stop() : void
+}
+
+
+class PING {
+	-PING()
+	+~PING()
+	-{static} player1 : static Player
+	-{static} player2 : static Player
+	-{static} player3 : static Player
+	-{static} player4 : static Player
+	-{static} raspComManager : static RaspComManagement
+	-{static} solenoid_overtemp_task_handle : static TaskHandle_t
+	+{static} setup() : void
+	-{static} solenoid_overtemp_task(void* pvParameters) : void
+}
+
+
+class Player {
+	+Player(int stepPin, int dirPin, TMC2209::SerialAddress address, int solenoidPin, int beamSwitchRPin)
+	+~Player()
+	+beamSwitch : BeamSwitch
+	+actuator : LinearActuator
+	+solenoid : Solenoid
+	+loop() : int
+	+setup() : int
+}
+
+
+class RaspComManagement {
+	+RaspComManagement(int baudRate)
+	+~RaspComManagement()
+	+setup() : void
+}
+
+
+class Solenoid {
+	+Solenoid(int solenoidPin ), ~Solenoid ()
+	+overTempProtect(uint64_t currentTime) : bool
+	-currentTemp : float
+	+getPower() : float
+	+getState() : float
+	-state : float
+	-state : float
+	-state : float
+	-solenoidPin : int
+	-{static} maxTemp : static float
+	-lastTempCheck : uint64_t
+	+activate() : void
+	+deactivate() : void
+	+setPower(int power) : void
+	+setup() : void
+}
+
+
+namespace RunStatus {
+	enum Status {
+		COLLISION
+		IDLE
+		RUNNING
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+.BeamSwitch o-- .BeamSwitch
+
+
+.LinearActuator *-- RunStatus.Status
+
+
+.PING "4" *-- .Player
+
+
+.PING *-- .RaspComManagement
+
+
+.Player *-- .BeamSwitch
+
+
+.Player *-- .LinearActuator
+
+
+.Player *-- .Solenoid
+
+
+
+
+
+
+/' Nested objects '/
+
+
+
+@enduml
