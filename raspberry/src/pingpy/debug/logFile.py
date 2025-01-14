@@ -15,7 +15,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 import os
 from datetime import datetime
-from pingpy.config.config import DEBUG_PRINT_IN_MONITOR
+from pingpy.config.config import DEBUG_PRINT_IN_TERMINAL
 
 pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
