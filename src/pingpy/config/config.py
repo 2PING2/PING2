@@ -50,7 +50,7 @@ GIT_CLONE_PATH = '/home/pi/Documents/PING2' # Github repository path
 GIT_BRANCH = 'origin/dev'  # Branch to check for updates
 # Update with the correct files (all files to check)
 ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
-FILE_AND_FOLDER_TO_CHECK = ["raspberry/src"]
+FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH]
 
 HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
 CHECK_WIFI_DELAY = 5  # Delay between each Wi-Fi check in seconds
