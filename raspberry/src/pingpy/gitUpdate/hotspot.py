@@ -36,7 +36,7 @@ class Hotspot:
     def check_git_update(self):
         os.chdir(GIT_CLONE_PATH)
         try:
-            subprocess.run(['git', 'fetch', GIT_BRANCH], check=True)
+            subprocess.run(['git', 'fetch', 'origin'], check=True)
             logger.write_in_log("INFO", __name__, "check_git_update", "Git fetch successful")
         except subprocess.CalledProcessError:
             logger.write_in_log("ERROR", __name__, "check_git_update", "Git fetch failed")
