@@ -47,7 +47,7 @@ CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
 # GIT UPDATE
 ####################################
 GIT_CLONE_PATH = '/home/pi/Documents/PING2' # Github repository path
-
+GIT_BRANCH = 'origine/dev'  # Branch to check for updates
 # Update with the correct files (all files to check)
 ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
 FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", 
