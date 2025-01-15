@@ -9,11 +9,11 @@ while True:
 # except Exception as e:
 #     import os
 #     # restore the backup
-#     os.system(f'cp -r /home/pi/Documents/backup* /home/pi/Documents/PIN2')
+#     os.system(f'cp -r /home/pi/Documents/backup* /home/pi/Documents/PING2')
 #     try:
 #         import pingpy.logger as logger
 #         logger.write_in_log("ERROR", __name__, "main", str(e))
 #     except:
 #         pass
-#     os.system(f'sleep 1 && python3 /home/pi/Documents/PIN2/src/main.py')
+#     os.system(f'sleep 1 && python3 /home/pi/Documents/PING2/src/main.py')
 #     exit(1) 
