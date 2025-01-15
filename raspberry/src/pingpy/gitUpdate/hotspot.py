@@ -98,6 +98,7 @@ class Hotspot:
             if self.check_wifi():
                 self.should_stop = True
                 self.stop_services()  # Stop services if connected
+                self.check_git_update()
                 logger.write_in_log("INFO", __name__, "monitor_services", "Wi-Fi setup successful")
                 return
             time.sleep(CHECK_WIFI_DELAY)  # Check connection
