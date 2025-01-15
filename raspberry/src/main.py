@@ -12,9 +12,15 @@ except Exception as e:
     print("Error in the main.py")
     import os
     # restore from the backup
-    os.system(f'rm -r /home/pi/Documents/PING2/*')
-    os.system(f'rm -r /home/pi/Documents/PING2/.*')
-    print("PING2 folder deleted")
+    import subprocess
+
+    try:
+        subprocess.run(['sudo', 'rm', '-rf', '/home/pi/Documents/PING2/*', '/home/pi/Documents/PING2/.*'], check=True)
+        print("PING2 folder deleted")
+
+    except subprocess.CalledProcessError as ee:
+        print(f"fail to delete PING2 : {ee}")
+    
     os.system(f'cp -r /home/pi/Documents/backup/. /home/pi/Documents/PING2/')
     print("PING2 folder restored from the backup")
     try:
