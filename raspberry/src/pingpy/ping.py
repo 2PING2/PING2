@@ -26,7 +26,7 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        # self.UiCorner.read(self.input)
+        self.UiCorner.read(self.input)
         # self.currentGameMode.compute(self.input, self.output)
         # self.refresh_output()
     
