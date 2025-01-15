@@ -8,7 +8,7 @@ try :
         
   
 except Exception as e:
-    print("Error in the main.py")
+    print(f"Error: {e}")
     import os
     # restore from the backup
     import subprocess
