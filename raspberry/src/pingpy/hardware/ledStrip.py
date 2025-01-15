@@ -33,6 +33,8 @@ class LedStrip:
         """Config the LED strip."""
         try:
             result = self.strip.begin()
+            # light one all the LEDs
+            self.strip.setPixelColor(0, Color(255, 0, 0))
             logger.write_in_log("INFO", "ledStrip", "__init__", f"LED strip setup: {result}")
         except Exception as e:
             logger.write_in_log("ERROR", "ledStrip", "__init__", f"Failed to initialize LED strip: {e}")
