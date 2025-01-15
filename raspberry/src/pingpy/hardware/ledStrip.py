@@ -42,9 +42,9 @@ class LedStrip:
         if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
             logger.write_in_log("ERROR", "LedStrip", "setLedStrip", "Invalid offset")
             return
-        if not isinstance(color, int) or color < 0:
-            logger.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Invalid color value: {color}")
-            return
+        # if not isinstance(color, int) or color < 0:
+        #     logger.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Invalid color value: {color}")
+        #     return
        
         for i in range(OFFSET_MIN, OFFSET_MAX):
             self.strip.setPixelColor(i, color)
