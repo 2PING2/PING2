@@ -15,5 +15,5 @@ while True:
 #         logger.write_in_log("ERROR", __name__, "main", str(e))
 #     except:
 #         pass
-#     os.system(f'sleep 1 && python3 /home/pi/Documents/PING2/src/main.py')
+#     os.system(f'sleep 1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
 #     exit(1) 
