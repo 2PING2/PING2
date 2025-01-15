@@ -50,7 +50,7 @@ class LedStrip:
                 self.strip.setPixelColor(i, color)
             self.strip.show()
         except Exception as e:
-                logger.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Failed to set LED strip: {e}")
+                logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
                    
     def setBrightness(self, brightness):
         """Set the brightness of the LED strip."""
@@ -64,9 +64,9 @@ class LedStrip:
         '''Clear the LED strip'''
         self.setLedStrip(Color(0, 0, 0), 0, self.strip.numPixels())
 
-    def onLedStrip(self, color):
+    def onLedStrip(self, r, g, b):
         """Turn on the LED strip."""
-        self.setLedStrip(color, 0, self.strip.numPixels())
+        self.setLedStrip(Color(r,g,b), 0, self.strip.numPixels())
 
 class PlayerLedStrip:    
     def __init__(self, ledStrip, minAndMax):
