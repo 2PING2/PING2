@@ -13,7 +13,7 @@ class Ping:
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], BAUD_RATE, TIMEOUT)
         self.currentGameMode = WaitingRoom()
-        # self.ledStrip = LedStrip(LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, MAX_BRIGTHNESS)
+        self.ledStrip = LedStrip(LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, MAX_BRIGTHNESS)
         # self.playerHardware = [PlayerLedStrip() for _ in range(4)]
         logger.write_in_log("INFO", __name__, "__init__")
         
