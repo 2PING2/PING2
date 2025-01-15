@@ -22,8 +22,18 @@ dev/
   
 ## 🔄 Workflow de Développement
 - Développement Fonctionnel : Chaque branche ```hardware/*``` est dédiée au développement et à l'amélioration du code pour un matériel spécifique.
-- Intégration dans dev : Les branches ```hardware/*``` sont ajoutées en tant que sous-modules à la branche dev. **Aucune modification du code source ne doit être effectué depuis la branche ```dev```.**
-- Phase de Test : Les codes sont testés ensemble pour s'assurer qu'ils fonctionnent de manière cohérente sur l'ensemble du système.
+- Intégration dans dev : Les branches ```hardware/*``` sont ajoutées en tant que sous-arbres à la branche dev à l'aide de la commande suivante :
+ ```bash
+git subtree add --prefix=hardwareName ./ refs/remotes/origin/hardware/hardwareName
+```
+Pour mettre à jour le sous-arbre depuis la dernière version de sa branche, effectuez la commande :
+ ```bash
+git subtree update --prefix=hardwareName ./ refs/remotes/origin/hardware/hardwareName
+```
+- Phase de Test : Les codes sont testés ensemble pour s'assurer qu'ils fonctionnent de manière cohérente sur l'ensemble du système. Durant cette phase d'integration, est souvent necessaire d'effectuer des changements directement depuis la branche `dev`. Il sera alors nécessaire de propager les commits aux branches ```hardware/*``` concernées. Cela se fait avec :
+```bash
+   git subtree push --prefix=hardwareName ./ refs/remotes/origin/hardware/hardwareName
+```
 - Validation : Une fois les tests concluants, la branche dev est fusionnée (merge) dans la branche main, qui représente alors la version stable et prête pour la production du projet.
 
 ### 🎯 En Résumé :
