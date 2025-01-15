@@ -68,13 +68,13 @@ class Hotspot:
                 
         # restart the app if needed
         if restartNeeded:
-            os.system(f'sleep 1 && python3 /home/pi/Documents/PIN2/src/main.py')
+            os.system(f'sleep 1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
             exit(1) 
 
     def build_backup(self):
         backup_dir = os.path.join(ROOT_PATH, "backup")
         os.makedirs(backup_dir, exist_ok=True)
-        # copy the concent of PIN2 folder to the backup folder
+        # copy the concent of PING2 folder to the backup folder
         os.system(f'cp -r {GIT_CLONE_PATH}/* {backup_dir}')
         
                 
