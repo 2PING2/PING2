@@ -17,8 +17,9 @@
 class LinearActuator
 {
 public:
-    static void setup_Serial();
+    static void setup_all();
     static void stall_guard_task(void *pvParameters);
+    static void motor_run_task(void *pvParameters);
 
     LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
@@ -36,6 +37,7 @@ public:
     void move_left() { move_to(leftLimit); }
     void stop() { motor.stop(); }
     void instant_stop();
+    void calibrate() {calibrating = true; }
     int run();
     float current_position() { return motor.currentPosition() / MICRO_STEPS_PER_MM; }
     float current_speed() { return motor.speed() / MICRO_STEPS_PER_MM; }
@@ -56,6 +58,7 @@ private:
     void set_current_position(float position) { motor.setCurrentPosition(position * MICRO_STEPS_PER_MM); }
     int64_t chrono = 0;
     bool shaft;
+    bool running = false;
     int currentCalibrationSteps = 0;
     float calibrationFirstWallPosition = 0, calibrationNewWallPosition = 0;
     int calibrationGoodSamples = 0;
@@ -63,6 +66,7 @@ private:
     bool newStallGuardAvailable = false;
     uint8_t updateSgTh = 0;
     bool stallResult = false;
+    bool calibrating = false;
 
     // calibrationSteps
     bool c_step1();

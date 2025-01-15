@@ -4,6 +4,7 @@
 #include "LinearActuator.hpp"
 #include "Solenoid.hpp"
 #include "BeamSwitch.hpp"
+#include "vector.hpp"
 
 class Player
 {
@@ -16,6 +17,9 @@ public:
     LinearActuator actuator;
     Solenoid solenoid;
     BeamSwitch beamSwitch;
+
+public :
+    static Vector<Player*> all;
 };
 
 #endif

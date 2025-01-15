@@ -2,7 +2,7 @@
 
 Vector<LinearActuator *> LinearActuator::all;
 
-void LinearActuator::setup_Serial()
+void LinearActuator::setup_all()
 {
     TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
     xTaskCreatePinnedToCore(
@@ -13,6 +13,16 @@ void LinearActuator::setup_Serial()
         TASK_STALLGUARD_PRIORITY,
         NULL,
         TASK_STALLGUARD_CORE);
+
+
+    xTaskCreatePinnedToCore(
+        motor_run_task,
+        "motor_run_task",
+        10000,
+        NULL,
+        TASK_MOTOR_RUN_PRIORITY,
+        NULL,
+        TASK_MOTOR_RUN_CORE);
 }
 
 void LinearActuator::stall_guard_task(void *pvParameters)
@@ -36,6 +46,20 @@ void LinearActuator::stall_guard_task(void *pvParameters)
     }
 }
 
+void LinearActuator::motor_run_task(void *pvParameters)
+{
+    for (;;)
+    {
+        // Boucle infinie pour l'exécution de votre tâche
+        uint64_t t = esp_timer_get_time();
+        for (LinearActuator *la : LinearActuator::all)
+            if (la->calibrating)
+                if(la->calibration(t))
+                    la->calibrating = false;
+
+        vTaskDelay(10 / portTICK_PERIOD_MS); // Bad practice, but it's the only way to avoid watchdog reset, solution is to use the FastAccelStepper library
+    }
+}
 void LinearActuator::setup()
 {
     all.push_back(this);

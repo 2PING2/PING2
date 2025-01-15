@@ -4,6 +4,8 @@
 
 #ifndef RASP_COM_MANAGEMENT_HPP
 #define RASP_COM_MANAGEMENT_HPP
+#include "vector.hpp"
+#include "Player.hpp"
 
 class RaspComManagement
 {
@@ -12,6 +14,12 @@ public:
     RaspComManagement(int baudRate);
     ~RaspComManagement();
 
-    void setup();
+    void setup(Vector <Player*> *players);
+
+    void readData();
+
+private:
+    int baudRate;
+    Vector <Player*> *players; // Vector of all players
 };
 #endif
