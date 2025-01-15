@@ -1,5 +1,5 @@
 from pingpy.debug import logger
-from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH
+from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH, ROOT_PATH
 import os
 import subprocess
 import time
@@ -35,6 +35,7 @@ class Hotspot:
         
     def check_git_update(self):
         os.chdir(GIT_CLONE_PATH)
+        restartNeeded = False
         try:
             subprocess.run(['git', 'fetch', 'origin'], check=True)
             logger.write_in_log("INFO", __name__, "check_git_update", "Git fetch successful")
@@ -44,15 +45,37 @@ class Hotspot:
         
         for fileOrFolder in FILE_AND_FOLDER_TO_CHECK:
             try:
-                subprocess.run(['git', 'diff', '--name-only', GIT_BRANCH, fileOrFolder], check=True)
-                subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
+                # Vérifie les différences pour le fichier ou dossier
+                diff_output = subprocess.run(
+                ['git', 'diff', '--name-only', GIT_BRANCH, fileOrFolder],
+                check=True,
+                stdout=subprocess.PIPE,  # Capture la sortie pour vérification
+                text=True  # Renvoie la sortie sous forme de chaîne
+                ).stdout.strip()
+                
+                # S'il y a une différence, effectue le checkout et marque le redémarrage nécessaire
+                if diff_output:  # Si la sortie n'est pas vide
+                    subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
+                    logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
+                    restartNeeded = True  # Indique qu'un redémarrage est nécessaire
                             
-                logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
             except subprocess.CalledProcessError:
                 logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
             if fileOrFolder == ESP_FIRMWARE_PATH:
                 self.update_esp()
+                
+        # restart the app if needed
+        if restartNeeded:
+            os.system(f'sleep 1 && python3 /home/pi/Documents/PIN2/src/main.py')
+            exit(1) 
 
+    def build_backup(self):
+        backup_dir = os.path.join(ROOT_PATH, "backup")
+        os.makedirs(backup_dir, exist_ok=True)
+        # copy the concent of PIN2 folder to the backup folder
+        os.system(f'cp -r {GIT_CLONE_PATH}/* {backup_dir}')
+        
+                
     def update_esp(self):
         try:
             subprocess.run(['esptool.py', '--port', PORT_ESP32, 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
