@@ -21,7 +21,7 @@ class Ping:
         self.esp32.setup()
         self.UICorner.setup()
         self.ledStrip.setup()
-        self.ledStrip.onLedStrip(255, 0, 0)
+        self.ledStrip.onLedStrip(100, 0, 0)
         # wait for calibration data here
         logger.write_in_log("INFO", __name__, "setup")
         

@@ -49,6 +49,7 @@ class LedStrip:
             for i in range(OFFSET_MIN, OFFSET_MAX):
                 self.strip.setPixelColor(i, color)
             self.strip.show()
+            logger.write_in_log("INFO", "LedStrip", "setLedStrip", f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
                    
