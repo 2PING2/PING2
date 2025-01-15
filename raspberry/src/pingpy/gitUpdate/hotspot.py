@@ -77,6 +77,7 @@ class Hotspot:
         os.makedirs(backup_dir, exist_ok=True)
         # copy the concent of PING2 folder to the backup folder
         os.system(f'cp -r {GIT_CLONE_PATH}/* {backup_dir}')
+        logger.write_in_log("INFO", __name__, "build_backup")
         
                 
     def update_esp(self):
