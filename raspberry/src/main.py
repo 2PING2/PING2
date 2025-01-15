@@ -14,7 +14,8 @@ except Exception as e:
     # restore from the backup
     # os.system(f'sudo rm -r /home/pi/Documents/PING2/*')
     # os.system(f'sudo rm -r /home/pi/Documents/PING2/.*')
-    os.system('shopt -s dotglob && rm -rf /home/pi/Documents/PING2/*')
+    os.system('rm -rf /home/pi/Documents/PING2/{.*,*}')
+
 
     print("PING2 folder deleted")
     os.system(f'cp -r /home/pi/Documents/backup/. /home/pi/Documents/PING2/')
