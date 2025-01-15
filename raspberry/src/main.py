@@ -1,5 +1,5 @@
 try :
-    import adeiojf
+    # import adeiojf
     from pingpy import ping
 
     ping.setup()
