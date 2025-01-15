@@ -53,6 +53,8 @@ class Hotspot:
                 text=True  # Renvoie la sortie sous forme de chaîne
                 ).stdout.strip()
                 
+                logger.write_in_log("INFO", __name__, "check_git_update", f'checking file: {fileOrFolder}, diff_output: {diff_output}')
+   
                 # S'il y a une différence, effectue le checkout et marque le redémarrage nécessaire
                 if diff_output:  # Si la sortie n'est pas vide
                     subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
