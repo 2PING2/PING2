@@ -26,7 +26,7 @@ from pingpy.debug import logger
 class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
         """Init the LED strip.""" 
-        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
+        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS, strip_type=ws.SK6812_STRIP_RGB)
         logger.write_in_log("INFO", "ledStrip", "__init__", "LED strip created")
      
     def setup(self):
@@ -34,7 +34,6 @@ class LedStrip:
         try:
             result = self.strip.begin()
             # light one all the LEDs
-            self.strip.setPixelColor(0, Color(255, 0, 0))
             logger.write_in_log("INFO", "ledStrip", "__init__", f"LED strip setup: {result}")
         except Exception as e:
             logger.write_in_log("ERROR", "ledStrip", "__init__", f"Failed to initialize LED strip: {e}")
