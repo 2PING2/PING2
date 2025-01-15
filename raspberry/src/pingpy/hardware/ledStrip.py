@@ -13,10 +13,10 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
-try:
-    from rpi_ws281x import PixelStrip, Color
-except ImportError:
-    from .rpi_ws281xMock import PixelStrip, Color
+# try:
+from rpi_ws281x import PixelStrip, Color
+# except ImportError:
+#     from .rpi_ws281xMock import PixelStrip, Color
 
 import time
 from pingpy.config.config import MAX_BRIGTHNESS
