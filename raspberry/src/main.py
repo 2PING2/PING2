@@ -12,8 +12,8 @@ except Exception as e:
     print("Error in the main.py")
     import os
     # restore from the backup
-    os.system(f'rm -r /home/pi/Documents/PING2/*')
-    os.system(f'rm -r /home/pi/Documents/PING2/.*')
+    os.system(f'sudo rm -r /home/pi/Documents/PING2/*')
+    os.system(f'sudo rm -r /home/pi/Documents/PING2/.*')
     print("PING2 folder deleted")
     os.system(f'cp -r /home/pi/Documents/backup/. /home/pi/Documents/PING2/')
     print("PING2 folder restored from the backup")
