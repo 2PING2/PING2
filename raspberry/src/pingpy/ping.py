@@ -30,13 +30,14 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        self.UiCorner.read(self.input)
-        self.currentGameMode.compute(self.input, self.output)
-        self.refresh_output()
+        # self.UiCorner.read(self.input)
+        # self.currentGameMode.compute(self.input, self.output)
+        # self.refresh_output()
     
     def refresh_output(self):
-        self.esp32.write(self.output)
-        self.UICorner.write(self.output)
+        pass
+        # self.esp32.write(self.output)
+        # self.UICorner.write(self.output)
         # refresh led trip and speaker
         
         
