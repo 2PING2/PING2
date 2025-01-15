@@ -3,6 +3,7 @@ from ..output.output import Output
 import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
+from random import random
 
 
 class RedLightGreenLight(GameMode):
@@ -11,11 +12,23 @@ class RedLightGreenLight(GameMode):
     """
     def __init__(self):
         self.isLightGreen = False
-        self.timeInit = time.time()
-        self.durationGreenLight = 3  # Temps du feu vert
+        self.timeInit = 0
+        self.durationGreenLight = None  # Temps du feu vert
         self.reactionTime = 0.5      # Temps de réaction
-        self.outputData = Output()  # Initialisation des données de sortie
+        self.lastPlayedAudio = None
 
+    def setup(self, Input, Output):
+        """
+        Setup the game mode.
+        """
+        for playerInput in Input.ListPlayerInput:
+            playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
+            playerOutput.PlayerLedStrip.color(GREEN)
+            playerOutput.LinearActuatorOutput.move_to = Input.ListPlayerInput[playerInput.idPlayer].LinearActuatorInput.leftLimit
+        self.timeInit = time.time()
+        self.isLightGreen = True
+        
+        
     def can_move(self, currentTime):
         """
         Check if the player can move (green light)
@@ -25,7 +38,7 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", "gameMode", "can_move", "elaspsed time has a negative value")
         return elapsedTime < self.durationGreenLight + self.reactionTime
 
-    def check_action(self, playerInput, currentTime):
+    def check_action(self, playerInput, playerOutput, currentTime):
         """
         Checks the player's action according to the current state of the light.
         """
@@ -48,53 +61,85 @@ class RedLightGreenLight(GameMode):
             playerOutput.LinearActuatorOutput.move_to_right = False
             playerOutput.LinearActuatorOutput.move_to_leftLimit = False
 
-    def check_victory(self, playerInput):
+    def check_victory(self, playerInput, Output):
         """
         Checks if a player has won.
         """
         if playerInput.LinearActuatorInput.currentPose >= playerInput.LinearActuatorInput.rightLimit-20:
-            self.outputData.ListPlayerOutput[playerInput.idPlayer].PlayerLedStrip.onPlayer(YELLOW)
+            Output.ListPlayerOutput[playerInput.idPlayer].PlayerLedStrip.onPlayer(YELLOW)
             return True
         return False
 
-    def cycle(self, currentTime):
+    import random
+
+    def cycle(self, currentTime, Output):
         """
         Manages the alternation between green and red lights.
         """
         elapsedTime = currentTime - self.timeInit
-        if elapsedTime<0:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "elaspsed time has a negative value")
-        self.isLightGreen = elapsedTime < self.durationGreenLight
 
-        #self.outputData.ledStrip.onLedStrip(GREEN) if self.isLightGreen else self.outputData.ledStrip.onLedStrip(RED)
-        self.outputData.ledStrip.color=GREEN if self.isLightGreen else RED
+        if elapsedTime < 0:
+            logger.write_in_log("ERROR", "gameMode", "cycle", "elapsed time has a negative value")
 
+        # Changer la durée du feu vert à chaque cycle
+        if elapsedTime >= self.durationGreenLight + self.reactionTime:  # Fin d'un cycle
+            self.timeInit = currentTime
+            self.isLightGreen = True
 
-    def run(self, inputData):
+            
+            min_duration = (
+                Output.Speaker.duration("123Soleil.wav") +
+                Output.Speaker.duration("Soleil.wav") +
+                1  
+            )
+            max_duration = 10  
+            self.durationGreenLight = random.uniform(min_duration, max_duration)
+
+            
+            self.lastPlayedAudio = None
+        else:
+            self.isLightGreen = elapsedTime < self.durationGreenLight
+
+        
+        if elapsedTime <= self.durationGreenLight + self.reactionTime:
+            if elapsedTime <= self.durationGreenLight:
+                if self.lastPlayedAudio != "123Soleil.wav":
+                    Output.Speaker.audioPiste = "123Soleil.wav"
+                    self.lastPlayedAudio = "123Soleil.wav"
+            elif elapsedTime <= self.durationGreenLight - Output.Speaker.duration("123Soleil.wav"):
+                if self.lastPlayedAudio != "Soleil.wav":
+                    Output.Speaker.audioPiste = "Soleil.wav"
+                    self.lastPlayedAudio = "Soleil.wav"
+            Output.LedStrip.color(GREEN)
+        elif elapsedTime < 2 * self.durationGreenLight + self.reactionTime:
+            Output.LedStrip.color(RED)
+            self.isLightGreen = False
+
+    def compute(self, Input, Output):
         """
         Executes an iteration of the game mode.
         """
-        if not inputData.ListPlayerInput:
+        # Cycle between green and red light
+        self.cycle(time.time(), Output)
+        if not Input.ListPlayerInput:
             logger.write_in_log("ERROR", "gameMode", "run", "no player was connected")
-        for playerInput in inputData.ListPlayerInput:
+        for playerInput in Input.ListPlayerInput:
             if self.check_victory(playerInput):
-                self.stop(inputData)
-                return self.outputData
+                self.stop(Input)
+                return Output
 
             # check player action
             self.check_action(playerInput, time.time())
 
-        # Cycle between green and red light
-        self.cycle(time.time())
-        return self.outputData
 
-    def stop(self, inputData):
+    def stop(self, Input, Output):
         """
         Stops the game and resets the outputs.
         """
-        for playerInput in inputData.ListPlayerInput:
-            playerOutput = self.outputData.ListPlayerOutput[playerInput.idPlayer]
+        for playerInput in Input.ListPlayerInput:
+            playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
             #playerOutput.PlayerLedStrip.clearPlayer()
             playerOutput.PlayerLedStrip.color(None)
             playerOutput.LinearActuatorOutput.move_to_right = False
-            playerOutput.LinearActuatorOutput.move_to_leftLimit = True
+            #playerOutput.LinearActuatorOutput.move_to_leftLimit = True
+            playerOutput.LinearActuatorOutput.move_to = Input.ListPlayerInput[playerInput.idPlayer].LinearActuatorInput.leftLimit

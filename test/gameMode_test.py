@@ -1,19 +1,18 @@
 """ Ce fichier permet de tester les méthodes de la classe GameMode """
 import unittest
-import sys
-import os
 import time
-from unittest.mock import MagicMock
 from datetime import datetime
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+#from test.mock import MockInput, MockOutput
+
+
 
 # Importer les classes nécessaires
-from pingpy.gameMode import RedLightGreenLight
-from pingpy.input.input import *
-from pingpy.output.output import *
-from pingpy.hardware import *
-from config import LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, MAX_BRIGTHNESS, PLAYER_OFFSETS
+from ..src.pingpy import *
+# from pingpy.gameMode import RedLightGreenLight
+# from pingpy.hardware import *
+# from pingpy.config import *
+
 
 
 
@@ -25,26 +24,22 @@ class TestRedLightGreenLight(unittest.TestCase):
         Prépare les données d'entrée (Input) et de sortie (Output) pour les tests.
         """
         self.game_mode = RedLightGreenLight()
-
-        # Configuration des joueurs (entrées)
-        player_input_1 = PlayerInput(
-            BeamSwitch(isBeamSwitchOn=True),
-            LinearActuatorInput(leftLimit=0, rightLimit=100, currentPose=0),
-            GameController3button(newAction=True),
-            id_player=0
-        )
-        self.input_data = Input(
-            
-            ListPlayerInput=[player_input_1]
-        )
+        
+        self.input_data = MockInput(2)
 
         # Configuration des joueurs (sorties)
-        player_output_1 = PlayerOutput(
-            PlayerLedStrip(LedStrip(GPIO_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS), PLAYER_OFFSETS[1]),
-            LinearActuatorOutput(move_to_right=False, move_to_leftLimit=False)
-        )
-        self.game_mode.output_data.ListPlayerOutput.append(player_output_1)
+        self.output_data = MockOutput(2)
         
+        
+    def test_setup(self):
+        self.game_mode.setup(self.input_data, self.output_data)
+        self.assertTrue(self.game_mode.is_light_green)
+        self.assertEqual(self.game_mode.time_init, time.time())
+        self.input_data.ListPlayerInput[0].LinearActuatorInput.leftLimit = 3
+
+        # Vérifier les sorties
+        self.assertTrue(self.output_data.LinearActuatorOutput.move_to_right)
+        self.assertEqual(self.output_data.LinearActuatorOutput.move_to, 3)
 
     def test_can_move_during_green_light(self):
         current_time = self.game_mode.time_init + 1  # Feu vert
@@ -63,17 +58,17 @@ class TestRedLightGreenLight(unittest.TestCase):
 
         output = self.game_mode.output_data.ListPlayerOutput[0]
         self.assertFalse(output.LinearActuatorOutput.move_to_right)
-        self.assertEqual(output.Led.color, None)
+        self.assertEqual(output.LedStrip.color, GREEN)
 
     def test_check_action_red_light(self):
         player = self.input_data.ListPlayerInput[0]
         player.GameController.newAction = True
-
+        player.linearActuatorInput.leftLimit = 200
         current_time = self.game_mode.time_init + self.game_mode.duration_green_light + 1  # Lumière rouge
         self.game_mode.check_action(player, current_time)
 
         output = self.game_mode.output_data.ListPlayerOutput[0]
-        self.assertTrue(output.LinearActuatorOutput.move_to_leftLimit)
+        self.assertTrue(output.LinearActuatorOutput.move_to, 200)
         self.assertEqual(output.Led.color, "orange")
 
     def test_victory_condition(self):
@@ -123,7 +118,7 @@ class TestRedLightGreenLight(unittest.TestCase):
             GameController3button(newAction=False),
             id_player=1
         )
-        self.input_data.ListPlayerInput.append(player_input_2)
+        self.input_data.player.append(player_input_2)
 
         # Configuration des joueurs (sorties)
         player_output_2 = PlayerOutput(
