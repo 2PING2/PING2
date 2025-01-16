@@ -80,6 +80,7 @@ class SerialCom:
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
                 self.running = False
+            time.sleep(0.05)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
