@@ -54,6 +54,8 @@ class SerialCom:
 
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
+                ser.reset_input_buffer()
+                ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
                 # make sure the Serial is closed at the beginning
                 ser.close()
                 ser.open()
