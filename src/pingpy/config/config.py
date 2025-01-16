@@ -13,6 +13,7 @@ RESTRICTIONS:
 For inquiries, contact us at: projet.ping2@gmail.com
 """
 
+
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
@@ -35,6 +36,7 @@ ports = {
     "Player4": "/dev/Player4",
     "ESP32": "/dev/ESP32"
 }
+PORT_ESP32 = ports["ESP32"]
 
 ####################################
 # CONTROLLER TYPES KEYS
@@ -42,6 +44,24 @@ ports = {
 CONTROLLER_TYPE_3BUTTONS = "3buttons"
 CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
 
+####################################
+# GIT UPDATE
+####################################
+ROOT_PATH = '/home/pi/Documents'  # Root path of the project
+import os
+GIT_CLONE_PATH = os.path.join(ROOT_PATH, "/PING2")# Github repository path
+GIT_BRANCH = 'origin/dev'  # Branch to check for updates
+# Update with the correct files (all files to check)
+ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
+FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH]
+
+HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
+CHECK_WIFI_DELAY = 5  # Delay between each Wi-Fi check in seconds
+
+DEBUG_PRINT_IN_TERMINAL = True  # Print debug messages in the monitor
+
+HTML_PATH = 'src/pingpy/gitUpdate/index.html' # Update with the correct path
+CSS_PATH = 'src/pingpy/gitUpdate/styles.css'  # Update with the correct path
 
 ####################################
 # SERIAL KEYS

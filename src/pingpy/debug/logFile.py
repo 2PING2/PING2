@@ -15,6 +15,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 import os
 from datetime import datetime
+from pingpy.config.config import DEBUG_PRINT_IN_TERMINAL
 
 pathLogFolder = "/home/pi/Documents/logFolder" # Path to the log folder
 
@@ -41,6 +42,8 @@ class LogFile:
         try:
             with open(logFilename, 'a') as file:
                 file.write(f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S.%f')[:-3]} {status} {programme} {function} {message}\n")
+                if DEBUG_PRINT_IN_TERMINAL:
+                    print(f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S.%f')[:-3]} {status} {programme} {function} {message}")
 
         except Exception as e:
             print(f"Failed to write in log file {logFilename}: {e}")
