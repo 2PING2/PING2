@@ -108,19 +108,19 @@ private:
     {
         if (abs(inputs.volume - lastInputs.volume) > ANTI_NOISE_THRESHOLD)
         {
-            send(VOLUME_KEY, VALUE_ACTION_KEY, inputs.volume);
+            send(VOLUME_KEY, inputs.volume);
             lastInputs.volume = inputs.volume;
         }
 
         if (abs(inputs.level - lastInputs.level) > ANTI_NOISE_THRESHOLD)
         {
-            send(LEVEL_KEY, VALUE_ACTION_KEY, inputs.level);
+            send(LEVEL_KEY, inputs.level);
             lastInputs.level = inputs.level;
         }
         
         if (abs(inputs.light - lastInputs.light) > ANTI_NOISE_THRESHOLD)
         {
-            send(LIGHT_KEY, VALUE_ACTION_KEY, inputs.light);
+            send(LIGHT_KEY, inputs.light);
             lastInputs.light = inputs.light;
         }
 
@@ -169,20 +169,18 @@ private:
     }
 
     template <typename T> 
-    void send(String key, String action, T value) // method to send a message
-    {
-        Serial.print(key);
-        Serial.print("/");
-        Serial.print(action);
-        Serial.print("/");
-        Serial.println(value);
-    }
-    void send(String key, String action)
+    void send(String key, T action) // method to send a message
     {
         Serial.print(key);
         Serial.print("/");
         Serial.println(action);
     }
+    // void send(String key, String action)
+    // {
+    //     Serial.print(key);
+    //     Serial.print("/");
+    //     Serial.println(action);
+    // }
 
     Messages receive() {
         Messages msg = {"", "", false}; // Initialise un message vide

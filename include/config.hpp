@@ -24,7 +24,7 @@
 #define INCREMENT_ACTION_KEY "increment"
 #define DECREMENT_ACTION_KEY "decrement"
 
-#define ANTI_NOISE_THRESHOLD 5
+#define ANTI_NOISE_THRESHOLD 10
 #define DEBOUNCE_DELAY 50
 #define NB_MODES 8
 
