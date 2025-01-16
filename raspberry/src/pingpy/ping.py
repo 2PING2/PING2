@@ -15,7 +15,6 @@ class Ping:
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], BAUD_RATE, TIMEOUT)
         self.currentGameMode = WaitingRoom()
-        # self.playerLedStrip = [PlayerLedStrip(ledStrip,PLAYER_LED_STRIP_OFFSETS[i]) for i in range(4)]
         self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         logger.write_in_log("INFO", __name__, "__init__")
         
@@ -24,9 +23,6 @@ class Ping:
         self.UICorner.setup()
         ledStrip.setup()
         ledStrip.clear()
-        # wait for calibration data here
-        # self.playerLedStrip[0].onPlayer((0, 255, 0))
-        self.player1LedStrip.onPlayer((0, 0, 255))
         logger.write_in_log("INFO", __name__, "setup")
         
     def select_game_mode(self):
