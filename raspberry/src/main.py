@@ -12,6 +12,8 @@ try :
     # Configuration du GPIO
     GPIO.setmode(GPIO.BCM)  # Utilise la numérotation BCM
     PWM_PIN = 10
+    #make sure GPIO is not already in use
+    GPIO.cleanup(10)
     GPIO.setup(PWM_PIN, GPIO.OUT)
 
     # Initialisation du PWM sur GPIO 10 avec une fréquence de 100 Hz
