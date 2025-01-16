@@ -24,7 +24,7 @@ MAX_VOLUME = 100
 # SERIAL SETTINGS
 ####################################
 BAUD_RATE = 115200
-TIMEOUT = 1
+TIMEOUT = 0.02  # Timeout for the serial communication (in seconds)
 RETRY_ATTEMPTS = 3  # Number of attempts to reset a port in case of a failed connection
 RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)
 

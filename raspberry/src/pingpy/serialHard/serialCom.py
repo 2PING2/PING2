@@ -55,7 +55,6 @@ class SerialCom:
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
                 # make sure the Serial is closed at the beginning
-                ser.close()
                 ser.open()
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 # begin asynchronous reading
@@ -75,6 +74,7 @@ class SerialCom:
             try:
                 new = self.ser.readline().decode('utf-8').strip()
                 if new:
+                    logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
                     self.queue.append(new)
                     
             except serial.SerialException as e:
