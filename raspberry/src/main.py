@@ -6,28 +6,24 @@ try :
     # while True:
     #     ping.run()
     
-    import RPi.GPIO as GPIO
+    import spidev
     import time
 
-    # Configuration du GPIO
-    GPIO.setmode(GPIO.BCM)  # Utilise la numérotation BCM
-    PWM_PIN = 10
-    #make sure GPIO is not already in use
-    GPIO.setup(PWM_PIN, GPIO.OUT)
+    # Initialisation de l'interface SPI
+    spi = spidev.SpiDev()  # Crée un objet SPI
+    spi.open(0, 0)         # Bus SPI 0, périphérique 0 (MOSI: GPIO10, SCLK: GPIO11)
+    spi.max_speed_hz = 500000  # Fréquence SPI (500 kHz)
 
     try:
         while True:
-            # Exemple : changer l'état de la LED
-            GPIO.output(PWM_PIN, GPIO.HIGH)
-            time.sleep(1)
-            GPIO.output(PWM_PIN, GPIO.LOW)
-            time.sleep(1)
-            
-    except KeyboardInterrupt:
-        print("Arrêt par l'utilisateur.")
+            # Envoie une séquence de données (ex. 0xAA puis 0x55)
+            spi.xfer([0xAA])  # 10101010 en binaire
+            time.sleep(0.1)
+            spi.xfer([0x55])  # 01010101 en binaire
+            time.sleep(0.1)
+
     finally:
-        # Nettoyage des GPIO
-        GPIO.cleanup()
+        spi.close()  # Ferme l'interface SPI proprement
 
         
   
