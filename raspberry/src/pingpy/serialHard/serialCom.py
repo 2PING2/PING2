@@ -73,7 +73,7 @@ class SerialCom:
                 self.setup()
             
             try:
-                newline = self.ser.read_until(b'\n')
+                newline = self.ser.readline()
                 new = newline.decode('utf-8')
                 if new:
                     logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
@@ -86,7 +86,7 @@ class SerialCom:
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
                 self.connected = False
-            time.sleep(0.01)
+            # time.sleep(0.01)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
