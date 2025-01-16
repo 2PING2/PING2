@@ -78,7 +78,7 @@ class PlayerLedStrip:
         
     def onPlayer(self, color):
         """Turn on all the LEDs."""
-        self.ledStrip.setLedStrip(color, self.min, self.max)
+        self.ledStrip.setLedStrip(Color(color[0],color[1],color[2]), self.min, self.max)
     
     def set(self, area, color):
         """Set the player LED strip."""
