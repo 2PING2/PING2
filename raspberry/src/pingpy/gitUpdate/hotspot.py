@@ -57,12 +57,13 @@ class Hotspot:
                 if diff_output:  # Si la sortie n'est pas vide
                     subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
                     logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
+                    if fileOrFolder == ESP_FIRMWARE_PATH:
+                        self.update_esp()
                     restartNeeded = True  # Indique qu'un redémarrage est nécessaire
                             
             except subprocess.CalledProcessError:
                 logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
-            if fileOrFolder == ESP_FIRMWARE_PATH:
-                self.update_esp()
+            
                 
         # restart the app if needed
         if restartNeeded:
@@ -79,7 +80,7 @@ class Hotspot:
                 
     def update_esp(self):
         try:
-            subprocess.run(['esptool.py', '--port', PORT_ESP32, 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
+            subprocess.run(['esptool.py', '--port', PORT_ESP32, 'write_flash', '-z', '0x0000', ESP_FIRMWARE_PATH], check=True)
             logger.write_in_log("INFO", __name__, "update_esp", "success")
         except subprocess.CalledProcessError:
             logger.write_in_log("ERROR", __name__, "update_esp", "fail")
