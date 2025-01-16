@@ -71,5 +71,6 @@ method=ignore
 def styles():
     return send_from_directory(os.path.dirname(CSS_PATH), os.path.basename(CSS_PATH))
 
-
-hotspot.setup(app)
+from threading import Thread 
+# hotspot.setup(app)
+Thread(target=hotspot.setup, args=(app,)).start()
