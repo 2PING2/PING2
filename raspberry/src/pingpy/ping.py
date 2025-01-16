@@ -15,6 +15,7 @@ class Ping:
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], BAUD_RATE, TIMEOUT)
         self.currentGameMode = WaitingRoom()
+        self.prevGameMode = None
         # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
         logger.write_in_log("INFO", __name__, "__init__")
@@ -24,27 +25,35 @@ class Ping:
         self.UICorner.setup()
         ledStrip.setup()
         ledStrip.clear()
-        self.playerLedStrip[0].onPlayer(YELLOW)
-        self.playerLedStrip[1].onPlayer(GREEN)
-        self.playerLedStrip[2].onPlayer(RED)
-        self.playerLedStrip[3].onPlayer(BLUE)
         logger.write_in_log("INFO", __name__, "setup")
         
     def select_game_mode(self):
         pass
     
     def run(self):
-        # self.esp32.read(self.input)
-        # self.UiCorner.read(self.input)
-        # self.currentGameMode.compute(self.input, self.output)
-        # self.refresh_output()
-        pass
-    
+        self.esp32.read(self.input)
+        self.UICorner.read(self.input)
+        self.runGameMode()
+        self.refresh_output()
+
+    def runGameMode(self):
+        if self.prevGameMode!=self.currentGameMode:
+            if self.prevGameMode is not None:
+                self.prevGameMode.stop()
+            self.currentGameMode.setup(self.output)
+            self.prevGameMode = self.currentGameMode
+        self.currentGameMode.compute(self.input, self.output)
+            
     def refresh_output(self):
-        pass
+        # pass
         # self.esp32.write(self.output)
         # self.UICorner.write(self.output)
         # refresh led trip and speaker
+        self.refresh_player_led_strip()
+        
+    def refresh_player_led_strip(self):
+        for i in range(4):
+            self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
         
         
         

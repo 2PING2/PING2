@@ -2,7 +2,7 @@ from .gameMode import GameMode
 from ..output.output import Output
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
+from pingpy.config.config import PURPLE
 
 
 class WaitingRoom(GameMode):
@@ -14,8 +14,9 @@ class WaitingRoom(GameMode):
         
     def setup(self, output):
         for i in range(4):
-            output.player[i].playerLedStrip.area = [-200, 200]
-            output.player[i].playerLedStrip.color = (120, 50, 255)
+            output.player[i].playerLedStrip.area = [-20, 20]
+            output.player[i].playerLedStrip.color = PURPLE
+        logger.write_in_log("INFO", __name__, "setup")
     
     def compute(self, input, output):
         pass

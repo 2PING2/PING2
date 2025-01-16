@@ -41,16 +41,16 @@ class LedStrip:
     def setLedStrip(self, color, OFFSET_MIN, OFFSET_MAX):
         """Set the LED strip between OFFSET_MIN and OFFSET_MAX to a color."""
         if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
-            logger.write_in_log("ERROR", "LedStrip", "setLedStrip", "Invalid offset")
+            logger.write_in_log("ERROR", __name__, f"Invalid offset : {OFFSET_MIN, OFFSET_MAX}")
             return
         # if not isinstance(color, int) or color < 0:
-        #     logger.write_in_log("ERROR", "LedStrip", "setLedStrip", f"Invalid color value: {color}")
+        #     logger.write_in_log("ERROR", __name__, f"Invalid color value: {color}")
         #     return
         try:
             for i in range(OFFSET_MIN, OFFSET_MAX):
                 self.strip.setPixelColor(i, color)
             self.strip.show()
-            logger.write_in_log("INFO", "LedStrip", "setLedStrip", f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
+            logger.write_in_log("INFO", __name__, f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
                    
@@ -75,15 +75,35 @@ class PlayerLedStrip:
         """Init the player LED strip."""
         self.ledStrip = ledStrip
         self.min, self.max = minAndMax
+        self.n_led = self.max - self.min
+        self.n_led_per_mm = 144.0 / 1000.0
+        self.len_mm = self.n_led / self.n_led_per_mm
+        self.min_mm = -self.len_mm / 2
+        self.max_mm = self.len_mm / 2
         
     def onPlayer(self, color):
         """Turn on all the LEDs."""
         self.ledStrip.setLedStrip(Color(color[0],color[1],color[2]), self.min, self.max)
     
-    def set(self, area, color):
+    def set_mm(self, area_mm, color):
         """Set the player LED strip."""
-        self.ledStrip.setLedStrip(color, area[0], area[1])
+        # compute the index of min and max
+        min_mm, max_mm = area_mm
+        min_led = round(self.n_led/2 + min_mm * self.n_led_per_mm)
+        max_led = round(self.n_led/2 + max_mm * self.n_led_per_mm)
+        logger.write_in_log("INFO", __name__, f"min_mm {min_mm} -> {min_led} and max_mm {max_mm} -> {max_led}")
+
+        self.set_led_index([min_led, max_led], color)
         
+    def set_led_index(self, area_led_index, color):
+        min_led, max_led = area_led_index
+        """Set the player LED strip."""
+        if min_led < self.min:
+            min_led = self.min
+        if max_led > self.max:
+            max_led = self.max
+        self.ledStrip.setLedStrip(color, min_led, max_led)
+         
     def clearPlayer(self):
         """Clear all the LEDs."""
         self.onPlayer(Color(0, 0, 0))

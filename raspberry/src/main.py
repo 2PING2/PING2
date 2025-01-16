@@ -1,10 +1,12 @@
 try :
     from pingpy import ping
+    import time
 
     ping.setup()
 
     while True:
         ping.run()
+        time.sleep(1)
     
         
   
