@@ -97,6 +97,9 @@ class PlayerLedStrip:
         
     def set_led_index(self, area_led_index, color):
         min_led, max_led = area_led_index
+        min_led += self.min
+        max_led += self.min
+        
         """Set the player LED strip."""
         if min_led < self.min:
             min_led = self.min
