@@ -53,6 +53,9 @@ class SerialCom:
 
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
+                # make sure the Serial is closed at the beginning
+                ser.close()
+                ser.open()
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 # begin asynchronous reading
                 Thread(target=self.read_data_task, daemon = True).start()
@@ -80,7 +83,7 @@ class SerialCom:
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
                 self.running = False
-            time.sleep(0.05)
+            time.sleep(0.01)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
