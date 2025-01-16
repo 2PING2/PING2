@@ -26,7 +26,7 @@ class Ping:
         ledStrip.clear()
         # wait for calibration data here
         # self.playerLedStrip[0].onPlayer((0, 255, 0))
-        self.player1LedStrip.onPlayer((0, 255, 0))
+        self.player1LedStrip.onPlayer((0, 0, 255))
         logger.write_in_log("INFO", __name__, "setup")
         
     def select_game_mode(self):
