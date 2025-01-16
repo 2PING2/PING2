@@ -12,12 +12,13 @@ class WaitingRoom(GameMode):
     def __init__(self):
         logger.write_in_log("INFO", __name__, "__init__")
         self.currentLed_brightness = 0.0
+        self.brightness_rate = 0.1
         self.last_time = time.time()
         
     def setup(self, output):
         for i in range(4):
             output.player[i].playerLedStrip.area = [-200, 200]
-            output.player[i].playerLedStrip.color = tuple(x * self.currentLed_brightness for x in PURPLE)
+            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in PURPLE)
         logger.write_in_log("INFO", __name__, "setup")
     
     def compute(self, input, output):
@@ -27,10 +28,14 @@ class WaitingRoom(GameMode):
         dt = t - self.last_time
         self.last_time = t
         
-        self.currentLed_brightness += 0.1 * float(dt)
-        if self.currentLed_brightness > 1:
+        self.currentLed_brightness += self.brightness_rate * dt
+        if self.currentLed_brightness > 1.0:
+            self.currentLed_brightness = 1.0
+            self.brightness_rate *= -1
+        elif self.currentLed_brightness < 0.0:
             self.currentLed_brightness = 0.0
-        self.currentLed_brightness = (self.currentLed_brightness + 0.1 * float(dt)) % 1.0
+            self.brightness_rate *= -1
+        
     
 
     def stop(self, input, output):

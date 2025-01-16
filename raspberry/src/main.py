@@ -6,7 +6,7 @@ try :
 
     while True:
         ping.run()
-        time.sleep(1)
+        # time.sleep(1)
     
         
   
