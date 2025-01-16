@@ -27,9 +27,10 @@ class WaitingRoom(GameMode):
         dt = t - self.last_time
         self.last_time = t
         
-        self.currentLed_brightness += 0.1 * float(dt)
-        if self.currentLed_brightness > 1:
-            self.currentLed_brightness = 0.0
+        # self.currentLed_brightness += 0.1 * float(dt)
+        # if self.currentLed_brightness > 1:
+        #     self.currentLed_brightness = 0.0
+        self.currentLed_brightness = (self.currentLed_brightness + 0.1 * float(dt)) % 1.0
     
 
     def stop(self, input, output):
