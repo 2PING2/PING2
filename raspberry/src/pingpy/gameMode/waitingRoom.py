@@ -11,7 +11,7 @@ class WaitingRoom(GameMode):
     """
     def __init__(self):
         logger.write_in_log("INFO", __name__, "__init__")
-        self.currentLed_brightness = 0
+        self.currentLed_brightness = 0.0
         self.last_time = time.time()
         
     def setup(self, output):
@@ -27,7 +27,7 @@ class WaitingRoom(GameMode):
         dt = t - self.last_time
         self.last_time = t
         
-        self.currentLed_brightness += 0.1 * dt
+        self.currentLed_brightness += 0.1 * float(dt)
         if self.currentLed_brightness > 1:
             self.currentLed_brightness = 0
     
