@@ -68,7 +68,7 @@ class Hotspot:
         # restart the app if needed
         if restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
-            os.system(f'sleep 1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
+            os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
             exit(1) 
 
     def build_backup(self):
