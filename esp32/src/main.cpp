@@ -6,7 +6,6 @@ Player *players[4] = {&PING::player1, &PING::player2, &PING::player3, &PING::pla
 void setup()
 {
     Serial.begin(115200);
-    Serial.println("Setup");
     PING::setup();
     PING::player1.actuator.calibrate();
     PING::player2.actuator.calibrate();
