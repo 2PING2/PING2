@@ -26,7 +26,7 @@ from pingpy.debug import logger
 class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=255):
         """Init the LED strip.""" 
-        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS, strip_type=ws.SK6812_STRIP_RGB)
+        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
         logger.write_in_log("INFO", "ledStrip", "__init__", "LED strip created")
      
     def setup(self):
