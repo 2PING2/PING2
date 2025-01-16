@@ -26,7 +26,7 @@ void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
     BeamSwitch::setup_emitter();
-    raspComManager.setup();
+    // raspComManager.setup();
     LinearActuator::setup_all();
     PING::player1.setup();
     PING::player2.setup();
