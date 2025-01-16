@@ -49,10 +49,11 @@ class LedStrip:
         try:
             for i in range(OFFSET_MIN, OFFSET_MAX):
                 self.strip.setPixelColor(i, color)
-            self.strip.show()
             # logger.write_in_log("INFO", __name__, f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
+    def show(self):
+        self.strip.show()
                    
     def setBrightness(self, brightness):
         """Set the brightness of the LED strip."""

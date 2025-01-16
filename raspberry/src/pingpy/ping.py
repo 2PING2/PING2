@@ -54,6 +54,7 @@ class Ping:
     def refresh_player_led_strip(self):
         for i in range(4):
             self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
+        ledStrip.show()
         
         
         
