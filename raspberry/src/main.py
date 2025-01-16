@@ -1,10 +1,39 @@
 try :
-    from pingpy import ping
+    # from pingpy import ping
 
-    ping.setup()
+    # ping.setup()
 
-    while True:
-        ping.run()
+    # while True:
+    #     ping.run()
+    
+    import RPi.GPIO as GPIO
+    import time
+
+    # Configuration du GPIO
+    GPIO.setmode(GPIO.BCM)  # Utilise la numérotation BCM
+    PWM_PIN = 10
+    GPIO.setup(PWM_PIN, GPIO.OUT)
+
+    # Initialisation du PWM sur GPIO 10 avec une fréquence de 100 Hz
+    pwm = GPIO.PWM(PWM_PIN, 100)  # Fréquence de 100 Hz
+    pwm.start(0)  # Démarre avec un rapport cyclique de 0%
+    try:
+        while True:
+            # Exemple : changer le rapport cyclique du PWM
+            for duty_cycle in range(0, 101, 5):  # Augmente de 0% à 100%
+                pwm.ChangeDutyCycle(duty_cycle)
+                time.sleep(0.1)  # Pause de 100 ms
+            for duty_cycle in range(100, -1, -5):  # Diminue de 100% à 0%
+                pwm.ChangeDutyCycle(duty_cycle)
+                time.sleep(0.1)
+            
+    except KeyboardInterrupt:
+        print("Arrêt par l'utilisateur.")
+    finally:
+        # Nettoyage des GPIO
+        pwm.stop()
+        GPIO.cleanup()
+
         
   
 except Exception as e:
