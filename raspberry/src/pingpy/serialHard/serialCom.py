@@ -73,7 +73,8 @@ class SerialCom:
                 self.setup()
             
             try:
-                new = self.ser.readline().decode('utf-8').strip()
+                newline = self.ser.readlineUntil(b'\n')
+                new = newline.decode('utf-8').strip()
                 if new:
                     logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
                     self.queue.append(new)
