@@ -3,7 +3,7 @@ from ..output.output import Output
 import time
 from pingpy.debug import logger
 from pingpy.config.config import PURPLE
-
+import time
 
 class WaitingRoom(GameMode):
     """
@@ -11,15 +11,25 @@ class WaitingRoom(GameMode):
     """
     def __init__(self):
         logger.write_in_log("INFO", __name__, "__init__")
+        self.currentLed_brightness = 0
+        self.last_time = time.time()
         
     def setup(self, output):
         for i in range(4):
-            output.player[i].playerLedStrip.area = [-20, 20]
-            output.player[i].playerLedStrip.color = PURPLE
+            output.player[i].playerLedStrip.area = [-200, 200]
+            output.player[i].playerLedStrip.color = tuple(x * self.currentLed_brightness for x in PURPLE)
         logger.write_in_log("INFO", __name__, "setup")
     
     def compute(self, input, output):
-        pass
+        for i in range(4):
+            output.player[i].playerLedStrip.color = tuple(x * self.currentLed_brightness for x in PURPLE)
+        t = time.time()
+        dt = t - self.last_time
+        self.last_time = t
+        
+        self.currentLed_brightness += 0.1 * dt
+        if self.currentLed_brightness > 1:
+            self.currentLed_brightness = 0
     
 
     def stop(self, input, output):

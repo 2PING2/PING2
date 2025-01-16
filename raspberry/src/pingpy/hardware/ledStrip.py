@@ -50,7 +50,7 @@ class LedStrip:
             for i in range(OFFSET_MIN, OFFSET_MAX):
                 self.strip.setPixelColor(i, color)
             self.strip.show()
-            logger.write_in_log("INFO", __name__, f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
+            # logger.write_in_log("INFO", __name__, f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
                    
@@ -91,7 +91,7 @@ class PlayerLedStrip:
         min_mm, max_mm = area_mm
         min_led = round(self.n_led/2 + min_mm * self.n_led_per_mm)
         max_led = round(self.n_led/2 + max_mm * self.n_led_per_mm)
-        logger.write_in_log("INFO", __name__, f"min_mm {min_mm} -> {min_led} and max_mm {max_mm} -> {max_led}")
+        # logger.write_in_log("INFO", __name__, f"min_mm {min_mm} -> {min_led} and max_mm {max_mm} -> {max_led}")
 
         self.set_led_index([min_led, max_led], color)
         
