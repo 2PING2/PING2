@@ -25,6 +25,7 @@ MAX_VOLUME = 100
 ####################################
 BAUD_RATE = 115200
 UI_CORNER_BAUD_RATE = 9600
+
 TIMEOUT = 0.2  # Timeout for the serial communication (in seconds)
 RETRY_ATTEMPTS = 3  # Number of attempts to reset a port in case of a failed connection
 RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)

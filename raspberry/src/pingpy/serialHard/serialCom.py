@@ -59,7 +59,7 @@ class SerialCom:
                 # make sure the Serial is closed at the beginning
                 ser.close()
                 ser.open()
-                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
+                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port} at {self.baudrate} baud")
                 # begin asynchronous reading
                 # Thread(target=self.read_data_task, daemon = True).start()
                 return ser
