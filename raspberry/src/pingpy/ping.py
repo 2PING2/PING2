@@ -23,7 +23,7 @@ class Ping:
         
     def setup(self):
         self.esp32.setup()
-        # self.UICorner.setup()
+        self.UICorner.setup()
         ledStrip.setup()
         ledStrip.clear()
         logger.write_in_log("INFO", __name__, "setup")
@@ -33,7 +33,7 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        # self.UICorner.read(self.input)
+        self.UICorner.read(self.input)
         self.runGameMode()
         self.refresh_output()
 

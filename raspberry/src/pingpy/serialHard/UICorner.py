@@ -8,6 +8,7 @@ class UICornerSerial(SerialCom):
         
     def read(self, input_ptr):
         """Read the next data from the serial port."""
+        self.read_data_task()
         new_line = self.consume_older_data()
         # process the data
         # if new_line is not None:
