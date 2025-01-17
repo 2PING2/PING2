@@ -4,5 +4,8 @@ class PingGame(GameMode):
     """
     Game mode of PING.
     """
-    
-    pass
+    def run():
+        pass
+
+    def stop():
+        pass

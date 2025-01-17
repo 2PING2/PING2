@@ -1,4 +1,3 @@
-
 from pingpy.debug import logger
 from pingpy.input.player import PlayerInput
 from pingpy.config.config import BAUD_RATE, TIMEOUT, ports
