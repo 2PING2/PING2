@@ -32,10 +32,7 @@ RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)
 
 ports = {
     "UICorner": "/dev/UICorner",
-    "Player1": "/dev/Player1",
-    "Player2": "/dev/Player2",
-    "Player3": "/dev/Player3",
-    "Player4": "/dev/Player4",
+    "Player" : ["/dev/player1", "/dev/player2", "/dev/player3", "/dev/player4"],
     "ESP32": "/dev/ESP32"
 }
 PORT_ESP32 = ports["ESP32"]
@@ -57,6 +54,7 @@ GIT_BRANCH = 'origin/dev'  # Branch to check for updates
 ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
 ESP_BOOTLOADER_PATH = "esp32/.pio/build/esp32dev/bootloader.bin"
 ESP_PARTITION_PATH = "esp32/.pio/build/esp32dev/partitions.bin"
+
 
 
 

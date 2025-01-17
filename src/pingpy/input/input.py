@@ -10,6 +10,6 @@ Inputs : PlayerInput (linearActuatorInput, BeamSwitch...), GameController3button
 """
 class Input:
     def __init__(self):
-        self.player = [PlayerInput(ports["Player"+str(i)], BAUD_RATE, TIMEOUT) for i in range(1, 5)]
+        self.player = [PlayerInput(ports["Player"][i], BAUD_RATE, TIMEOUT) for i in range(4)]
         self.UICorner = UICornerInput()
         logger.write_in_log("INFO", __name__, "__init__")
