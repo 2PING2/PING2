@@ -1,0 +1,40 @@
+name: Generate UML Diagrams
+
+on:
+  push:
+    paths:
+      - 'include/**'
+      - 'src/**'
+
+jobs:
+  plantuml:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: pip install hpp2plantuml
+    - name: Run PlantUML Builder
+      run: python .github/scripts/plantUmlBuilder.py  # Exécuter le script Python
+    - name: Install PlantUML
+      run: sudo apt-get install plantuml
+    - name: Generate UML Diagrams
+      run: plantuml docs/classes/*.puml -tsvg  # Générer les image .svg
+    - name: Commit UML Diagram
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'actions@github.com'
+        git config pull.rebase false  # merge
+        git pull
+        git add docs/classes/*.svg
+        git commit -m "Updated UML diagram"
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref_name }}
+
+        
