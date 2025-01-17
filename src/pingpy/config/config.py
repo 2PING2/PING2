@@ -24,7 +24,9 @@ MAX_VOLUME = 100
 # SERIAL SETTINGS
 ####################################
 BAUD_RATE = 115200
-TIMEOUT = 1
+UI_CORNER_BAUD_RATE = 9600
+
+TIMEOUT = 0.2  # Timeout for the serial communication (in seconds)
 RETRY_ATTEMPTS = 3  # Number of attempts to reset a port in case of a failed connection
 RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)
 
@@ -49,19 +51,25 @@ CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
 ####################################
 ROOT_PATH = '/home/pi/Documents'  # Root path of the project
 import os
-GIT_CLONE_PATH = os.path.join(ROOT_PATH, "/PING2")# Github repository path
+GIT_CLONE_PATH = os.path.join(ROOT_PATH, "PING2")# Github repository path
 GIT_BRANCH = 'origin/dev'  # Branch to check for updates
 # Update with the correct files (all files to check)
 ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
-FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH]
+ESP_BOOTLOADER_PATH = "esp32/.pio/build/esp32dev/bootloader.bin"
+ESP_PARTITION_PATH = "esp32/.pio/build/esp32dev/partitions.bin"
+
+
+
+
+FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH, ESP_BOOTLOADER_PATH, ESP_PARTITION_PATH]  # Files and folders to check for updates
 
 HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
 CHECK_WIFI_DELAY = 5  # Delay between each Wi-Fi check in seconds
 
 DEBUG_PRINT_IN_TERMINAL = True  # Print debug messages in the monitor
 
-HTML_PATH = 'src/pingpy/gitUpdate/index.html' # Update with the correct path
-CSS_PATH = 'src/pingpy/gitUpdate/styles.css'  # Update with the correct path
+HTML_PATH = 'index.html' # Update with the correct path
+CSS_PATH = 'styles.css'  # Update with the correct path
 
 ####################################
 # SERIAL KEYS
@@ -77,8 +85,8 @@ LED_STRIP_PIN = 10
 NUMBER_OF_LEDS = 176
 FREQUENCY = 800000
 DMA_CHANNEL = 10
-MAX_BRIGTHNESS = 200
-PLAYER_OFFSETS = {
+MAX_BRIGTHNESS = 150
+PLAYER_LED_STRIP_OFFSETS = {
     1: (132, 176),
     2: (88, 132),
     3: (44, 88),
@@ -89,6 +97,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 ORANGE = (255, 165, 0)
 YELLOW = (255, 255, 0)
+BLUE = (0, 0, 255)
+PURPLE = (159, 19, 187)
 
 
 ####################################

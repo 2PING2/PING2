@@ -1,5 +1,5 @@
 from pingpy.debug import logger
-from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH, ROOT_PATH
+from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH, ROOT_PATH, ESP_BOOTLOADER_PATH, ESP_PARTITION_PATH
 import os
 import subprocess
 import time
@@ -57,16 +57,18 @@ class Hotspot:
                 if diff_output:  # Si la sortie n'est pas vide
                     subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
                     logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
+                    # if fileOrFolder == ESP_FIRMWARE_PATH:
+                    self.update_esp()
                     restartNeeded = True  # Indique qu'un redémarrage est nécessaire
                             
             except subprocess.CalledProcessError:
                 logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
-            if fileOrFolder == ESP_FIRMWARE_PATH:
-                self.update_esp()
+            
                 
         # restart the app if needed
         if restartNeeded:
-            os.system(f'sleep 1 && python3 /home/pi/Documents/PIN2/src/main.py')
+            logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
+            os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
             exit(1) 
 
     def build_backup(self):
@@ -78,7 +80,18 @@ class Hotspot:
                 
     def update_esp(self):
         try:
-            subprocess.run(['esptool.py', '--port', PORT_ESP32, 'write_flash', '-z', '0x0000', 'firmware.bin'], check=True)
+            # subprocess.run(['esptool.py', '--chip esp32 --port', PORT_ESP32 ,'--baud 115200 write_flash 0x1000 ',ESP_BOOTLOADER_PATH , '0x8000 ',ESP_PARTITION_PATH,' 0x10000', ESP_FIRMWARE_PATH], check=True)
+            subprocess.run([
+            'esptool.py',
+            '--chip', 'esp32',
+            '--port', PORT_ESP32,
+            '--baud', '115200',
+            'write_flash',
+            '0x1000', ESP_BOOTLOADER_PATH,
+            '0x8000', ESP_PARTITION_PATH,
+            '0x10000', ESP_FIRMWARE_PATH
+        ], check=True)
+
             logger.write_in_log("INFO", __name__, "update_esp", "success")
         except subprocess.CalledProcessError:
             logger.write_in_log("ERROR", __name__, "update_esp", "fail")
@@ -97,7 +110,7 @@ class Hotspot:
             if self.check_wifi():
                 self.should_stop = True
                 self.stop_services()  # Stop services if connected
-                logger.write_in_log("INFO", __name__, "monitor_services", "Wi-Fi setup successful")
+                self.check_git_update()
                 return
             time.sleep(CHECK_WIFI_DELAY)  # Check connection
         # Stop services if no connection after timeout
