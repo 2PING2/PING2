@@ -31,9 +31,9 @@ class Ping:
     def setup(self):
         self.esp32.setup()
         self.UICorner.setup()
-        # for i in range(4):
-        #     self.playerController[i].setup()
-        self.playerController[1].setup()
+        for i in range(4):
+            self.playerController[i].setup()
+        # self.playerController[1].setup()
         ledStrip.setup()
         ledStrip.clear()
         logger.write_in_log("INFO", __name__, "setup")
@@ -44,9 +44,9 @@ class Ping:
     def run(self):
         self.esp32.read(self.input)
         self.UICorner.read(self.input)
-        # for i in range(4):
-        #     self.playerController[i].read(self.input.player[i])
-        self.playerController[1].read(self.input.player[1])
+        for i in range(4):
+            self.playerController[i].read(self.input.player[i])
+        # self.playerController[1].read(self.input.player[1])
             
         self.runGameMode()
         self.refresh_output()
