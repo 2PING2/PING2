@@ -6,5 +6,6 @@ class GameController3ButtonInput(GameControllerInput):
         super().__init__()
         self.left=False
         self.right=False
-        self.Shoot=False
+        self.shoot=False
+        self.countButton=0 ##Penser a reinitialiser a chaque mode de jeu
         logger.write_in_log("INFO", __name__, "__init__")
