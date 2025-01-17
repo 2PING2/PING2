@@ -59,6 +59,7 @@ ESP_BOOTLOADER_PATH = "esp32/.pio/build/esp32dev/bootloader.bin"
 ESP_PARTITION_PATH = "esp32/.pio/build/esp32dev/partitions.bin"
 
 
+
 FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH]
 
 HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
