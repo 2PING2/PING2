@@ -14,6 +14,7 @@ class RedLightGreenLight(GameMode):
         self.isLightGreen = False
         self.timeInit = 0
         self.durationGreenLight = None  # Temps du feu vert
+        self.durationRedLight = None
         self.reactionTime = 0.5      # Temps de réaction
 
         self.initialized = False
@@ -22,6 +23,7 @@ class RedLightGreenLight(GameMode):
         """
         Setup the game mode.
         """
+        Output.Speaker.audioPiste = r"audio\redLightGreenLight\Intro_123Soleil.wav"
         for playerInput in Input.ListPlayerInput:
             playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
             playerOutput.PlayerLedStrip.color(GREEN)
@@ -37,12 +39,13 @@ class RedLightGreenLight(GameMode):
         Randomize the duration of the green light.
         """
         min_duration = (
-                Output.Speaker.duration("123Soleil.wav") +
-                Output.Speaker.duration("Soleil.wav") +
+                Output.Speaker.duration(r"audio\redLightGreenLight\123.wav") +
+                Output.Speaker.duration(r"audio\redLightGreenLight\Soleil.wav") +
                 1  
             )
         max_duration = 10  
         self.durationGreenLight = random.uniform(min_duration, max_duration)
+        self.durationRedLight = random.uniform(2*self.reactionTime, max_duration)
 
     def can_move(self, currentTime):
         """
@@ -97,18 +100,19 @@ class RedLightGreenLight(GameMode):
             if elapsedTime < 0:
                 logger.write_in_log("ERROR", "gameMode", "cycle", "elapsed time has a negative value")
             elif elapsedTime < self.durationGreenLight - Output.Speaker.duration("Soleil.wav"):
-                if Output.Speaker.audioPiste != "123.wav":
-                    Output.Speaker.audioPiste = "123.wav"
+                if Output.Speaker.audioPiste != r"audio\redLightGreenLight\123.wav":
+                    Output.Speaker.audioPiste = r"audio\redLightGreenLight\123.wav"
 
             else:
-                if self.audioPiste != "Soleil.wav":
-                    Output.Speaker.audioPiste = "Soleil.wav"
-                
-            Output.LedStrip.color(GREEN)
+                if self.audioPiste != r"audio\redLightGreenLight\Soleil.wav":
+                    Output.Speaker.audioPiste = r"audio\redLightGreenLight\Soleil.wav"
+            for playerOutput in Output.ListPlayerOutput:
+                playerOutput.PlayerLedStrip.color(GREEN)
             self.isLightGreen = True
 
-        elif elapsedTime > self.durationGreenLight and elapsedTime < 2 * self.durationGreenLight + self.reactionTime:
-            Output.LedStrip.color(RED)
+        elif elapsedTime > self.durationGreenLight and elapsedTime < self.durationGreenLight + self.durationRedLight:
+            for playerOutput in Output.ListPlayerOutput:
+                playerOutput.PlayerLedStrip.color(RED)
             self.isLightGreen = False
         else:
             self.timeInit = currentTime

@@ -3,10 +3,10 @@ import unittest
 import time
 from datetime import datetime
 
+#import src.pingpy.gameMode.redLightGreenLight as RedLightGreenLight
 
-
-#from test.mock import MockInput, MockOutput
-from ..src.pingpy.gameMode.redLightGreenLight import RedLightGreenLight
+from mock import MockInput, MockOutput
+#from ..src.pingpy.gameMode.redLightGreenLight import RedLightGreenLight
 
 
 class TestRedLightGreenLight(unittest.TestCase):
