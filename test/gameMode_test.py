@@ -3,18 +3,10 @@ import unittest
 import time
 from datetime import datetime
 
+
+
 #from test.mock import MockInput, MockOutput
-
-
-
-# Importer les classes nécessaires
-from ..src.pingpy import *
-# from pingpy.gameMode import RedLightGreenLight
-# from pingpy.hardware import *
-# from pingpy.config import *
-
-
-
+from ..src.pingpy.gameMode.redLightGreenLight import RedLightGreenLight
 
 
 class TestRedLightGreenLight(unittest.TestCase):

@@ -1,5 +1,5 @@
-from .gameMode import GameMode
-from ..output.output import Output
+from pingpy.gameMode import GameMode
+from pingpy.output import Output
 import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
@@ -15,7 +15,8 @@ class RedLightGreenLight(GameMode):
         self.timeInit = 0
         self.durationGreenLight = None  # Temps du feu vert
         self.reactionTime = 0.5      # Temps de réaction
-        self.lastPlayedAudio = None
+
+        self.initialized = False
 
     def setup(self, Input, Output):
         """
@@ -26,9 +27,23 @@ class RedLightGreenLight(GameMode):
             playerOutput.PlayerLedStrip.color(GREEN)
             playerOutput.LinearActuatorOutput.move_to = Input.ListPlayerInput[playerInput.idPlayer].LinearActuatorInput.leftLimit
         self.timeInit = time.time()
+
         self.isLightGreen = True
+        self.randomize_duration()
+        Output.Speaker.audioPiste = None
         
-        
+    def randomize_duration(self):
+        """
+        Randomize the duration of the green light.
+        """
+        min_duration = (
+                Output.Speaker.duration("123Soleil.wav") +
+                Output.Speaker.duration("Soleil.wav") +
+                1  
+            )
+        max_duration = 10  
+        self.durationGreenLight = random.uniform(min_duration, max_duration)
+
     def can_move(self, currentTime):
         """
         Check if the player can move (green light)
@@ -57,7 +72,7 @@ class RedLightGreenLight(GameMode):
                 #playerOutput.PlayerLedStrip.onPlayer(ORANGE)
                 playerOutput.PlayerLedStrip.color(ORANGE)
         else:
-            playerOutput = self.outputData.ListPlayerOutput[playerInput.idPlayer]
+            playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
             playerOutput.LinearActuatorOutput.move_to_right = False
             playerOutput.LinearActuatorOutput.move_to_leftLimit = False
 
@@ -78,59 +93,47 @@ class RedLightGreenLight(GameMode):
         """
         elapsedTime = currentTime - self.timeInit
 
-        if elapsedTime < 0:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "elapsed time has a negative value")
+        if elapsedTime <= self.durationGreenLight:
+            if elapsedTime < 0:
+                logger.write_in_log("ERROR", "gameMode", "cycle", "elapsed time has a negative value")
+            elif elapsedTime < self.durationGreenLight - Output.Speaker.duration("Soleil.wav"):
+                if Output.Speaker.audioPiste != "123.wav":
+                    Output.Speaker.audioPiste = "123.wav"
 
-        # Changer la durée du feu vert à chaque cycle
-        if elapsedTime >= self.durationGreenLight + self.reactionTime:  # Fin d'un cycle
-            self.timeInit = currentTime
+            else:
+                if self.audioPiste != "Soleil.wav":
+                    Output.Speaker.audioPiste = "Soleil.wav"
+                
+            Output.LedStrip.color(GREEN)
             self.isLightGreen = True
 
-            
-            min_duration = (
-                Output.Speaker.duration("123Soleil.wav") +
-                Output.Speaker.duration("Soleil.wav") +
-                1  
-            )
-            max_duration = 10  
-            self.durationGreenLight = random.uniform(min_duration, max_duration)
-
-            
-            self.lastPlayedAudio = None
-        else:
-            self.isLightGreen = elapsedTime < self.durationGreenLight
-
-        
-        if elapsedTime <= self.durationGreenLight + self.reactionTime:
-            if elapsedTime <= self.durationGreenLight:
-                if self.lastPlayedAudio != "123Soleil.wav":
-                    Output.Speaker.audioPiste = "123Soleil.wav"
-                    self.lastPlayedAudio = "123Soleil.wav"
-            elif elapsedTime <= self.durationGreenLight - Output.Speaker.duration("123Soleil.wav"):
-                if self.lastPlayedAudio != "Soleil.wav":
-                    Output.Speaker.audioPiste = "Soleil.wav"
-                    self.lastPlayedAudio = "Soleil.wav"
-            Output.LedStrip.color(GREEN)
-        elif elapsedTime < 2 * self.durationGreenLight + self.reactionTime:
+        elif elapsedTime > self.durationGreenLight and elapsedTime < 2 * self.durationGreenLight + self.reactionTime:
             Output.LedStrip.color(RED)
             self.isLightGreen = False
+        else:
+            self.timeInit = currentTime
+            self.isLightGreen = True
+            self.randomize_duration()
+
+
 
     def compute(self, Input, Output):
         """
         Executes an iteration of the game mode.
         """
-        # Cycle between green and red light
-        self.cycle(time.time(), Output)
+        if self.initialized == False:
+            self.setup(Input, Output)
+            self.initialized = True
+
         if not Input.ListPlayerInput:
             logger.write_in_log("ERROR", "gameMode", "run", "no player was connected")
         for playerInput in Input.ListPlayerInput:
-            if self.check_victory(playerInput):
-                self.stop(Input)
-                return Output
-
+            if self.check_victory(playerInput, Output):
+                self.stop(Input, Output)
+                
             # check player action
-            self.check_action(playerInput, time.time())
-
+            self.check_action(playerInput, Output.ListPlayerOutput[playerInput.idPlayer], time.time())
+        self.cycle(time.time(), Output)
 
     def stop(self, Input, Output):
         """

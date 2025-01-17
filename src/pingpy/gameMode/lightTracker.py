@@ -20,7 +20,6 @@ class LightTracker(GameMode):
         self.distanceLed=distanceLed
         self.roundNumber=5 #5 rounds
         self.actualRound=0
-        self.outputData = Output([])
     
     def run(self,PlayerInput):
         pass
