@@ -56,7 +56,7 @@ class Ping:
         if self.prevGameMode!=self.currentGameMode:
             if self.prevGameMode is not None:
                 self.prevGameMode.stop()
-            self.currentGameMode.setup(self.output)
+            self.currentGameMode.setup(self.input, self.output)
             self.prevGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
             
