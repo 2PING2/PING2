@@ -1,11 +1,12 @@
 from pingpy import *
 from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE
 from pingpy.input import Input
+from pingpy.input.gameController3Button import GameController3ButtonInput
 from pingpy.output import Output
 from pingpy.debug import logger
 from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
-
+from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
 
 class Ping:
@@ -16,15 +17,24 @@ class Ping:
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
         
         self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
-        self.currentGameMode = WaitingRoom()
+        # self.currentGameMode = WaitingRoom()
+        self.currentGameMode = RedLightGreenLight()
         self.prevGameMode = None
         # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
+        
+        for i in range(4):
+            self.input.player[i].gameController = GameController3ButtonInput()
+        
+        self.playerController = [ControllerSerial(self.input.player[i].gameController, ports["Player"][i], BAUD_RATE, TIMEOUT) for i in range(4)]
         logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self):
         self.esp32.setup()
         self.UICorner.setup()
+        # for i in range(4):
+        #     self.playerController[i].setup()
+        self.playerController[1].setup()
         ledStrip.setup()
         ledStrip.clear()
         logger.write_in_log("INFO", __name__, "setup")
@@ -35,6 +45,10 @@ class Ping:
     def run(self):
         self.esp32.read(self.input)
         self.UICorner.read(self.input)
+        # for i in range(4):
+        #     self.playerController[i].read(self.input.player[i])
+        self.playerController[1].read(self.input.player[1])
+            
         self.runGameMode()
         self.refresh_output()
 

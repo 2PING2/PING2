@@ -10,9 +10,13 @@ class ControllerSerial(SerialCom):
         self.controllerInput = controllerInput
         logger.write_in_log("INFO", __name__, "__init__")
         
-    def process_data(self):
-        
-        if self.lastData[1] == PUSH_KEY:
+    def read(self, input_ptr):
+        self.read_data_task()
+        new_line = self.consume_older_data()
+        if new_line is None:
+            return
+        new_line = new_line.split('/')
+        if new_line[1] == PUSH_KEY:
             self.controllerInput.inAction = True
-        elif self.lastData[1] == RELEASE_KEY:
+        elif new_line[1] == RELEASE_KEY:
             self.controllerInput.inAction = False
