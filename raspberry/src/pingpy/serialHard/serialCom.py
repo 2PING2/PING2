@@ -16,7 +16,9 @@ For inquiries, contact us at: projet.ping2@gmail.com
 import serial
 import time
 import os
-from threading import Thread
+# from threading import Thread
+import asyncio
+# import serial_asyncio
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 
@@ -69,8 +71,9 @@ class SerialCom:
                 time.sleep(RETRY_DELAY)
         return None
 
-    def read_data_task(self):
+    async def read_data_task(self):
         """Read the next data from the serial port."""
+        # loop = asyncio.get_running_loop()
         while True :
             if not self.connected:
                 self.setup()
@@ -89,6 +92,7 @@ class SerialCom:
                 logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
                 self.connected = False
             # time.sleep(0.01)
+            await asyncio.sleep(0.01)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
