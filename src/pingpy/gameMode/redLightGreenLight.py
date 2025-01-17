@@ -26,18 +26,18 @@ class RedLightGreenLight(GameMode):
         """
         logger.write_in_log("INFO", "RedLightGreenLight", "setup", "Setting up the game mode.")
 
-        if not Input.ListPlayerInput or not Output.ListPlayerOutput:
+        if not Input.player or not Output.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "setup", "Input or Output data is missing.")
             return
 
         Output.speaker.audioPiste = r"audio\redLightGreenLight\Intro_123Soleil.wav"
-        for playerInput in Input.ListPlayerInput:
+        for i in range(4):
             try:
-                playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
+                playerOutput = Output.player[i]
                 playerOutput.playerLedStrip.color(GREEN)
-                playerOutput.linearActuator.move_to = playerInput.linearActuator.leftLimit
+                playerOutput.linearActuator.move_to = Input.player[i].linearActuator.leftLimit
             except IndexError:
-                logger.write_in_log("ERROR", "RedLightGreenLight", "setup", f"No output found for player ID {playerInput.idPlayer}.")
+                logger.write_in_log("ERROR", "RedLightGreenLight", "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
         self.timeInit = time.time()
         self.isLightGreen = True
@@ -86,19 +86,18 @@ class RedLightGreenLight(GameMode):
                 logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player {playerInput.idPlayer} moved during green light.")
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
-                playerOutput.LinearActuator.moveToRight = False
-                playerOutput.PlayerLedStrip.color(ORANGE)
+                playerOutput.linearActuator.moveToRight = False
+                playerOutput.playerLedStrip.color(ORANGE)
                 logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player {playerInput.idPlayer} moved during red light.")
         else:
-            playerOutput.linearActuatorOutput.moveToRight = False
+            playerOutput.linearActuator.moveToRight = False
 
-    def check_victory(self, playerInput, Output):
+    def check_victory(self, playerInput, playerOutput):
         """
         Checks if a player has won.
         """
         if playerInput.linearActuator.currentPose >= playerInput.linearActuator.rightLimit:
-            Output.ListPlayerOutput[playerInput.idPlayer].PlayerLedStrip.color(YELLOW)
-            logger.write_in_log("INFO", "RedLightGreenLight", "check_victory", f"Player {playerInput.idPlayer} has won.")
+            playerOutput.playerLedStrip.color(YELLOW)
             return True
         return False
 
@@ -113,11 +112,11 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = r"audio\redLightGreenLight\123.wav"
                 else:
                     Output.speaker.audioPiste = r"audio\redLightGreenLight\Soleil.wav"
-                for PlayerOutput in Output.ListPlayerOutput:
+                for PlayerOutput in Output.player:
                     PlayerOutput.playerLedStrip.color(GREEN)
                 self.isLightGreen = True
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
-                for PlayerOutput in Output.ListPlayerOutput:
+                for PlayerOutput in Output.player:
                     PlayerOutput.playerLedStrip.color(RED)
                 self.isLightGreen = False
             else:
@@ -136,23 +135,22 @@ class RedLightGreenLight(GameMode):
             self.setup(Input, Output)
             self.initialized = True
 
-        if not Input.ListPlayerInput:
+        if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
 
-        for playerInput in Input.ListPlayerInput:
-            if self.check_victory(playerInput, Output):
+        for i in range(4):
+            if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:
-                self.check_action(playerInput, Output.ListPlayerOutput[playerInput.idPlayer], time.time())
+                self.check_action(Input.player[i], Output.player[i], time.time())
         self.cycle(time.time(), Output)
 
     def stop(self, Input, Output):
         """
         Stops the game and resets the outputs.
         """
-        for playerInput in Input.ListPlayerInput:
-            playerOutput = Output.ListPlayerOutput[playerInput.idPlayer]
+        for i in range(4):
+            playerOutput = Output.player[i]
             playerOutput.playerLedStrip.color(None)
             playerOutput.linearActuator.moveToRight = False
-            logger.write_in_log("INFO", "RedLightGreenLight", "stop", f"Game stopped for player {playerInput.idPlayer}.")
