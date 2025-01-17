@@ -4,8 +4,7 @@
 Corner corner;
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println("Hello World");
+  Serial.begin(9600);
   corner.setup();
 }
 
