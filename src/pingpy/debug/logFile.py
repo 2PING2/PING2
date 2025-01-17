@@ -35,6 +35,7 @@ class LogFile:
                 file.write(f"---- PING^2 : LOG FILE OF {today} ----\n")
         else:
             print(f"Log file: {logFilename} already exists")
+        self.write_in_log("INFO", "", "BEGIN")
 
     def write_in_log(self, status, programme, function, message=""):
         today = datetime.now().strftime("%d-%m-%Y")      

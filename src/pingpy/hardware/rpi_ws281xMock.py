@@ -24,16 +24,25 @@ class PixelStrip:
 
     def show(self):
         print("Simulating PixelStrip.show()")
-        print("Current Pixel Colors:", self.pixels)
+        # print("Current Pixel Colors:", self.pixels)
 
     def setBrightness(self, brightness):
         if brightness < 0 or brightness > 255:
             raise ValueError("Brightness out of range")
         self.brightness = brightness
         print(f"Simulating setting brightness to {brightness}")
+    
+    def numPixels(self):
+        return self.num_pixels
 
 class Color:
-    @staticmethod
-    def RGB(r, g, b):
-        """Retourne une couleur sous forme d'entier (valeur RGB)"""
-        return (r << 16) + (g << 8) + b  # Conversion RGB en un entier
+    def __init__(self, r, g, b):
+        self.r = r
+        self.g = g
+        self.b = b
+
+    def __repr__(self):
+        return f"Color({self.r}, {self.g}, {self.b})"
+
+    def __eq__(self, other):
+        return self.r == other.r and self.g == other.g and self.b == other.b

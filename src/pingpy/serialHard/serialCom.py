@@ -28,7 +28,7 @@ class SerialCom:
         self.baudrate = BAUD_RATE
         self.timeout = TIMEOUT
         self.ser = None
-        self.running = False
+        self.connected = False
         self.retryCount = 0
         self.queue = []
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.port}")
@@ -37,9 +37,10 @@ class SerialCom:
         """Configure and start reading the serial port."""
         self.ser = self.open_port()
         if self.ser:
-            self.running = True
+            self.connected = True
             logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.port}")
         else:
+            self.connected = False
             logger.write_in_log("WARNING", __name__, "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
@@ -53,9 +54,14 @@ class SerialCom:
 
                 # Try to open the port
                 ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
-                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
+                # ser.reset_input_buffer()
+                # ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
+                # make sure the Serial is closed at the beginning
+                ser.close()
+                ser.open()
+                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port} at {self.baudrate} baud")
                 # begin asynchronous reading
-                Thread(target=self.read_data_task, daemon = True).start()
+                # Thread(target=self.read_data_task, daemon = True).start()
                 return ser
             except serial.SerialException as e:
                 logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
@@ -64,22 +70,26 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
-        while True :
-            if not self.running:
-                continue
-            
-            try:
-                new = self.ser.readline().decode('utf-8').strip()
-                if new:
-                    self.queue.append(new)
-                    
-            except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
-                self.running = False
+        if not self.connected:
+            self.setup()
+        
+        try:
+            if self.ser.in_waiting > 0:
+                new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+            else:
+                new = False
+            if new:
+                logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
+                self.queue.append(new)
                 
-            except Exception as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
-                self.running = False
+        except serial.SerialException as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
+            self.connected = False
+            
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
+            self.connected = False
+        # time.sleep(0.01)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
@@ -90,7 +100,7 @@ class SerialCom:
             
     def stop_reading(self):
         """Stop reading from the serial port."""
-        self.running = False
+        self.connected = False
         if self.ser:
             self.ser.close()
             logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
