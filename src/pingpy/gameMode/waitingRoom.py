@@ -24,6 +24,9 @@ class WaitingRoom(GameMode):
     def compute(self, input, output):
         for i in range(4):
             output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in PURPLE)
+            if input.player[i].gameController.inAction:
+                output.player[i].playerLedStrip.color = (50, 50, 50)
+                
         t = time.time()
         dt = t - self.last_time
         self.last_time = t

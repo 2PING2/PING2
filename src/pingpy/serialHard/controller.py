@@ -16,7 +16,7 @@ class ControllerSerial(SerialCom):
         if new_line is None:
             return
         new_line = new_line.split('/')
-        if new_line[0] == PUSH_KEY:
+        if new_line[1] == PUSH_KEY:
             self.controllerInput.inAction = True
-        elif new_line[0] == RELEASE_KEY:
+        elif new_line[1] == RELEASE_KEY:
             self.controllerInput.inAction = False
