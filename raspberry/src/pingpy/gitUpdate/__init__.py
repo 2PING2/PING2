@@ -74,6 +74,10 @@ method=ignore
 
 @app.route("/styles.css")
 def styles():
+    if os.path.exists(CSS_PATH):
+        logger.write_in_log("INFO", __name__, "styles", "Serving CSS file")
+    else:
+        logger.write_in_log("ERROR", __name__, "styles", "CSS file not found")
     return send_from_directory(os.path.dirname(CSS_PATH), os.path.basename(CSS_PATH))
 
 hotspot.setup(app)
