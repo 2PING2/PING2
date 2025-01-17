@@ -1,5 +1,5 @@
 from pingpy import *
-from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, GREEN, ORANGE, YELLOW, RED, BLUE
+from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE
 from pingpy.input import Input
 from pingpy.output import Output
 from pingpy.debug import logger
@@ -13,7 +13,7 @@ class Ping:
         self.input = Input()
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
-        self.UICorner = serialHard.UICornerSerial(ports["UICorner"], BAUD_RATE, TIMEOUT)
+        self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
         self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
         self.currentGameMode = WaitingRoom()
         self.prevGameMode = None
