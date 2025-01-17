@@ -61,7 +61,7 @@ class SerialCom:
                 ser.open()
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 # begin asynchronous reading
-                Thread(target=self.read_data_task, daemon = True).start()
+                # Thread(target=self.read_data_task, daemon = True).start()
                 return ser
             except serial.SerialException as e:
                 logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
@@ -70,27 +70,26 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
-        while True :
-            if not self.connected:
-                self.setup()
-            
-            try:
-                if self.ser.in_waiting > 0:
-                    new = self.ser.readline().decode('utf-8', errors='ignore').strip()
-                else:
-                    new = False
-                if new:
-                    logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
-                    self.queue.append(new)
-                    
-            except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
-                self.connected = False
+        if not self.connected:
+            self.setup()
+        
+        try:
+            if self.ser.in_waiting > 0:
+                new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+            else:
+                new = False
+            if new:
+                logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
+                self.queue.append(new)
                 
-            except Exception as e:
-                logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
-                self.connected = False
-            # time.sleep(0.01)
+        except serial.SerialException as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
+            self.connected = False
+            
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
+            self.connected = False
+        # time.sleep(0.01)
             
     def consume_older_data(self):
         """Consume the older data in the queue."""

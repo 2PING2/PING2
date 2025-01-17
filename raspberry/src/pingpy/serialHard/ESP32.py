@@ -12,7 +12,7 @@ class ESP32Serial(SerialCom):
         # if new:
         #     logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
         #     self.queue.append(new)
-        
+        self.read_data_task()
         new_line = self.consume_older_data()
         # process the data
         if new_line is not None:
