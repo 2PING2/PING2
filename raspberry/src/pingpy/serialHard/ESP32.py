@@ -15,5 +15,5 @@ class ESP32Serial(SerialCom):
         self.read_data_task()
         new_line = self.consume_older_data()
         # process the data
-        if new_line is not None:
-            logger.write_in_log("INFO", __name__, "read", f"Read {new_line}")
+        # if new_line is not None:
+        #     logger.write_in_log("INFO", __name__, "read", f"Read {new_line}")
