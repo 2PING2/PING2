@@ -33,10 +33,6 @@ RETRY_DELAY = 2  # Delay between each reset attempt (in seconds)
 ports = {
     "UICorner": "/dev/UICorner",
     "Player" : ["/dev/player1", "/dev/player2", "/dev/player3", "/dev/player4"],
-    # "Player1": "/dev/Player1",
-    # "Player2": "/dev/Player2",
-    # "Player3": "/dev/Player3",
-    # "Player4": "/dev/Player4",
     "ESP32": "/dev/ESP32"
 }
 PORT_ESP32 = ports["ESP32"]
