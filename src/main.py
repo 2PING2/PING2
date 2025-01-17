@@ -31,4 +31,4 @@ except Exception as e:
     except:
         pass
     os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
-    exit(1) 
+    exit(1)
