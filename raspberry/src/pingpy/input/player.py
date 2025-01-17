@@ -8,7 +8,7 @@ from pingpy.serialHard.controller import ControllerSerial
 class PlayerInput:
     def __init__(self,usbPort, usbBaudRate, usbTimeout):
         self.beamSwitch = BeamSwitchInput()
-        self.linearActuatorInput = LinearActuatorInput()
+        self.linearActuator = LinearActuatorInput()
         self.gameController = GameControllerInput()
         self.usb = ControllerSerial(self.gameController, usbPort, usbBaudRate, usbTimeout)
         self.pointCounter=0

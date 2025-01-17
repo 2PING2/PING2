@@ -15,7 +15,7 @@ class WaitingRoom(GameMode):
         self.brightness_blink_rate = 0.5
         self.last_time = time.time()
         
-    def setup(self, output):
+    def setup(self, input, output):
         for i in range(4):
             output.player[i].playerLedStrip.area = [-200, 200]
             output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in PURPLE)

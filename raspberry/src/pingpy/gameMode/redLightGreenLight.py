@@ -34,7 +34,8 @@ class RedLightGreenLight(GameMode):
         for i in range(4):
             try:
                 playerOutput = Output.player[i]
-                playerOutput.playerLedStrip.color(GREEN)
+                playerOutput.playerLedStrip.area = [-200, 200]
+                playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.move_to = Input.player[i].linearActuator.leftLimit
             except IndexError:
                 logger.write_in_log("ERROR", "RedLightGreenLight", "setup", f"No output found for player ID {Input.playerInput[i]}.")
@@ -82,12 +83,12 @@ class RedLightGreenLight(GameMode):
         if playerInput.gameController.inAction:
             if self.can_move(currentTime):
                 playerOutput.linearActuator.moveToRight = True
-                playerOutput.playerLedStrip.color(GREEN)
+                playerOutput.playerLedStrip.color = GREEN
                 logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player {playerInput.idPlayer} moved during green light.")
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
                 playerOutput.linearActuator.moveToRight = False
-                playerOutput.playerLedStrip.color(ORANGE)
+                playerOutput.playerLedStrip.color = ORANGE
                 logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player {playerInput.idPlayer} moved during red light.")
         else:
             playerOutput.linearActuator.moveToRight = False
@@ -96,8 +97,10 @@ class RedLightGreenLight(GameMode):
         """
         Checks if a player has won.
         """
+        if playerInput.linearActuator.currentPose is None or playerInput.linearActuator.rightLimit is None:
+            return False
         if playerInput.linearActuator.currentPose >= playerInput.linearActuator.rightLimit:
-            playerOutput.playerLedStrip.color(YELLOW)
+            playerOutput.playerLedStrip.color = YELLOW
             return True
         return False
 
@@ -113,11 +116,11 @@ class RedLightGreenLight(GameMode):
                 else:
                     Output.speaker.audioPiste = r"audio\redLightGreenLight\Soleil.wav"
                 for PlayerOutput in Output.player:
-                    PlayerOutput.playerLedStrip.color(GREEN)
+                    PlayerOutput.playerLedStrip.color = GREEN
                 self.isLightGreen = True
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
                 for PlayerOutput in Output.player:
-                    PlayerOutput.playerLedStrip.color(RED)
+                    PlayerOutput.playerLedStrip.color = RED
                 self.isLightGreen = False
             else:
                 self.timeInit = currentTime
