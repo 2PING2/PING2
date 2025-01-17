@@ -61,7 +61,8 @@ class SerialCom:
                 ser.open()
                 logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port}")
                 # begin asynchronous reading
-                Thread(target=self.read_data_task, daemon = True).start()
+                # Thread(target=self.read_data_task, daemon = True).start()
+                
                 return ser
             except serial.SerialException as e:
                 logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
