@@ -1,4 +1,4 @@
-.pio
+# .pio
 .vscode
 .codegpt
 \!.pio/build/esp32dev/firmware.bin
