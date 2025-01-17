@@ -3,7 +3,7 @@ from pingpy.debug import logger
 import pygame
 import time
 
-class Speaker:
+class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
         pygame.mixer.init()

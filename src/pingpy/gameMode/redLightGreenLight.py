@@ -1,5 +1,5 @@
-from pingpy.gameMode import GameMode
-from pingpy.output import Output
+from .gameMode import GameMode
+from ..output.output import Output
 import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, YELLOW, RED

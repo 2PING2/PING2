@@ -6,8 +6,7 @@ from pingpy.config.config import CONTROLLER_TYPE_3BUTTONS, CONTROLLER_TYPE_1BUTT
 from pingpy.serialHard.controller import ControllerSerial
 
 class PlayerInput:
-    def __init__(self, idPlayer,usbPort, usbBaudRate, usbTimeout):
-        self.idPlayer = idPlayer
+    def __init__(self,usbPort, usbBaudRate, usbTimeout):
         self.beamSwitch = BeamSwitchInput()
         self.linearActuatorInput = LinearActuatorInput()
         self.gameController = GameControllerInput()
