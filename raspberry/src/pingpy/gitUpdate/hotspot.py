@@ -80,7 +80,17 @@ class Hotspot:
                 
     def update_esp(self):
         try:
-            subprocess.run(['esptool.py', '--chip esp32 --port', PORT_ESP32 ,'--baud 115200 write_flash 0x1000 ',ESP_BOOTLOADER_PATH , '0x8000 ',ESP_PARTITION_PATH,' 0x10000', ESP_FIRMWARE_PATH], check=True)
+            # subprocess.run(['esptool.py', '--chip esp32 --port', PORT_ESP32 ,'--baud 115200 write_flash 0x1000 ',ESP_BOOTLOADER_PATH , '0x8000 ',ESP_PARTITION_PATH,' 0x10000', ESP_FIRMWARE_PATH], check=True)
+            subprocess.run([
+            'esptool.py',
+            '--chip', 'esp32',
+            '--port', PORT_ESP32,
+            '--baud', '115200',
+            'write_flash',
+            '0x1000', ESP_BOOTLOADER_PATH,
+            '0x8000', ESP_PARTITION_PATH,
+            '0x10000', ESP_FIRMWARE_PATH
+        ], check=True)
 
             logger.write_in_log("INFO", __name__, "update_esp", "success")
         except subprocess.CalledProcessError:
