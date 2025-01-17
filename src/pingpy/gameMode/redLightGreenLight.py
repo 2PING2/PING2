@@ -31,7 +31,7 @@ class RedLightGreenLight(GameMode):
             return
 
         Output.speaker.audioPiste = r"audio\redLightGreenLight\Intro_123Soleil.wav"
-        for i in range(4):
+        for i in range(1,2):
             try:
                 playerOutput = Output.player[i]
                 playerOutput.playerLedStrip.area = [-200, 200]
@@ -142,7 +142,7 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
 
-        for i in range(4):
+        for i in range(1,2):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:
@@ -153,7 +153,7 @@ class RedLightGreenLight(GameMode):
         """
         Stops the game and resets the outputs.
         """
-        for i in range(4):
+        for i in range(1,2):
             playerOutput = Output.player[i]
             playerOutput.playerLedStrip.color(None)
             playerOutput.linearActuator.moveToRight = False
