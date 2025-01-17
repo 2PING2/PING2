@@ -57,7 +57,7 @@ class Hotspot:
                 if diff_output:  # Si la sortie n'est pas vide
                     subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
                     logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
-                    # if fileOrFolder == ESP_FIRMWARE_PATH:
+                if fileOrFolder == ESP_FIRMWARE_PATH:
                     self.update_esp()
                     restartNeeded = True  # Indique qu'un redémarrage est nécessaire
                             
