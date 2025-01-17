@@ -17,7 +17,8 @@ class Ping:
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
         
         self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
-        self.currentGameMode = WaitingRoom()
+        # self.currentGameMode = WaitingRoom()
+        self.currentGameMode = RedLightGreenLight()
         self.prevGameMode = None
         # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
