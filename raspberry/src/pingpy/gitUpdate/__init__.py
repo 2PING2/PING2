@@ -65,6 +65,11 @@ method=ignore
             logger.write_in_log("INFO", __name__, "index", "Wi-Fi configuration successful")
             
         return 
+    if os.path.exists(HTML_PATH):
+        logger.write_in_log("INFO", __name__, "index", "Serving HTML file")
+    else:
+        logger.write_in_log("ERROR", __name__, "index", "HTML file not found")
+        
     return send_from_directory(os.path.dirname(HTML_PATH), os.path.basename(HTML_PATH))  # Serve the HTML file
 
 @app.route("/styles.css")

@@ -62,8 +62,8 @@ CHECK_WIFI_DELAY = 5  # Delay between each Wi-Fi check in seconds
 
 DEBUG_PRINT_IN_TERMINAL = True  # Print debug messages in the monitor
 
-HTML_PATH = 'src/pingpy/gitUpdate/index.html' # Update with the correct path
-CSS_PATH = 'src/pingpy/gitUpdate/styles.css'  # Update with the correct path
+HTML_PATH = 'index.html' # Update with the correct path
+CSS_PATH = 'styles.css'  # Update with the correct path
 
 ####################################
 # SERIAL KEYS
