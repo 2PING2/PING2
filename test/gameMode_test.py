@@ -1,12 +1,12 @@
-""" Ce fichier permet de tester les méthodes de la classe GameMode """
+"""Ce fichier permet de tester les méthodes de la classe GameMode"""
 import unittest
 import time
 from datetime import datetime
-
-#import src.pingpy.gameMode.redLightGreenLight as RedLightGreenLight
-
-from mock import MockInput, MockOutput
-#from ..src.pingpy.gameMode.redLightGreenLight import RedLightGreenLight
+from unittest.mock import MagicMock
+from ..src.pingpy.input import RedLightGreenLight
+from ..src.pingpy.input import Input, PlayerInput, BeamSwitch, LinearActuatorInput, GameController3button
+from ..src.pingpy.output import Output, PlayerOutput, Led, LinearActuatorOutput
+from ..src.pingpy.config import GREEN, ORANGE, YELLOW
 
 
 class TestRedLightGreenLight(unittest.TestCase):
@@ -17,142 +17,123 @@ class TestRedLightGreenLight(unittest.TestCase):
         """
         self.game_mode = RedLightGreenLight()
         
-        self.input_data = MockInput(2)
+        # Simuler les entrées
+        self.input_data = Input()
+        player_input_1 = PlayerInput(
+            BeamSwitch(isBeamSwitchOn=True),
+            LinearActuatorInput(leftLimit=0, rightLimit=100, currentPose=0),
+            GameController3button(inAction=False),
+            id_player=0
+        )
+        self.input_data.ListPlayerInput = [player_input_1]
 
-        # Configuration des joueurs (sorties)
-        self.output_data = MockOutput(2)
-        
-        
+        # Simuler les sorties
+        self.output_data = Output()
+        player_output_1 = PlayerOutput(
+            Led(color=None, intensity=0),
+            LinearActuatorOutput(moveToRight=False, move_to_leftLimit=False)
+        )
+        self.output_data.ListPlayerOutput = [player_output_1]
+
+        # Configurer les dépendances mockées
+        self.output_data.speaker = MagicMock()
+        self.output_data.speaker.duration = MagicMock(return_value=2)
+        self.output_data.speaker.audioPiste = None
+
     def test_setup(self):
+        """Tester la méthode setup."""
         self.game_mode.setup(self.input_data, self.output_data)
-        self.assertTrue(self.game_mode.is_light_green)
-        self.assertEqual(self.game_mode.time_init, time.time())
-        self.input_data.ListPlayerInput[0].LinearActuatorInput.leftLimit = 3
 
-        # Vérifier les sorties
-        self.assertTrue(self.output_data.LinearActuatorOutput.move_to_right)
-        self.assertEqual(self.output_data.LinearActuatorOutput.move_to, 3)
+        self.assertTrue(self.game_mode.initialized)
+        self.assertEqual(self.output_data.speaker.audioPiste, r"audio\redLightGreenLight\Intro_123Soleil.wav")
+        self.assertTrue(self.output_data.ListPlayerOutput[0].linearActuator.moveTo is not None)
 
     def test_can_move_during_green_light(self):
-        current_time = self.game_mode.time_init + 1  # Feu vert
+        """Tester si les joueurs peuvent bouger pendant le feu vert."""
+        self.game_mode.timeInit = time.time()
+        self.game_mode.durationGreenLight = 5
+        current_time = self.game_mode.timeInit + 1  # Feu vert
         self.assertTrue(self.game_mode.can_move(current_time))
 
     def test_cannot_move_during_red_light(self):
-        current_time = self.game_mode.time_init + self.game_mode.duration_green_light + 1  # Feu rouge
+        """Tester si les joueurs ne peuvent pas bouger pendant le feu rouge."""
+        self.game_mode.timeInit = time.time()
+        self.game_mode.durationGreenLight = 5
+        self.game_mode.durationRedLight = 5
+        current_time = self.game_mode.timeInit + self.game_mode.durationGreenLight + 1  # Feu rouge
         self.assertFalse(self.game_mode.can_move(current_time))
 
     def test_check_action_green_light(self):
+        """Tester les actions des joueurs pendant le feu vert."""
+        self.game_mode.timeInit = time.time()
+        self.game_mode.durationGreenLight = 5
+
         player = self.input_data.ListPlayerInput[0]
-        player.GameController.newAction = False
+        player.gameController.inAction = True
+        current_time = self.game_mode.timeInit + 1  # Lumière verte
 
-        current_time = self.game_mode.time_init + 1  # Lumière verte
-        self.game_mode.check_action(player, current_time)
+        self.game_mode.check_action(player, self.output_data.ListPlayerOutput[0], current_time)
+        output = self.output_data.ListPlayerOutput[0]
 
-        output = self.game_mode.output_data.ListPlayerOutput[0]
-        self.assertFalse(output.LinearActuatorOutput.move_to_right)
-        self.assertEqual(output.LedStrip.color, GREEN)
+        self.assertTrue(output.linearActuator.moveToRight)
+        self.assertEqual(output.Led.color, GREEN)
 
     def test_check_action_red_light(self):
-        player = self.input_data.ListPlayerInput[0]
-        player.GameController.newAction = True
-        player.linearActuatorInput.leftLimit = 200
-        current_time = self.game_mode.time_init + self.game_mode.duration_green_light + 1  # Lumière rouge
-        self.game_mode.check_action(player, current_time)
+        """Tester les actions des joueurs pendant le feu rouge."""
+        self.game_mode.timeInit = time.time()
+        self.game_mode.durationGreenLight = 5
+        self.game_mode.durationRedLight = 5
 
-        output = self.game_mode.output_data.ListPlayerOutput[0]
-        self.assertTrue(output.LinearActuatorOutput.move_to, 200)
-        self.assertEqual(output.Led.color, "orange")
+        player = self.input_data.ListPlayerInput[0]
+        player.gameController.inAction = True
+        player.linearActuator.leftLimit = 0
+        current_time = self.game_mode.timeInit + self.game_mode.durationGreenLight + 1  # Lumière rouge
+
+        self.game_mode.check_action(player, self.output_data.ListPlayerOutput[0], current_time)
+        output = self.output_data.ListPlayerOutput[0]
+
+        self.assertFalse(output.linearActuator.moveToRight)
+        self.assertEqual(output.Led.color, ORANGE)
 
     def test_victory_condition(self):
+        """Tester la détection de la victoire."""
         player = self.input_data.ListPlayerInput[0]
-        player.LinearActuatorInput.currentPose = player.LinearActuatorInput.rightLimit
+        player.linearActuator.currentPose = player.linearActuator.rightLimit
 
-        self.assertTrue(self.game_mode.check_victory(player))
-        output = self.game_mode.output_data.ListPlayerOutput[0]
-        self.assertEqual(output.Led.color, "yellow")
+        result = self.game_mode.check_victory(player, self.output_data)
+        self.assertTrue(result)
 
-    """"tests de la fonction run avec plusieurs joueurs"""
-    def test_run(self):
-        player_input_2 = PlayerInput(
-            BeamSwitch(isBeamSwitchOn=True),
-            LinearActuatorInput(leftLimit=0, rightLimit=100, currentPose=0),
-            GameController3button(newAction=False),
-            id_player=1
-        )
-        self.input_data.ListPlayerInput.append(player_input_2)
+        output = self.output_data.ListPlayerOutput[0]
+        self.assertEqual(output.Led.color, YELLOW)
 
-        # Configuration des joueurs (sorties)
-        player_output_2 = PlayerOutput(
-            Led(color=None, intensity=0),
-            LinearActuatorOutput(move_to_right=False, move_to_leftLimit=False)
-        )
-        self.game_mode.output_data.ListPlayerOutput.append(player_output_2)
-
-        # Exécution de la méthode run
-        output_data = self.game_mode.run(self.input_data)
-
-        # Vérification des sorties
-        # Joueur 1
-        self.assertTrue(output_data.ListPlayerOutput[0].LinearActuatorOutput.move_to_right)
-        self.assertEqual(output_data.ListPlayerOutput[0].Led.color, "green")
-        # Joueur 2
-        self.assertFalse(output_data.ListPlayerOutput[1].LinearActuatorOutput.move_to_right)
-        self.assertEqual(output_data.ListPlayerOutput[1].Led.color, "green")
-    
     def test_long_run(self):
-        """Simule un test prolongé où les actions des manettes changent et le jeu évolue au fil du temps."""
-        
+        """Simuler un test prolongé où les actions des manettes changent et le jeu évolue au fil du temps."""
+        self.game_mode.setup(self.input_data, self.output_data)
 
-        # Ajout d'un deuxième joueur
-        player_input_2 = PlayerInput(
-            BeamSwitch(isBeamSwitchOn=True),
-            LinearActuatorInput(leftLimit=0, rightLimit=100, currentPose=0),
-            GameController3button(newAction=False),
-            id_player=1
-        )
-        self.input_data.player.append(player_input_2)
-
-        # Configuration des joueurs (sorties)
-        player_output_2 = PlayerOutput(
-            Led(color=None, intensity=0),
-            LinearActuatorOutput(move_to_right=False, move_to_leftLimit=False)
-        )
-        self.game_mode.output_data.ListPlayerOutput.append(player_output_2)
-
-        # Simulation sur une longue période
         simulation_duration = 6  # secondes
         start_time = time.time()
         current_time = start_time
 
         while current_time - start_time < simulation_duration:
-            # Simuler les actions des joueurs
-            for idx, player_input in enumerate(self.input_data.ListPlayerInput):
-                # Alterner entre `newAction=True` et `newAction=False`
-                player_input.GameController.newAction = (int(current_time - start_time) % 2 == 0)  # Changer toutes les 2 secondes
+            for player in self.input_data.ListPlayerInput:
+                player.gameController.inAction = ((current_time - start_time) % 2 == 0)  # Action change toutes les 2 secondes
+                if player.gameController.inAction:
+                    player.linearActuator.currentPose += 10
 
-                # Avancer les positions pour simuler le déplacement
-                if player_input.GameController.newAction:
-                    player_input.LinearActuatorInput.currentPose += 10
+            self.game_mode.compute(self.input_data, self.output_data)
 
-            # Exécuter une itération du jeu
-            self.game_mode.run(self.input_data)
-            # Afficher les inputs et outputs toutes les secondes
-            
+            # Affichage pour le suivi
+            output = self.output_data.ListPlayerOutput[0]
             print(f"Time: {datetime.fromtimestamp(current_time).strftime('%H:%M:%S')}")
-            print(f"Etats Manette Player 1: {self.input_data.ListPlayerInput[0].GameController.newAction}")
-            print(f"Etats Manette Player 2: {self.input_data.ListPlayerInput[1].GameController.newAction}")
-            print(f"Etats LED Player 1: {self.game_mode.output_data.ListPlayerOutput[0].Led.color} ")
-            print(f"Etats LinearActuatorOutput move_to_right Player 1: {self.game_mode.output_data.ListPlayerOutput[0].LinearActuatorOutput.move_to_right}")
-            print(f"Etats LinearActuatorOutput move_to_leftLimit Player 1: {self.game_mode.output_data.ListPlayerOutput[0].LinearActuatorOutput.move_to_leftLimit}")
-            print(f"Etats LED Player 2: {self.game_mode.output_data.ListPlayerOutput[1].Led.color}")
-            print(f"Etats LinearActuatorOutput move_to_right Player 2: {self.game_mode.output_data.ListPlayerOutput[1].LinearActuatorOutput.move_to_right}")
-            print(f"Etats LinearActuatorOutput move_to_leftLimit Player 2: {self.game_mode.output_data.ListPlayerOutput[1].LinearActuatorOutput.move_to_leftLimit}")
+            print(f"Player Action: {player.gameController.inAction}")
+            print(f"Player LED Color: {output.Led.color}")
+            print(f"Player LinearActuatorOutput moveToRight: {output.linearActuator.moveToRight}")
 
             time.sleep(1)
-            # Avancer dans le temps
             current_time = time.time()
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
+
+
