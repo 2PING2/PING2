@@ -20,7 +20,7 @@ def index():
         connection_uuid = str(uuid.uuid4())
 
         # Create NetworkManager configuration for the network
-        ssid = ssid + ' '
+        # ssid = ssid + ' '
         config_content = f"""
 [connection]
 id={ssid} 
