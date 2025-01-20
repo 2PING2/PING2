@@ -122,8 +122,10 @@ class SerialCom:
             # get the symlink of the device
             
             logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path}")
-            if device_path is not self.port:
+            if os.readlink(self.port)!=device_path:
                 continue
+            
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {self.port}")
             if device.action == 'add':
                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {self.port}")
                 self.setup()
