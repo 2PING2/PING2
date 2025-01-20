@@ -119,6 +119,7 @@ class SerialCom:
             device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
             if device_path is None:
                 continue
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action}")
             if device_path is not self.port:
                 continue
             if device.action == 'add':
@@ -127,3 +128,5 @@ class SerialCom:
             elif device.action == 'remove':
                 self.stop_reading()
                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {self.port}")
+            else:
+                logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {self.port}")
