@@ -88,7 +88,7 @@ class Ping:
                 continue
             # get the symlink of the device
             
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} os.readlink : {os.readlink(self.port)})")
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action}")
            
             for i in range(4):
                 playerControllerSerial = self.input.player[i].usb
@@ -96,7 +96,7 @@ class Ping:
                 if os.readlink(playerControllerSerial.port)!=device_path:
                     continue
                 
-                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {self.port}")
+                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {playerControllerSerial.port}")
                 if device.action == 'add':
                     logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {playerControllerSerial.port}")
                     playerControllerSerial.setup()
