@@ -119,7 +119,9 @@ class SerialCom:
             device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
             if device_path is None:
                 continue
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action}")
+            # get the symlink of the device
+            
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path}")
             if device_path is not self.port:
                 continue
             if device.action == 'add':
