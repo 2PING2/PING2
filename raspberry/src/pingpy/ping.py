@@ -26,7 +26,7 @@ class Ping:
         
         self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
         # self.currentGameMode = WaitingRoom()
-        self.currentGameMode = self.gameModeList[1]
+        self.currentGameMode = self.gameModeList[0]
         self.prevGameMode = None
         # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
