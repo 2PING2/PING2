@@ -92,8 +92,11 @@ class Ping:
            
             for i in range(4):
                 playerControllerSerial = self.input.player[i].usb
-            
-                if os.readlink(playerControllerSerial.port)!=device_path:
+                try:
+                    if os.readlink(playerControllerSerial.port)!=device_path:
+                        continue
+                except FileNotFoundError:
+                    logger.write_in_log("WARNING", __name__, "check_usb_event", f"Port {playerControllerSerial.port} not found")
                     continue
                 
                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {playerControllerSerial.port}")
