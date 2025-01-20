@@ -57,7 +57,7 @@ class Hotspot:
             diff_output = subprocess.run(['git', 'diff', 'HEAD', 'FETCH_HEAD', '--name-only'], capture_output=True, text=True)
             logger.write_in_log("INFO", __name__, "check_git_update", f"Diff output: {diff_output.stdout}")
             
-            subprocess.run(['git', 'pull', 'origin', GIT_BRANCH], check=True)
+            subprocess.run(['git', 'pull', GIT_BRANCH], check=True)
             logger.write_in_log("INFO", __name__, "check_git_update", "Git pull successful")
             
             for line in diff_output.stdout.splitlines():
