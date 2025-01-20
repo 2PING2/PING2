@@ -36,36 +36,45 @@ class Hotspot:
     def check_git_update(self):
         os.chdir(GIT_CLONE_PATH)
         restartNeeded = False
+        espFlashNeeded = False
         try:
+            subprocess.run(['git', 'sparse-checkout', 'init'], check=True)
+            logger.write_in_log("INFO", __name__, "check_git_update", "Git sparse-checkout initialized")
+            
+            sparse_patterns = "\n".join(FILE_AND_FOLDER_TO_CHECK)
+            sparse_checkout_file = os.path.join(".git", "info", "sparse-checkout")
+            
+            with open(sparse_checkout_file, "w") as f:
+                f.write(sparse_patterns + "\n")
+            logger.write_in_log("INFO", __name__, "check_git_update", f"Sparse-checkout patterns written: {FILE_AND_FOLDER_TO_CHECK}")
+            
+            subprocess.run(['git', 'sparse-checkout', 'reapply'], check=True)
+            logger.write_in_log("INFO", __name__, "check_git_update", "Sparse-checkout reapplied")
+            
             subprocess.run(['git', 'fetch', 'origin'], check=True)
             logger.write_in_log("INFO", __name__, "check_git_update", "Git fetch successful")
-        except subprocess.CalledProcessError:
-            logger.write_in_log("ERROR", __name__, "check_git_update", "Git fetch failed")
-            return
-        
-        for fileOrFolder in FILE_AND_FOLDER_TO_CHECK:
-            try:
-                # Vérifie les différences pour le fichier ou dossier
-                diff_output = subprocess.run(
-                ['git', 'diff', '--name-only', GIT_BRANCH, fileOrFolder],
-                check=True,
-                stdout=subprocess.PIPE,  # Capture la sortie pour vérification
-                text=True  # Renvoie la sortie sous forme de chaîne
-                ).stdout.strip()
-                
-                # S'il y a une différence, effectue le checkout et marque le redémarrage nécessaire
-                if diff_output:  # Si la sortie n'est pas vide
-                    subprocess.run(['git', 'checkout', GIT_BRANCH, '--', fileOrFolder], check=True)
-                    logger.write_in_log("INFO", __name__, "check_git_update", f'Git file updated: {fileOrFolder}')
-                    if fileOrFolder == ESP_FIRMWARE_PATH or fileOrFolder == ESP_BOOTLOADER_PATH or fileOrFolder == ESP_PARTITION_PATH:
-                        self.update_esp()
-                    restartNeeded = True  # Indique qu'un redémarrage est nécessaire
-                            
-            except subprocess.CalledProcessError:
-                logger.write_in_log("ERROR", __name__, "check_git_update", f'Git file not updated: {fileOrFolder}')
             
-                
-        # restart the app if needed
+            diff_output = subprocess.run(['git', 'diff', 'HEAD', 'FETCH_HEAD', '--name-only'], capture_output=True, text=True)
+            logger.write_in_log("INFO", __name__, "check_git_update", f"Diff output: {diff_output.stdout}")
+            
+            subprocess.run(['git', 'pull', 'origin', GIT_BRANCH], check=True)
+            logger.write_in_log("INFO", __name__, "check_git_update", "Git pull successful")
+            
+            for line in diff_output.stdout.splitlines():
+                if ESP_FIRMWARE_PATH in line or ESP_BOOTLOADER_PATH in line or ESP_PARTITION_PATH in line:
+                    espFlashNeeded = True
+                    restartNeeded = True
+                if "raspberry/src" in line:
+                    restartNeeded = True
+                               
+        except subprocess.CalledProcessError as e:
+            logger.write_in_log("ERROR", __name__, "check_git_update", f'Error during sparse-checkout or fetch: {e}')
+            return
+        if espFlashNeeded:
+            self.update_esp()
+            # Commande spécifique à votre application
+            os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
+            exit(1)
         if restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
             os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
@@ -80,7 +89,6 @@ class Hotspot:
                 
     def update_esp(self):
         try:
-            # subprocess.run(['esptool.py', '--chip esp32 --port', PORT_ESP32 ,'--baud 115200 write_flash 0x1000 ',ESP_BOOTLOADER_PATH , '0x8000 ',ESP_PARTITION_PATH,' 0x10000', ESP_FIRMWARE_PATH], check=True)
             subprocess.run([
             'esptool.py',
             '--chip', 'esp32',
