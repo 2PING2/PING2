@@ -16,10 +16,19 @@ public:
 
     void setup(Vector <Player*> *players);
 
+    static void readDataTask(void *pvParameters);
+
     void readData();
 
 private:
     int baudRate;
     Vector <Player*> *players; // Vector of all players
+    struct KeyValue
+    {
+        String key;
+        String param;
+    };
+    Vector<KeyValue> keyValues;
+    void processKeyValues();
 };
 #endif

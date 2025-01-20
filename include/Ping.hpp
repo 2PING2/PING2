@@ -23,6 +23,7 @@ public:
 private:
 #endif
     static Player player1, player2, player3, player4;
+    static Vector<Player *> players;
     static RaspComManagement raspComManager;
     static TaskHandle_t solenoidOvertempTaskHandle;
     static void solenoid_overtemp_task(void *pvParameters);

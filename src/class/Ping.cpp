@@ -9,6 +9,9 @@ Player PING::player2 = Player(P2_STEP_PIN, P2_DIR_PIN, TMC2_ADDRESS, P2_INVERT_D
 Player PING::player3 = Player(P3_STEP_PIN, P3_DIR_PIN, TMC3_ADDRESS, P3_INVERT_DIR, P3_SOLENOID_PIN, P3_BEAM_R_PIN);
 Player PING::player4 = Player(P4_STEP_PIN, P4_DIR_PIN, TMC4_ADDRESS, P4_INVERT_DIR, P4_SOLENOID_PIN, P4_BEAM_R_PIN);
 
+
+Vector<Player *> PING::players = Vector<Player *>(4);
+
 void PING::solenoid_overtemp_task(void *pvParameters)
 {
     for (;;)
@@ -26,7 +29,11 @@ void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
     BeamSwitch::setup_emitter();
-    // raspComManager.setup();
+    PING::players.push_back(&PING::player1);
+    PING::players.push_back(&PING::player2);
+    PING::players.push_back(&PING::player3);
+    PING::players.push_back(&PING::player4);
+    raspComManager.setup(&PING::players);
     LinearActuator::setup_all();
     PING::player1.setup();
     PING::player2.setup();

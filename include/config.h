@@ -97,7 +97,7 @@
 #define TASK_BEAM_CHECK_CORE        1
 #define TASK_MOTOR_RUN_CORE   0
 #define TASK_SOLENOID_OVERTEMP_CORE 1
-// #define TASK_RASP_COMMUNICATION_CORE 1
+#define TASK_RASP_COMMUNICATION_CORE 1
 #define TASK_STALLGUARD_CORE        1
 
 ////////////////////////////////////
@@ -107,7 +107,7 @@
 #define TASK_BEAM_CHECK_PRIORITY        2
 #define TASK_MOTOR_RUN_PRIORITY   3
 #define TASK_SOLENOID_OVERTEMP_PRIORITY 3
-// #define TASK_RASP_COMMUNICATION_PRIORITY 1
+#define TASK_RASP_COMMUNICATION_PRIORITY 1
 #define TASK_STALLGUARD_PRIORITY        3
 
 ////////////////////////////////////
@@ -115,6 +115,7 @@
 ////////////////////////////////////
 #define TASK_BEAM_CHECK_DELAY_MS       5
 #define TASK_SOLENOID_OVERTEMP_DELAY_MS 100
+#define TASK_RASP_COMMUNICATION_DELAY_MS 10
 #define TASK_STALLGUARD_DELAY_MS       3
 
 
@@ -122,16 +123,17 @@
 // RASP COMMUNICATION SETTINGS
 ////////////////////////////////////
 #define KEY_SEP '/'
+#define PARAM_BEGIN_SEP '{'
+#define PARAM_END_SEP '}'
 #define LINE_SEP '\n'
 #define PLAYER_KEY "P"
-
-
-// for the linear actuator
-#define LINEAR_ACTUATOR_KEY "LA"
-#define CALIBRATION_KEY "C"
+#define CALIBRATE_KEY "C"
 #define MOVE_LEFT_KEY "ML"
 #define MOVE_RIGHT_KEY "MR"
 #define MOVE_TO_KEY "MT"
-#define STOP_KEY "S"
+#define SET_SPEED_KEY "S"
+#define SET_ACCELERATION_KEY "A"
+#define SOL_ON_KEY "SOL_ON"
+#define SOL_OFF_KEY "SOL_OFF"
 
 #endif // CONFIG_H
