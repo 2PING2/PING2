@@ -19,12 +19,6 @@ import os
 from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
-import pyudev
-
-# Configurer le contexte udev
-context = pyudev.Context()
-monitor = pyudev.Monitor.from_netlink(context)
-monitor.filter_by(subsystem='tty')  # Filtrer les événements des ports série (ou USB si nécessaire)
 
 
 
@@ -78,7 +72,7 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
-        self.check_usb_event()
+        # self.check_usb_event()
         if not self.connected:
             return
         
@@ -113,25 +107,3 @@ class SerialCom:
         if self.ser:
             self.ser.close()
             logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
-            
-    def check_usb_event(self):
-        for device in iter(monitor.poll, None):
-            device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
-            if device_path is None:
-                continue
-            # get the symlink of the device
-            
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} os.readlink : {os.readlink(self.port)})")
-           
-            if os.readlink(self.port)!=device_path:
-                continue
-            
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {self.port}")
-            if device.action == 'add':
-                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {self.port}")
-                self.setup()
-            elif device.action == 'remove':
-                self.stop_reading()
-                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {self.port}")
-            else:
-                logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {self.port}")
