@@ -35,8 +35,9 @@ class LogFile:
                 file.write(f"---- PING^2 : LOG FILE OF {today} ----\n")
         # else:
         #     print(f"Log file: {logFilename} already exists")
+        self.write_in_log("", "","")
         self.write_in_log("===============================", "","")
-        self.write_in_log("=========INFO", "", "BEGIN==========")
+        self.write_in_log("==========INFO", "", "BEGIN==========")
         self.write_in_log("===============================", "","")
         self.write_in_log("", "","")
 
