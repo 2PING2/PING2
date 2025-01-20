@@ -60,6 +60,7 @@ class Ping:
         self.refresh_output()
 
     def runGameMode(self):
+        logger.write_in_log("INFO", __name__, "runGameMode", f"Current game mode : {self.currentGameMode}")
         if self.prevGameMode!=self.currentGameMode:
             if self.prevGameMode is not None:
                 self.prevGameMode.stop()
