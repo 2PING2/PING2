@@ -122,6 +122,8 @@ class SerialCom:
             if device_path is not self.port:
                 continue
             if device.action == 'add':
+                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {self.port}")
                 self.setup()
             elif device.action == 'remove':
                 self.stop_reading()
+                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {self.port}")
