@@ -8,6 +8,14 @@ from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
+import pyudev
+
+# Configurer le contexte udev
+context = pyudev.Context()
+monitor = pyudev.Monitor.from_netlink(context)
+monitor.filter_by(subsystem='tty')  # Filtrer les événements des ports série (ou USB si nécessaire)
+
+
 
 class Ping:
     def __init__(self):
@@ -44,6 +52,7 @@ class Ping:
     def run(self):
         self.esp32.read(self.input)
         self.UICorner.read(self.input)
+        self.check_usb_event()
         for i in range(4):
             self.playerController[i].read(self.input.player[i])
             
@@ -71,5 +80,29 @@ class Ping:
         ledStrip.show()
         
         
-        
+                
+    def check_usb_event(self):
+        for device in iter(monitor.poll, None):
+            device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
+            if device_path is None:
+                continue
+            # get the symlink of the device
+            
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} os.readlink : {os.readlink(self.port)})")
+           
+            for i in range(4):
+                playerControllerSerial = self.input.player[i].usb
+            
+                if os.readlink(self.port)!=device_path:
+                    continue
+                
+                logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {self.port}")
+                if device.action == 'add':
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {self.port}")
+                    self.setup()
+                elif device.action == 'remove':
+                    self.stop_reading()
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {self.port}")
+                else:
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {self.port}")
         
