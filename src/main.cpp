@@ -7,7 +7,7 @@ void setup()
 {
     Serial.begin(115200);
     PING::setup();
-    Serial.println("Calibrating actuators...");
+    // Serial.println("Calibrating actuators...");
     PING::player1.actuator.calibrate();
     PING::player2.actuator.calibrate();
     PING::player3.actuator.calibrate();
