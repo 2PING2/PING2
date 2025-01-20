@@ -19,6 +19,14 @@ import os
 from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
+import pyudev
+
+# Configurer le contexte udev
+context = pyudev.Context()
+monitor = pyudev.Monitor.from_netlink(context)
+monitor.filter_by(subsystem='tty')  # Filtrer les événements des ports série (ou USB si nécessaire)
+
+
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
 class SerialCom:
@@ -70,8 +78,9 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
+        self.check_usb_event()
         if not self.connected:
-            self.setup()
+            return
         
         try:
             if self.ser.in_waiting > 0:
@@ -104,3 +113,15 @@ class SerialCom:
         if self.ser:
             self.ser.close()
             logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
+            
+    def check_usb_event(self):
+        for device in iter(monitor.poll, None):
+            device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
+            if device_path is None:
+                continue
+            if device_path is not self.port:
+                continue
+            if device.action == 'add':
+                self.setup()
+            elif device.action == 'remove':
+                self.stop_reading()
