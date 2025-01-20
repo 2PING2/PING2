@@ -110,4 +110,4 @@ class Ping:
                     logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {playerControllerSerial.port}")
                 else:
                     logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {playerControllerSerial.port}")
-        
+            break
