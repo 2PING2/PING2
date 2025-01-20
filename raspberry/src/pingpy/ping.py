@@ -93,16 +93,16 @@ class Ping:
             for i in range(4):
                 playerControllerSerial = self.input.player[i].usb
             
-                if os.readlink(self.port)!=device_path:
+                if os.readlink(playerControllerSerial.port)!=device_path:
                     continue
                 
                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {self.port}")
                 if device.action == 'add':
-                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {self.port}")
-                    self.setup()
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {playerControllerSerial.port}")
+                    playerControllerSerial.setup()
                 elif device.action == 'remove':
-                    self.stop_reading()
-                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {self.port}")
+                    playerControllerSerial.stop_reading()
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {playerControllerSerial.port}")
                 else:
-                    logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {self.port}")
+                    logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {playerControllerSerial.port}")
         
