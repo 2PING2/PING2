@@ -43,7 +43,7 @@ class SerialCom:
         self.ser = self.open_port()
         if self.ser:
             self.connected = True
-            self.port = os.path.realpath(self.ser.port)
+            self.port = os.path.realpath(self.symlink)
             logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
         else:
             self.connected = False
@@ -124,6 +124,8 @@ class SerialCom:
         self.connected = False
         for usb in connectedUsb:
             if usb is None:
+                continue
+            if self.port is None:
                 continue
             if usb.port == self.port:
                 self.connected = True
