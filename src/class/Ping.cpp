@@ -29,10 +29,10 @@ void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
     BeamSwitch::setup_emitter();
-    PING::players.push_back(&PING::player1);
-    PING::players.push_back(&PING::player2);
-    PING::players.push_back(&PING::player3);
-    PING::players.push_back(&PING::player4);
+    PING::players[0] = &PING::player1;
+    PING::players[1] = &PING::player2;
+    PING::players[2] = &PING::player3;
+    PING::players[3] = &PING::player4;
     raspComManager.setup(&PING::players);
     LinearActuator::setup_all();
     PING::player1.setup();
