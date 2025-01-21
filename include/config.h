@@ -26,7 +26,7 @@
 #define FINE_CALIBRATION_SPEED             44   // mm/s
 #define FINE_CALIBRATION_STALL_VALUE       180
 #define FINE_CALIBRATION_SAMPLES            2   // good samples needed
-#define FINE_CALIBRATION_ERROR_THRESHOLD    1.5   // mm
+#define FINE_CALIBRATION_ERROR_THRESHOLD    3   // mm
 #define FINE_CALIBRATION_WITHDRAWAL_DISTANCE 20  // mm
 
 // TMC Serial Port Settings

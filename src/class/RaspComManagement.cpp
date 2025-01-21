@@ -50,8 +50,10 @@ void RaspComManagement::readData()
 {
     if (Serial.available() > 0)
     {
-        const char *line = Serial.readStringUntil(LINE_SEP).c_str();
-        Serial.println("Received: " + String(line));
+        // const char *line = Serial.readStringUntil(LINE_SEP).c_str();
+        String l_str = Serial.readStringUntil(LINE_SEP);
+        Serial.println("Received: " + l_str);
+        const char *line = l_str.c_str();
         keyValues.resize(0);
         bool isParam = false;
         String key = "";
