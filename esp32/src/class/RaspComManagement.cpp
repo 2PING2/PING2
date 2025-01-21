@@ -15,6 +15,9 @@ void RaspComManagement::setup(Vector<Player *> *players)
 {
     Serial.begin(baudRate);
     this->players = players;
+    Serial.print("RaspComManagement setup with players ptr ");
+    Serial.println((unsigned long)players);
+    Serial.println(players->size());
     
     xTaskCreatePinnedToCore(this->readDataTask,
                             "readDataTask",
