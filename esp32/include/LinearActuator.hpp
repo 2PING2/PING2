@@ -37,7 +37,10 @@ public:
     void move_left() { move_to(leftLimit); }
     void stop() { motor.stop(); }
     void instant_stop();
-    void calibrate() {calibrating = true; }
+    void calibrate() {
+        reset_right_limit();
+        reset_left_limit();
+        calibrating = true; }
     int run();
     float current_position() { return motor.currentPosition() / MICRO_STEPS_PER_MM; }
     float current_speed() { return motor.speed() / MICRO_STEPS_PER_MM; }
