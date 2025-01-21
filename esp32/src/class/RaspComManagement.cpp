@@ -98,7 +98,10 @@ void RaspComManagement::processKeyValues()
     Player *player = players->operator[](playerId);
 
     if (keyValues[1].key == CALIBRATE_KEY)
+    {
         player->actuator.calibrate();
+        Serial.println("Calibrating player " + String(playerId));
+    }
     else if (keyValues[1].key == MOVE_LEFT_KEY)
         player->actuator.move_left();
     else if (keyValues[1].key == MOVE_RIGHT_KEY)
@@ -113,6 +116,6 @@ void RaspComManagement::processKeyValues()
         player->solenoid.activate();
     else if (keyValues[1].key == SOL_OFF_KEY)
         player->solenoid.deactivate();
-    // else
-    //     Serial.println("Invalid command");
+    else
+        Serial.println("Invalid command");
 }
