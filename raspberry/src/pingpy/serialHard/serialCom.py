@@ -20,8 +20,8 @@ from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 from serial.tools import list_ports  # pyserial
-
-
+import pyudev
+context = pyudev.Context()
 
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
@@ -115,24 +115,19 @@ class SerialCom:
             
     def check_usb_event(self):
         """Check if a USB device is connected or disconnected."""
-        # connectedUsb = serial.tools.list_ports.comports()
-        # for port, desc, hwid in sorted(connectedUsb):
-        #         print("{}: {} [{}]".format(port, desc, hwid))
-        # /dev/ttyUSB1: FT232R USB UART - FT232R USB UART [USB VID:PID=0403:6001 SER=A5069RR4 LOCATION=1-1.2.3]
         wasConnected = self.connected
         self.connected = False
- 
-        # connectedUsb = list_ports.comports()
-        connectedUsb = os.listdir('/dev/')
+        # connectedUsb = os.listdir('/dev/')
+        connectedUsb = []
+        for device in context.list_devices(subsystem='tty'):
+            connectedUsb.append(device.device_node)
+        print(connectedUsb)
+        
         for port in connectedUsb:
             if '/dev/'+port == self.symlink:
+
                 self.connected = True
                 break
-        # wasConnected = self.connected
-        # for port, _, _ in sorted(connectedUsb):
-        #     if port == self.port:
-        #         self.connected = True
-        #         break
             
         if not wasConnected and self.connected:
             logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
