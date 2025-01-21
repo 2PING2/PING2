@@ -76,19 +76,19 @@ class Ping:
         for i in range(4):
             if self.output.player[i].linearActuator.moveToLeft is not None:
                 if self.output.player[i].linearActuator.moveToLeft:
-                    self.esp32.send_data(f"P{i+1}/MTLL")
+                    self.esp32.send_data(f"P{{{i+1}}}/MTLL")
                 else:
-                    self.esp32.send_data(f"P{i+1}/S")
+                    self.esp32.send_data(f"P{{{i+1}}}/S")
                 self.output.player[i].linearActuator.moveToLeft = None
             if self.output.player[i].linearActuator.moveToRight is not None:
                 if self.output.player[i].linearActuator.moveToRight:
-                    self.esp32.send_data(f"P{i+1}/MTLR")
+                    self.esp32.send_data(f"P{{{i+1}}}/MTRL")
                 else:
-                    self.esp32.send_data(f"P{i+1}/S")
+                    self.esp32.send_data(f"P{{{i+1}}}/S")
                 self.output.player[i].linearActuator.moveToRight = None
             if self.output.player[i].bumper.shoot is not None:
                 if self.output.player[i].bumper.shoot:
-                    self.esp32.send_data(f"P{i+1}/S")
+                    self.esp32.send_data(f"P{{{i+1}}}/S")
                 self.output.player[i].bumper.shoot = None
             
         
