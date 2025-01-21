@@ -101,6 +101,7 @@ class SerialCom:
             return
         try:
             self.ser.write(data.encode() + b'\n')
+            logger.write_in_log("INFO", __name__, "send_data", f"Data sent to {self.symlink}: {data}")
         except serial.SerialException as e:
             logger.write_in_log("ERROR", __name__, "send_data", f"Error sending data to {self.symlink}: {e}")
             self.connected = False
