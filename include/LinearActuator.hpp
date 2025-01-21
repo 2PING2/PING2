@@ -13,7 +13,6 @@
 
 #define LINEAR_ACTUATOR_MIN_AMPLITUDE (LINEAR_ACTUATOR_RAILHEAD - MAX_BUMPER_WIDTH)
 
-
 class LinearActuator
 {
 public:
@@ -37,15 +36,19 @@ public:
     void move_left() { move_to(leftLimit); }
     void stop() { motor.stop(); }
     void instant_stop();
-    void calibrate() {
+    void calibrate()
+    {
         reset_right_limit();
         reset_left_limit();
-        calibrating = true; }
+        calibrating = true;
+    }
     int run();
     float current_position() { return motor.currentPosition() / MICRO_STEPS_PER_MM; }
     float current_speed() { return motor.speed() / MICRO_STEPS_PER_MM; }
     float max_speed() { return motor.maxSpeed() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
+    float get_right_limit() { return rightLimit; }
+    float get_left_limit() { return leftLimit; }
     bool is_right_calibrated() { return rightLimit > -LINEAR_ACTUATOR_RAILHEAD; }
     bool is_left_calibrated() { return leftLimit < LINEAR_ACTUATOR_RAILHEAD; }
     bool is_calibrated() { return is_right_calibrated() && is_left_calibrated(); }
@@ -53,7 +56,7 @@ public:
 #ifndef EVERYTHING_PUBLIC
 private:
 #endif
-    static Vector<LinearActuator*> all;
+    static Vector<LinearActuator *> all;
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;
     float leftLimit = LINEAR_ACTUATOR_RAILHEAD;
     TMC2209Stepper driver;

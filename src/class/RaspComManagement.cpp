@@ -110,42 +110,86 @@ void RaspComManagement::processKeyValues()
 
     Player *player = players->operator[](playerId);
 
-    if (keyValues[1]->key == CALIBRATE_KEY)
+    if (keyValues[1]->key == CALIBRATION_KEY)
     {
         player->actuator.calibrate();
     }
-    else if (keyValues[1]->key == MOVE_LEFT_KEY)
+    else if (keyValues[1]->key == MOVE_TO_LEFT_LIMIT_KEY)
     {
         player->actuator.move_left();
     }
-    else if (keyValues[1]->key == MOVE_RIGHT_KEY)
+    else if (keyValues[1]->key == MOVE_TO_RIGHT_LIMIT_KEY)
     {
         player->actuator.move_right();
     }
     else if (keyValues[1]->key == MOVE_TO_KEY)
     {
-        player->actuator.move_to(keyValues[1]->param.toFloat());
+        try {
+            player->actuator.move_to(keyValues[1]->param.toFloat());
+        } catch (const std::exception& e) {
+            Serial.println("Invalid move_to parameter e : " + String(e.what()));
+        }
     }
-    else if (keyValues[1]->key == SET_SPEED_KEY)
+    else if (keyValues[1]->key == SET_MAX_SPEED_KEY)
     {
-        player->actuator.set_speed(keyValues[1]->param.toFloat());
+        try {
+            player->actuator.set_speed(keyValues[1]->param.toFloat());
+        } catch (const std::exception& e) {
+            Serial.println("Invalid set_speed parameter e : " + String(e.what()));
+        }
     }
-    else if (keyValues[1]->key == SET_ACCELERATION_KEY)
+    else if (keyValues[1]->key == SET_MAX_ACCELERATION_KEY)
     {
-        player->actuator.set_acceleration(keyValues[1]->param.toFloat());
+        try {
+            player->actuator.set_acceleration(keyValues[1]->param.toFloat());
+        } catch (const std::exception& e) {
+            Serial.println("Invalid set_acceleration parameter e : " + String(e.what()));
+        }
     }
-    else if (keyValues[1]->key == SOL_ON_KEY)
+    else if (keyValues[1]->key == SET_SOL_STATE_KEY)
     {
-        player->solenoid.activate();
+        try
+        {
+            bool state = keyValues[1]->param.toInt();
+            if (state)
+                player->solenoid.activate();
+            else
+                player->solenoid.deactivate();
+
+        }
+        catch(const std::exception& e)
+        {
+            Serial.println("Invalid solenoid state parameter e : " + String(e.what()));
+        }     
+    
     }
-    else if (keyValues[1]->key == SOL_OFF_KEY)
+    else if (keyValues[1]->key == ASK_POSITION_KEY)
     {
-        player->solenoid.deactivate();
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_MAX_SPEED_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+MAX_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.max_speed())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_CALIBRATED)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+CALIBRATION_KEY+PARAM_BEGIN_SEP+String(player->actuator.is_calibrated())+PARAM_END_SEP); 
+    }
+    else if (keyValues[1]->key == ASK_RIGHT_LIMIT_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_LEFT_LIMIT_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
+    }   
+    else if (keyValues[1]->key == ASK_SOL_STATE_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+ASK_SOL_STATE_KEY+PARAM_BEGIN_SEP+String(player->solenoid.get_state())+PARAM_END_SEP);
     }
     else
     {
         Serial.println("Invalid command");
     }
 
-    Serial.println("flag8");
 }
