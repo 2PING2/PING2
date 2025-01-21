@@ -123,11 +123,11 @@ class SerialCom:
         connectedUsb = list_ports.comports()
         self.connected = False
         for port, _, _ in sorted(connectedUsb):
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Checking if port {port} is {self.port} with symlink {self.symlink}")
+            # logger.write_in_log("INFO", __name__, "check_usb_event", f"Checking if port {port} is {self.port} with symlink {self.symlink}")
             if port == self.port:
                 self.connected = True
                 return
             
-        time.sleep(1)
+        # time.sleep(1)
         
             
