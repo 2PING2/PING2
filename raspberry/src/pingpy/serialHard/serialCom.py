@@ -119,7 +119,7 @@ class SerialCom:
         self.connected = False
         # connectedUsb = os.listdir('/dev/')
         connectedUsb = []
-        for device in context.list_devices(subsystem='dev'):
+        for device in context.list_devices():
             connectedUsb.append(device.device_node)
         print(connectedUsb)
         
