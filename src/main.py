@@ -1,13 +1,21 @@
 try :
-    from pingpy import ping
+    # from pingpy import ping
     import time
 
-    ping.setup()
+    # ping.setup()
 
 
+    # while True:
+    #     ping.run()
+    #     time.sleep(0.01)
+    
+    import serial.tools.list_ports
     while True:
-        ping.run()
-        time.sleep(0.01)
+        ports = serial.tools.list_ports.comports()
+
+        for port, desc, hwid in sorted(ports):
+                print("{}: {} [{}]".format(port, desc, hwid))
+        time.sleep(1)
     
         
   
