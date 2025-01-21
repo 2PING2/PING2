@@ -26,49 +26,51 @@ from serial.tools import list_ports  # pyserial
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
 class SerialCom:
-    def __init__(self, port, BAUD_RATE, TIMEOUT):
+    def __init__(self, symlink, BAUD_RATE, TIMEOUT):
         """Initialize the serial port handler."""
-        self.port = port
+        self.symlink = symlink
+        self.port = None
         self.baudrate = BAUD_RATE
         self.timeout = TIMEOUT
         self.ser = None
         self.connected = False
         self.retryCount = 0
         self.queue = []
-        logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.port}")
+        logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
 
     def setup(self):
         """Configure and start reading the serial port."""
         self.ser = self.open_port()
+        self.port = os.path.realpath(self.ser.port)
         if self.ser:
             self.connected = True
-            logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.port}")
+            logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
         else:
             self.connected = False
-            logger.write_in_log("WARNING", __name__, "setup", f"Port {self.port} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+            logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
         """Try to open the serial port."""
         for _ in range(RETRY_ATTEMPTS):
             try:
                 # Check if the port exists
-                if not os.path.exists(self.port):
-                    logger.write_in_log("WARNING", __name__, "open_port", f"Port {self.port} does not exist.")
+                if not os.path.exists(self.symlink):
+                    logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
                     return None
 
                 # Try to open the port
-                ser = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
+                ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
                 # ser.reset_input_buffer()
                 # ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
                 # make sure the Serial is closed at the beginning
                 ser.close()
                 ser.open()
-                logger.write_in_log("INFO", __name__, "open_port", f"Connected to port {self.port} at {self.baudrate} baud")
+                logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")
                 # begin asynchronous reading
                 # Thread(target=self.read_data_task, daemon = True).start()
                 return ser
             except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to port {self.port}: {e}")
+                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to symlink {self.symlink}: {e}")
                 time.sleep(RETRY_DELAY)
         return None
 
@@ -84,15 +86,15 @@ class SerialCom:
             else:
                 new = False
             if new:
-                logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.port}: {new}")
+                logger.write_in_log("INFO", __name__, "read_data", f"Data received from {self.symlink}: {new}")
                 self.queue.append(new)
                 
         except serial.SerialException as e:
-            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.port}: {e}")
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.symlink}: {e}")
             self.connected = False
             
         except Exception as e:
-            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.port}:  {e}")
+            logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.symlink}:  {e}")
             self.connected = False
         # time.sleep(0.01)
             
@@ -108,10 +110,20 @@ class SerialCom:
         self.connected = False
         if self.ser:
             self.ser.close()
-            logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
+            logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.symlink}")
             
     def check_usb_event(self):
         """Check if a USB device is connected or disconnected."""
+        # connectedUsb = serial.tools.list_ports.comports()
+        # for port, desc, hwid in sorted(connectedUsb):
+        #         print("{}: {} [{}]".format(port, desc, hwid))
+        # /dev/ttyUSB1: FT232R USB UART - FT232R USB UART [USB VID:PID=0403:6001 SER=A5069RR4 LOCATION=1-1.2.3]
         
-        if self.ser in list_ports.comports():
+        connectedUsb = list_ports.comports()
+        self.connected = False
+        for usb in connectedUsb:
+            if usb.port == self.port:
+                self.connected = True
+                return
+        
             
