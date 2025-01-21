@@ -20,9 +20,6 @@ from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
 from serial.tools import list_ports  # pyserial
-import pyudev
-context = pyudev.Context()
-
 
 ''' Communication class useful for the serial communication between the Raspberry Pi and other devices. '''
 class SerialCom:
@@ -117,15 +114,9 @@ class SerialCom:
         """Check if a USB device is connected or disconnected."""
         wasConnected = self.connected
         self.connected = False
-        # connectedUsb = os.listdir('/dev/')
-        connectedUsb = []
-        for device in context.list_devices():
-            connectedUsb.append(device.device_node)
-        print(connectedUsb)
-        
+        connectedUsb = os.listdir('/dev/')
         for port in connectedUsb:
             if '/dev/'+port == self.symlink:
-
                 self.connected = True
                 break
             
