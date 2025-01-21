@@ -81,6 +81,7 @@ class SerialCom:
         try:
             if self.ser.in_waiting > 0:
                 new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+                logger("INFO", __name__, "read_data", f"Data received from {self.symlink}: {new}")
             else:
                 new = False
             if new:
