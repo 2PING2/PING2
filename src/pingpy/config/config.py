@@ -72,7 +72,10 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 ####################################
 # SERIAL KEYS
 ####################################
-
+SEP_KEY = '/'
+LEFT_BUTTON_KEY = "left"
+RIGHT_BUTTON_KEY = "right"
+SHOOT_BUTTON_KEY = "shoot"
 PUSH_KEY = "push"
 RELEASE_KEY = "release"
 

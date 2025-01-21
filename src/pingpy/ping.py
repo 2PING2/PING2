@@ -42,7 +42,7 @@ class Ping:
             self.playerController[i].setup()
         ledStrip.setup()
         ledStrip.clear()
-        self.esp32.send_data("P{1}/C")
+        # self.esp32.send_data("P{1}/C")
         logger.write_in_log("INFO", __name__, "setup")
         
     def select_game_mode(self):
@@ -70,9 +70,30 @@ class Ping:
         # self.esp32.write(self.output)
         # self.UICorner.write(self.output)
         # refresh led trip and speaker
+        # self.esp32.send_data("P{1}/C")
+
         self.refresh_player_led_strip()
+        for i in range(4):
+            if output.player[i].linearActuator.moveToLeft is not None:
+                if output.player[i].linearActuator.moveToLeft:
+                    self.esp32.send_data(f"P{i+1}/MTLL")
+                else:
+                    self.esp32.send_data(f"P{i+1}/S")
+                output.player[i].linearActuator.moveToLeft = None
+            if output.player[i].linearActuator.moveToRight is not None:
+                if output.player[i].linearActuator.moveToRight:
+                    self.esp32.send_data(f"P{i+1}/MTLR")
+                else:
+                    self.esp32.send_data(f"P{i+1}/S")
+                output.player[i].linearActuator.moveToRight = None
+            if output.player[i].bumper.shoot is not None:
+                if output.player[i].bumper.shoot:
+                    self.esp32.send_data(f"P{i+1}/S")
+                output.player[i].bumper.shoot = None
+            
         
     def refresh_player_led_strip(self):
         for i in range(4):
             self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
+            
         ledStrip.show()
