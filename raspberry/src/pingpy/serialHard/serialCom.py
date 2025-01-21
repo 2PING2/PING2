@@ -119,6 +119,7 @@ class SerialCom:
         # for port, desc, hwid in sorted(connectedUsb):
         #         print("{}: {} [{}]".format(port, desc, hwid))
         # /dev/ttyUSB1: FT232R USB UART - FT232R USB UART [USB VID:PID=0403:6001 SER=A5069RR4 LOCATION=1-1.2.3]
+        wasConnected = self.connected
         self.connected = False
  
         # connectedUsb = list_ports.comports()
