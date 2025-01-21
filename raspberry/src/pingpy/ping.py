@@ -74,22 +74,22 @@ class Ping:
 
         self.refresh_player_led_strip()
         for i in range(4):
-            if output.player[i].linearActuator.moveToLeft is not None:
-                if output.player[i].linearActuator.moveToLeft:
+            if self.output.player[i].linearActuator.moveToLeft is not None:
+                if self.output.player[i].linearActuator.moveToLeft:
                     self.esp32.send_data(f"P{i+1}/MTLL")
                 else:
                     self.esp32.send_data(f"P{i+1}/S")
-                output.player[i].linearActuator.moveToLeft = None
-            if output.player[i].linearActuator.moveToRight is not None:
-                if output.player[i].linearActuator.moveToRight:
+                self.output.player[i].linearActuator.moveToLeft = None
+            if self.output.player[i].linearActuator.moveToRight is not None:
+                if self.output.player[i].linearActuator.moveToRight:
                     self.esp32.send_data(f"P{i+1}/MTLR")
                 else:
                     self.esp32.send_data(f"P{i+1}/S")
-                output.player[i].linearActuator.moveToRight = None
-            if output.player[i].bumper.shoot is not None:
-                if output.player[i].bumper.shoot:
+                self.output.player[i].linearActuator.moveToRight = None
+            if self.output.player[i].bumper.shoot is not None:
+                if self.output.player[i].bumper.shoot:
                     self.esp32.send_data(f"P{i+1}/S")
-                output.player[i].bumper.shoot = None
+                self.output.player[i].bumper.shoot = None
             
         
     def refresh_player_led_strip(self):
