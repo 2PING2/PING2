@@ -117,6 +117,9 @@ void RaspComManagement::processKeyValues()
 
     Serial.println("flag7");
 
+    bool isCalKey = keyValues[1]->key == CALIBRATE_KEY;
+    Serial.println("flag7.1");
+    
     if (keyValues[1]->key == CALIBRATE_KEY)
     {
         player->actuator.calibrate();
@@ -138,4 +141,6 @@ void RaspComManagement::processKeyValues()
         player->solenoid.deactivate();
     else
         Serial.println("Invalid command");
+
+    Serial.println("flag8");
 }
