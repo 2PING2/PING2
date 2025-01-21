@@ -42,7 +42,7 @@ class Ping:
             self.playerController[i].setup()
         ledStrip.setup()
         ledStrip.clear()
-        self.esp32.send_data("P{index}/C".format(index=0))
+        self.esp32.send_data("P{1}/C")
         logger.write_in_log("INFO", __name__, "setup")
         
     def select_game_mode(self):
