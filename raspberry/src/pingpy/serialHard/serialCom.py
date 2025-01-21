@@ -19,6 +19,8 @@ import os
 from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
 from pingpy.debug import logger
+from serial.tools import list_ports  # pyserial
+
 
 
 
@@ -72,7 +74,7 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
-        # self.check_usb_event()
+        self.check_usb_event()
         if not self.connected:
             return
         
@@ -107,3 +109,9 @@ class SerialCom:
         if self.ser:
             self.ser.close()
             logger.write_in_log("INFO", "SerialPortHandler", "stop_reading", f"Reading stopped on {self.port}")
+            
+    def check_usb_event(self):
+        """Check if a USB device is connected or disconnected."""
+        
+        if self.ser in list_ports.comports():
+            
