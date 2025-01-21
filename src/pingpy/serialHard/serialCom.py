@@ -47,6 +47,7 @@ class SerialCom:
             logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
         else:
             self.connected = False
+            self.port = None
             logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
