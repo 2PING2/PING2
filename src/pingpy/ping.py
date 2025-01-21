@@ -8,28 +8,15 @@ from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
-import pyudev
-import time
-from serial.tools import list_ports  # pyserial
-
-def enumerate_serial_devices():
-    return set([item for item in list_ports.comports()])
 
 
 
 
-# Configurer le contexte udev
-context = pyudev.Context()
-monitor = pyudev.Monitor.from_netlink(context)
-monitor.filter_by(subsystem='tty')  # Filtrer les événements des ports série (ou USB si nécessaire)
 
 
 
 class Ping:
     def __init__(self):
-        # Quick and dirty timing loop 
-        self.old_devices = enumerate_serial_devices()
-
         self.input = Input()
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
@@ -63,7 +50,6 @@ class Ping:
     def run(self):
         self.esp32.read(self.input)
         self.UICorner.read(self.input)
-        # self.check_usb_event()
         for i in range(4):
             self.playerController[i].read(self.input.player[i])
             
@@ -103,36 +89,3 @@ class Ping:
         if removed:
             print('removed: {}'.format(removed))
         return devices
-
-
-    # def check_usb_event(self):
-    #     self.old_devices = self.check_new_devices()
-    #     return
-    #     for device in iter(monitor.poll, None):
-    #         device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
-    #         if device_path is None:
-    #             continue
-    #         # get the symlink of the device
-            
-    #         logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action}")
-           
-    #         for i in range(4):
-    #             playerControllerSerial = self.input.player[i].usb
-    #             try:
-    #                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Checking {playerControllerSerial.port}->{os.readlink(playerControllerSerial.port)} =?= {device_path}")
-    #                 if os.readlink(playerControllerSerial.port) not in device_path:
-    #                     continue
-    #             except FileNotFoundError:
-    #                 logger.write_in_log("WARNING", __name__, "check_usb_event", f"Port {playerControllerSerial.port} not found")
-    #                 continue
-                
-    #             logger.write_in_log("INFO", __name__, "check_usb_event", f"Device {device.device_node} {device.action} with path {device_path} on {playerControllerSerial.port}")
-    #             if device.action == 'add':
-    #                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device connected to {playerControllerSerial.port}")
-    #                 playerControllerSerial.setup()
-    #             elif device.action == 'remove':
-    #                 playerControllerSerial.stop_reading()
-    #                 logger.write_in_log("INFO", __name__, "check_usb_event", f"Device disconnected from {playerControllerSerial.port}")
-    #             else:
-    #                 logger.write_in_log("INFO", __name__, "check_usb_event", f"event {device.action} on {playerControllerSerial.port}")
-    #         break
