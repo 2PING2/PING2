@@ -28,7 +28,7 @@ private:
         String key;
         String param;
     };
-    Vector<KeyValue> keyValues;
+    Vector<KeyValue*> keyValues;
     void processKeyValues();
 };
 #endif
