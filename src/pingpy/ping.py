@@ -97,7 +97,7 @@ class Ping:
     def check_new_devices(self):
         devices = enumerate_serial_devices()
         added = devices.difference(self.old_devices)
-        removed = old_devices.difference(devices)
+        removed = self.old_devices.difference(devices)
         if added:
             print('added: {}'.format(added))
         if removed:
