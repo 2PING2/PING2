@@ -1,5 +1,5 @@
 try :
-    # from pingpy import ping
+    from pingpy import ping
     import time
 
     ping.setup()
