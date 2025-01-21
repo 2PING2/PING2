@@ -95,6 +95,15 @@ class SerialCom:
             logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.symlink}:  {e}")
             self.connected = False
         # time.sleep(0.01)
+        
+    def send_data(self, data):
+        if not self.connected:
+            return
+        try:
+            self.ser.write(data.encode() + b'\n')
+        except serial.SerialException as e:
+            logger.write_in_log("ERROR", __name__, "send_data", f"Error sending data to {self.symlink}: {e}")
+            self.connected = False
             
     def consume_older_data(self):
         """Consume the older data in the queue."""
