@@ -55,13 +55,15 @@ void RaspComManagement::readData()
         Serial.println("Received: " + l_str);
         const char *line = l_str.c_str();
         keyValues.resize(0);
+        Serial.println("flag1");
         bool isParam = false;
         String key = "";
         String param = "";
 
         const char *c = line - 1;
         do
-        {
+        {   
+            Serial.println("flag1."+String(*c));
             c++;
             if (*c == KEY_SEP || *c == '\0')
             {
@@ -81,7 +83,7 @@ void RaspComManagement::readData()
             else
                 key += *c;
         } while (*c != '\0');
-
+        Serial.println("flag2");
         this->processKeyValues();
     }
 }
