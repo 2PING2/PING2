@@ -26,6 +26,16 @@ class WaitingRoom(GameMode):
             output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in PURPLE)
             if input.player[i].gameController.inAction:
                 output.player[i].playerLedStrip.color = (50, 50, 50)
+        
+            if input.player[i].gameController.left is not None:
+                output.player[i].linearActuator.moveToLeft = input.player[i].gameController.left
+                input.player[i].gameController.left = None
+            if input.player[i].gameController.right is not None:
+                output.player[i].linearActuator.moveToRight = input.player[i].gameController.right
+                input.player[i].gameController.right = None
+            if input.player[i].gameController.shoot is not None:
+                output.player[i].bumper.shoot = input.player[i].gameController.shoot
+                input.player[i].gameController.shoot = None
                 
         t = time.time()
         dt = t - self.last_time

@@ -163,6 +163,10 @@ void RaspComManagement::processKeyValues()
         }     
     
     }
+    else if (keyValues[1]->key == STOP_KEY)
+    {
+        player->actuator.stop();
+    }
     else if (keyValues[1]->key == ASK_POSITION_KEY)
     {
         Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
