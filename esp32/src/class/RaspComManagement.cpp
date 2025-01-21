@@ -117,30 +117,53 @@ void RaspComManagement::processKeyValues()
 
     Serial.println("flag7");
 
-    bool isCalKey = keyValues[1]->key == CALIBRATE_KEY;
     Serial.println("flag7.1");
-    
+
     if (keyValues[1]->key == CALIBRATE_KEY)
     {
+        Serial.println("cal key");
         player->actuator.calibrate();
         Serial.println("Calibrating player " + String(playerId));
     }
     else if (keyValues[1]->key == MOVE_LEFT_KEY)
+    {
+        Serial.println("move left key");
         player->actuator.move_left();
+    }
     else if (keyValues[1]->key == MOVE_RIGHT_KEY)
+    {
+        Serial.println("move right key");
         player->actuator.move_right();
+    }
     else if (keyValues[1]->key == MOVE_TO_KEY)
+    {
+        Serial.println("move to key");
         player->actuator.move_to(keyValues[1]->param.toFloat());
+    }
     else if (keyValues[1]->key == SET_SPEED_KEY)
+    {
+        Serial.println("set speed key");
         player->actuator.set_speed(keyValues[1]->param.toFloat());
+    }
     else if (keyValues[1]->key == SET_ACCELERATION_KEY)
+    {
+        Serial.println("set acceleration key");
         player->actuator.set_acceleration(keyValues[1]->param.toFloat());
+    }
     else if (keyValues[1]->key == SOL_ON_KEY)
+    {
+        Serial.println("sol on key");
         player->solenoid.activate();
+    }
     else if (keyValues[1]->key == SOL_OFF_KEY)
+    {
+        Serial.println("sol off key");
         player->solenoid.deactivate();
+    }
     else
+    {
         Serial.println("Invalid command");
+    }
 
     Serial.println("flag8");
 }
