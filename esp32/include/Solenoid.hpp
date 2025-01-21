@@ -7,7 +7,8 @@ class Solenoid
 {
 private:
     /* data */
-    float state = 0, power = 0.82;
+    bool state = false;
+    float power = 0.82;
     int solenoidPin;
     static float maxTemp;
     float currentTemp = 0.0;
@@ -21,7 +22,7 @@ public:
     void set_power(int power){this->power = power;}
     float get_power(){return power;}
 
-    float get_state(){return state;}
+    bool get_state(){return state;}
 
     bool over_temp_protect(uint64_t currentTime = esp_timer_get_time());
 };
