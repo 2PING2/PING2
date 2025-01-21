@@ -16,8 +16,6 @@ def enumerate_serial_devices():
     return set([item for item in list_ports.comports()])
 
 
-# Quick and dirty timing loop 
-old_devices = enumerate_serial_devices()
 
 
 # Configurer le contexte udev
@@ -29,6 +27,9 @@ monitor.filter_by(subsystem='tty')  # Filtrer les événements des ports série 
 
 class Ping:
     def __init__(self):
+        # Quick and dirty timing loop 
+        self.old_devices = enumerate_serial_devices()
+
         self.input = Input()
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
@@ -93,9 +94,9 @@ class Ping:
         
 
 
-    def check_new_devices(self,old_devices):
+    def check_new_devices(self):
         devices = enumerate_serial_devices()
-        added = devices.difference(old_devices)
+        added = devices.difference(self.old_devices)
         removed = old_devices.difference(devices)
         if added:
             print('added: {}'.format(added))
@@ -105,7 +106,7 @@ class Ping:
 
 
     def check_usb_event(self):
-        old_devices = self.check_new_devices(old_devices)
+        self.old_devices = self.check_new_devices()
         return
         for device in iter(monitor.poll, None):
             device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
