@@ -124,22 +124,23 @@ class SerialCom:
         # connectedUsb = list_ports.comports()
         connectedUsb = os.listdir('/dev/')
         for port in connectedUsb:
-            print(port)
-            
+            if '/dev/'+port == self.symlink:
+                self.connected = True
+                break
         # wasConnected = self.connected
         # for port, _, _ in sorted(connectedUsb):
         #     if port == self.port:
         #         self.connected = True
         #         break
             
-        # if not wasConnected and self.connected:
-        #     logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
-        #     self.setup()
+        if not wasConnected and self.connected:
+            logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
+            self.setup()
             
-        # if wasConnected and not self.connected:
-        #     logger.write_in_log("WARNING", __name__, "check_usb_event", f"Disconnected from {self.symlink}")
-        #     self.stop_reading()
+        if wasConnected and not self.connected:
+            logger.write_in_log("WARNING", __name__, "check_usb_event", f"Disconnected from {self.symlink}")
+            self.stop_reading()
             
-        time.sleep(1)
+        # time.sleep(1)
         
             
