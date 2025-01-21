@@ -121,12 +121,18 @@ class SerialCom:
         # /dev/ttyUSB1: FT232R USB UART - FT232R USB UART [USB VID:PID=0403:6001 SER=A5069RR4 LOCATION=1-1.2.3]
         
         connectedUsb = list_ports.comports()
+        wasConnected = self.connected
         self.connected = False
         for port, _, _ in sorted(connectedUsb):
             logger.write_in_log("INFO", __name__, "check_usb_event", f"Checking if port {port} is {self.port} with symlink {self.symlink}")
             if port == self.port:
                 self.connected = True
-                return
+                break
+        if not wasConnected and self.connected:
+            self.setup()
+            
+        if wasConnected and not self.connected:
+            self.stop_reading()
             
         # time.sleep(1)
         
