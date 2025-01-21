@@ -119,22 +119,27 @@ class SerialCom:
         # for port, desc, hwid in sorted(connectedUsb):
         #         print("{}: {} [{}]".format(port, desc, hwid))
         # /dev/ttyUSB1: FT232R USB UART - FT232R USB UART [USB VID:PID=0403:6001 SER=A5069RR4 LOCATION=1-1.2.3]
-        
-        connectedUsb = list_ports.comports()
-        wasConnected = self.connected
         self.connected = False
-        for port, _, _ in sorted(connectedUsb):
-            if port == self.port:
-                self.connected = True
-                break
-        if not wasConnected and self.connected:
-            logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
-            self.setup()
+ 
+        # connectedUsb = list_ports.comports()
+        connectedUsb = os.listdir('/dev/')
+        for port in connectedUsb:
+            print(port)
             
-        if wasConnected and not self.connected:
-            logger.write_in_log("WARNING", __name__, "check_usb_event", f"Disconnected from {self.symlink}")
-            self.stop_reading()
+        # wasConnected = self.connected
+        # for port, _, _ in sorted(connectedUsb):
+        #     if port == self.port:
+        #         self.connected = True
+        #         break
             
-        # time.sleep(1)
+        # if not wasConnected and self.connected:
+        #     logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
+        #     self.setup()
+            
+        # if wasConnected and not self.connected:
+        #     logger.write_in_log("WARNING", __name__, "check_usb_event", f"Disconnected from {self.symlink}")
+        #     self.stop_reading()
+            
+        time.sleep(1)
         
             
