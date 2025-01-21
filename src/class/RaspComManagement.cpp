@@ -106,10 +106,16 @@ void RaspComManagement::processKeyValues()
     Serial.println("flag4");
 
     long playerId = keyValues[0]->param.toInt();
+
+    Serial.println("flag5");
     if (playerId < 0 || playerId >= players->size())
         return;
 
+    Serial.println("flag6");
+
     Player *player = players->operator[](playerId);
+
+    Serial.println("flag7");
 
     if (keyValues[1]->key == CALIBRATE_KEY)
     {
