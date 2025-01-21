@@ -9,6 +9,16 @@ from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
 import pyudev
+import time
+from serial.tools import list_ports  # pyserial
+
+def enumerate_serial_devices():
+    return set([item for item in list_ports.comports()])
+
+
+# Quick and dirty timing loop 
+old_devices = enumerate_serial_devices()
+
 
 # Configurer le contexte udev
 context = pyudev.Context()
@@ -81,8 +91,22 @@ class Ping:
         ledStrip.show()
         
         
-                
+
+
+    def check_new_devices(self,old_devices):
+        devices = enumerate_serial_devices()
+        added = devices.difference(old_devices)
+        removed = old_devices.difference(devices)
+        if added:
+            print('added: {}'.format(added))
+        if removed:
+            print('removed: {}'.format(removed))
+        return devices
+
+
     def check_usb_event(self):
+        old_devices = self.check_new_devices(old_devices)
+        return
         for device in iter(monitor.poll, None):
             device_path = os.path.realpath(device.device_node)  # Résoudre les symlinks vers les chemins réels
             if device_path is None:
