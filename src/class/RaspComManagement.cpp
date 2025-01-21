@@ -107,7 +107,7 @@ void RaspComManagement::processKeyValues()
 
     long playerId = keyValues[0]->param.toInt();
 
-    Serial.println("flag5");
+    Serial.println("flag5 with player Id " + String(playerId));
     if (playerId < 0 || playerId >= players->size())
         return;
 
