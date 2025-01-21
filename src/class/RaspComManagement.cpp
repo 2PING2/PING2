@@ -62,7 +62,6 @@ void RaspComManagement::readData()
             delete keyValues[i];
             
         keyValues.resize(0);
-        Serial.println("flag1");
         bool isParam = false;
         String key = "";
         String param = "";
@@ -71,7 +70,6 @@ void RaspComManagement::readData()
         do
         {   
             c++;
-            Serial.println("flag1."+String(*c));
             if (*c == KEY_SEP || *c == '\0')
             {
                 KeyValue * kv = new KeyValue();
@@ -90,77 +88,58 @@ void RaspComManagement::readData()
             else
                 key += *c;
         } while (*c != '\0');
-        Serial.println("flag2");
         this->processKeyValues();
     }
 }
 
 void RaspComManagement::processKeyValues()
 {
-    Serial.println("Processing key values");
     if (keyValues.size() < 2)
         return;
 
-    Serial.println("flag3");
 
     if (keyValues[0]->key != PLAYER_KEY)
         return;
     
-    Serial.println("flag4");
 
-    long playerId = keyValues[0]->param.toInt();
+    long playerId = keyValues[0]->param.toInt()-1;
 
-    Serial.println("flag5 with player Id " + String(playerId));
     if (playerId < 0 || playerId >= players->size())
         return;
 
-    Serial.println("flag6");
 
     Player *player = players->operator[](playerId);
 
-    Serial.println("flag7");
-
-    Serial.println("flag7.1");
-
     if (keyValues[1]->key == CALIBRATE_KEY)
     {
-        Serial.println("cal key");
         player->actuator.calibrate();
-        Serial.println("Calibrating player " + String(playerId));
     }
     else if (keyValues[1]->key == MOVE_LEFT_KEY)
     {
-        Serial.println("move left key");
         player->actuator.move_left();
     }
     else if (keyValues[1]->key == MOVE_RIGHT_KEY)
     {
-        Serial.println("move right key");
         player->actuator.move_right();
     }
     else if (keyValues[1]->key == MOVE_TO_KEY)
     {
-        Serial.println("move to key");
         player->actuator.move_to(keyValues[1]->param.toFloat());
     }
     else if (keyValues[1]->key == SET_SPEED_KEY)
     {
-        Serial.println("set speed key");
         player->actuator.set_speed(keyValues[1]->param.toFloat());
     }
     else if (keyValues[1]->key == SET_ACCELERATION_KEY)
     {
-        Serial.println("set acceleration key");
         player->actuator.set_acceleration(keyValues[1]->param.toFloat());
     }
     else if (keyValues[1]->key == SOL_ON_KEY)
     {
-        Serial.println("sol on key");
         player->solenoid.activate();
     }
     else if (keyValues[1]->key == SOL_OFF_KEY)
     {
-        Serial.println("sol off key");
         player->solenoid.deactivate();
     }
     else
