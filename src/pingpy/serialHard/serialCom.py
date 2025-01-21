@@ -122,6 +122,8 @@ class SerialCom:
         connectedUsb = list_ports.comports()
         self.connected = False
         for usb in connectedUsb:
+            if usb is None:
+                continue
             if usb.port == self.port:
                 self.connected = True
                 return
