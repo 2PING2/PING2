@@ -57,7 +57,6 @@ class Ping:
         self.refresh_output()
 
     def runGameMode(self):
-        logger.write_in_log("INFO", __name__, "runGameMode", f"Current game mode : {self.currentGameMode}")
         if self.prevGameMode!=self.currentGameMode:
             if self.prevGameMode is not None:
                 self.prevGameMode.stop()
@@ -76,16 +75,3 @@ class Ping:
         for i in range(4):
             self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
         ledStrip.show()
-        
-        
-
-
-    def check_new_devices(self):
-        devices = enumerate_serial_devices()
-        added = devices.difference(self.old_devices)
-        removed = self.old_devices.difference(devices)
-        if added:
-            print('added: {}'.format(added))
-        if removed:
-            print('removed: {}'.format(removed))
-        return devices
