@@ -114,11 +114,11 @@ void RaspComManagement::processKeyValues()
     {
         player->actuator.calibrate();
     }
-    else if (keyValues[1]->key == MOVE_TO_LEFT_LIMIT_KEY)
+    else if (keyValues[1]->key == "MTLL")
     {
         player->actuator.move_left();
     }
-    else if (keyValues[1]->key == MOVE_TO_RIGHT_LIMIT_KEY)
+    else if (keyValues[1]->key == "MTRL")
     {
         player->actuator.move_right();
     }
