@@ -2,22 +2,14 @@ try :
     # from pingpy import ping
     import time
 
-    # ping.setup()
+    ping.setup()
 
 
-    # while True:
-    #     ping.run()
-    #     time.sleep(0.01)
-    
-    import serial.tools.list_ports
     while True:
-        ports = serial.tools.list_ports.comports()
-
-        for port, desc, hwid in sorted(ports):
-                print("{}: {} [{}]".format(port, desc, hwid))
-        time.sleep(1)
+        ping.run()
+        time.sleep(0.01)
     
-        
+
   
 except Exception as e:
     print(f"Error: {e}")
