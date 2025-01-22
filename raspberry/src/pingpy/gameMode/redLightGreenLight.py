@@ -3,8 +3,7 @@ from ..output.output import Output
 import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
-from random import random
-from random.random import uniform
+from random import uniform
 
 
 class RedLightGreenLight(GameMode):
