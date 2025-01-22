@@ -70,7 +70,7 @@ HTML_PATH = 'index.html' # Update with the correct path
 CSS_PATH = 'styles.css'  # Update with the correct path
 
 ####################################
-# SERIAL KEYS
+# SERIAL KEYS FOR CONTROLLER
 ####################################
 SEP_KEY = '/'
 LEFT_BUTTON_KEY = "left"
@@ -79,6 +79,40 @@ SHOOT_BUTTON_KEY = "shoot"
 PUSH_KEY = "push"
 RELEASE_KEY = "release"
 
+####################################
+# SERIAL KEYS FOR ESP32
+####################################
+KEY_SEP = '/'
+PARAM_BEGIN_SEP = '{'
+PARAM_END_SEP = '}'
+LINE_SEP = '\n'
+PLAYER_KEY = ("P")
+MOVE_TO_KEY = ("MT")
+POSITION_KEY = ("P")
+
+SET_KEY = ("S")
+MAX_SPEED_KEY = ("MS")
+MAX_ACCELERATION_KEY = ("MA")
+CALIBRATION_KEY = ("C")
+RIGHT_LIMIT_KEY = ("RL")
+LEFT_LIMIT_KEY = ("LL")
+SOL_SATE_KEY = ("SS")
+STOP_KEY = ("S")
+BUSY_KEY = ("B")
+
+MOVE_TO_LEFT_LIMIT_KEY = (MOVE_TO_KEY+LEFT_LIMIT_KEY)
+MOVE_TO_RIGHT_LIMIT_KEY = (MOVE_TO_KEY+RIGHT_LIMIT_KEY)
+SET_MAX_SPEED_KEY = (SET_KEY+MAX_SPEED_KEY)
+SET_MAX_ACCELERATION_KEY = (SET_KEY+MAX_ACCELERATION_KEY)
+SET_SOL_STATE_KEY = (SET_KEY+SOL_SATE_KEY)
+
+ASK_KEY = ("A")
+ASK_POSITION_KEY = (ASK_KEY+POSITION_KEY)
+ASK_MAX_SPEED_KEY = (ASK_KEY+MAX_SPEED_KEY)
+ASK_CALIBRATED = (ASK_KEY+CALIBRATION_KEY)
+ASK_RIGHT_LIMIT_KEY = (ASK_KEY+RIGHT_LIMIT_KEY)
+ASK_LEFT_LIMIT_KEY = (ASK_KEY+LEFT_LIMIT_KEY)
+ASK_SOL_STATE_KEY = (ASK_KEY+SOL_SATE_KEY)
 ####################################
 # LED STRIP SETTINGS
 ####################################
