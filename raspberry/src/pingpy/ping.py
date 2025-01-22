@@ -56,7 +56,7 @@ class Ping:
                 self.playerController[i].read(self.input.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
-
+            logger.write_in_log("INFO", __name__, "run", f"playerController[{i}].ser: {self.playerController[i].ser}")
         self.runGameMode()
         self.refresh_output()
 
