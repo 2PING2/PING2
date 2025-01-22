@@ -41,8 +41,17 @@ class SerialCom:
             return
         # Check if the port exists
         if not os.path.exists(self.symlink):
+            self.failed_attempts += 1
             # logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
             return
+        
+        if self.failed_attempts >= RETRY_ATTEMPTS:
+            try:
+                self.ser.close()
+                self.failed_attempts = 0
+            except Exception as e:
+                logger.write_in_log("ERROR", __name__, "read_data_task", f"Error closing port: {e}")
+
 
         # Open the port
         try:
@@ -68,12 +77,6 @@ class SerialCom:
             new = self.ser.readline().decode('utf-8', errors='ignore').strip()
             self.queue.append(new)
         except Exception as _:
-            self.failed_attempts += 1
-            if self.failed_attempts >= RETRY_ATTEMPTS:
-                try:
-                    self.ser.close()
-                except Exception as e:
-                    logger.write_in_log("ERROR", __name__, "read_data_task", f"Error closing port: {e}")
             self.setup()
             
         
