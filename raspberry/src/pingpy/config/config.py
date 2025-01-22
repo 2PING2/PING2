@@ -73,9 +73,13 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 # SERIAL KEYS FOR CONTROLLER
 ####################################
 SEP_KEY = '/'
+RESET_KEY = 'reset'
+MODE_KEY = 'mode'
 LEFT_BUTTON_KEY = "left"
 RIGHT_BUTTON_KEY = "right"
 SHOOT_BUTTON_KEY = "shoot"
+INCREMENT_KEY = "increment"
+DECREMENT_KEY = "decrement"
 PUSH_KEY = "push"
 RELEASE_KEY = "release"
 

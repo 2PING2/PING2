@@ -62,6 +62,7 @@ class Ping:
             self.currentGameMode.setup(self.input, self.output)
             self.prevGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
+        self.currentGameMode = self.waitingRoom.currentGameMode
             
     def refresh_output(self):
         # pass

@@ -51,10 +51,10 @@ class WaitingRoom(GameMode):
             input.UICorner.modeDec = None
         if self.preselectedGameMode is not None:
             self.currentColor = self.gameModeList[self.preselectedGameMode].color
-            if input.UICorner.modeRelease:
+            if input.UICorner.resetPush:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
                 self.preselectedGameMode = None
-                input.UICorner.modeRelease = None
+                input.UICorner.resetPush = None
         
     
         for i in range(4):
