@@ -42,6 +42,7 @@ class SerialCom:
         try:
             ret = self.open_port()
             if ret == 0:
+                logger.write_in_log("WARNING", __name__, "setup", f"Port {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
                 return
             elif ret == -1:
                 logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink} after {RETRY_ATTEMPTS} attempts.")
