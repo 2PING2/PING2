@@ -78,6 +78,7 @@ class SerialCom:
             except serial.SerialException as e:
                 logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to symlink {self.symlink}: {e}")
                 time.sleep(RETRY_DELAY)
+        
         return None
 
     def read_data_task(self):
@@ -100,10 +101,12 @@ class SerialCom:
         except serial.SerialException as e:
             logger.write_in_log("ERROR", __name__, "read_data", f"Error reading from {self.symlink}: {e}")
             self.connected = False
+            return
             
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "read_data", f"Error processing data from {self.symlink}:  {e}")
             self.connected = False
+            return
         # time.sleep(0.01)
         
     def send_data(self, data):
