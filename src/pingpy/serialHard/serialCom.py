@@ -79,6 +79,7 @@ class SerialCom:
         logger.write_in_log("INFO", __name__, "send_data", f"test {data}")
         if not os.path.exists(self.symlink):
             return
+        logger.write_in_log("INFO", __name__, "send_data", f"Data sent to {self.symlink}: {data}")
         try:
             self.ser.write(data.encode() + b'\n')
             logger.write_in_log("INFO", __name__, "send_data", f"Data sent to {self.symlink}: {data}")
