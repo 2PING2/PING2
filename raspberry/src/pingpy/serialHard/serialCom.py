@@ -85,6 +85,8 @@ class SerialCom:
         self.check_usb_event()
         if not self.connected:
             return
+        if self.ser is None:
+            return
         
         try:
             if self.ser.in_waiting > 0:
