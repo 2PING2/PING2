@@ -5,6 +5,8 @@ class UICornerInput:
         self.light=None
         self.modeInc=None
         self.modeDec=None
+        self.modePush=None
+        self.modeRelease=None
         self.volume=None
         self.level=None
         self.reset=None

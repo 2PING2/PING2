@@ -10,20 +10,16 @@ from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
 
 
-
-
-
-
-
 class Ping:
     def __init__(self):
         self.input = Input()
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
-        
-        self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
-        self.currentGameMode = WaitingRoom()
+        self.gameModeList = [RedLightGreenLight()]
+        self.currentGameMode = None
+        self.waitingRoom = WaitingRoom(self.gameModeList, self.currentGameMode)
+        self.currentGameMode = self.waitingRoom
         # self.currentGameMode = self.gameModeList[0]
         self.prevGameMode = None
         # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
@@ -45,8 +41,8 @@ class Ping:
         # self.esp32.send_data("P{1}/C")
         logger.write_in_log("INFO", __name__, "setup")
         
-    def select_game_mode(self):
-        pass
+        
+        
     
     def run(self):
         self.esp32.read(self.input)
@@ -56,7 +52,6 @@ class Ping:
                 self.playerController[i].read(self.input.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
-            # logger.write_in_log("INFO", __name__, "run", f"playerController[{i}].symlink exist: {os.path.exists(self.playerController[i].symlink)}")
         self.runGameMode()
         self.refresh_output()
 
@@ -92,10 +87,6 @@ class Ping:
                     else:
                         self.esp32.send_data(f"P{{{i+1}}}/S")
                     self.output.player[i].linearActuator.moveToRight = None
-                if self.output.player[i].bumper.shoot is not None:
-                    if self.output.player[i].bumper.shoot:
-                        self.esp32.send_data(f"P{{{i+1}}}/S")
-                    self.output.player[i].bumper.shoot = None
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_output: {e}")
         

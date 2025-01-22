@@ -1,6 +1,8 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
 
+from pingpy.config.config import SEP_KEY
+
 class UICornerSerial(SerialCom):
     def __init__(self, port, baud_rate, timeout):
         super().__init__(port, baud_rate, timeout)
@@ -8,8 +10,32 @@ class UICornerSerial(SerialCom):
         
     def read(self, input_ptr):
         """Read the next data from the serial port."""
-        self.read_data_task()
-        new_line = self.consume_older_data()
-        # process the data
-        # if new_line is not None:
-        #     logger.write_in_log("INFO", __name__, "read", f"Read {new_line}")
+        try:
+            self.read_data_task()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in read_data_task: {e}")
+            return
+        try:
+            new_line = self.consume_older_data()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in consume_older_data: {e}")
+            return
+        if new_line is None:
+            return
+        try:
+            new_line = new_line.split(SEP_KEY)
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in split: {e}")
+            return
+        if len(new_line) < 2:
+            return
+        
+        # mode
+        if new_line[0] == 'mode':
+            if new_line[1] == 'increment':
+                self.modeInc = True
+            elif new_line[1] == 'decrement':
+                self.modeDec = True
+                
+                
+            

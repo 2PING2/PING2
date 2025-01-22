@@ -21,6 +21,7 @@ class LightTracker(GameMode):
         self.actualRound=0
         self.areaLength=20 ### ceci va varier selon la dificulté du jeu
         self.count_move=0
+        self.color = YELLOW
     
 
     def setup(self, Input, Output):

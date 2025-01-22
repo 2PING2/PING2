@@ -16,6 +16,7 @@ class RedLightGreenLight(GameMode):
         self.durationGreenLight = None  # Temps du feu vert
         self.durationRedLight = None
         self.reactionTime = 0.5  # Temps de réaction
+        self.color = GREEN
 
         self.initialized = False
         logger.write_in_log("INFO", "RedLightGreenLight", "__init__", "Game mode initialized.")
