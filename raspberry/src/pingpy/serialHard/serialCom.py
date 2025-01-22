@@ -61,12 +61,16 @@ class SerialCom:
     
     def read_data_task(self):
         """Read the next data from the serial port."""
-        try:
-            if self.ser.in_waiting == 0:
-                return
-            new = self.ser.readline().decode('utf-8', errors='ignore').strip()
-            self.queue.append(new)
-        except Exception as _:
+        if os.path.exists(self.symlink):
+            try:
+                if self.ser.in_waiting == 0:
+                    return
+                new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+                self.queue.append(new)
+            except Exception as _:
+                self.ser=None
+                self.setup()
+        else:
             self.ser=None
             self.setup()
             
