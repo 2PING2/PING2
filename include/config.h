@@ -126,9 +126,9 @@
 #define PARAM_BEGIN_SEP '{'
 #define PARAM_END_SEP '}'
 #define LINE_SEP '\n'
-#define PLAYER_KEY "P"
-#define MOVE_TO_KEY "MT"
-#define POSITION_KEY "P"
+#define PLAYER_KEY String("P")
+#define MOVE_TO_KEY String("MT")
+#define POSITION_KEY String("P")
 
 #define SET_KEY String("S")
 #define MAX_SPEED_KEY String("MS")
