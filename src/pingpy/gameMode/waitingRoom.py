@@ -53,6 +53,9 @@ class WaitingRoom(GameMode):
                 input.UICorner.modeRelease = None
         
     
+        for i in range(4):
+            output.player[i].playerLedStrip.area = [-200, 200]
+            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in self.currentColor)
 
     def stop(self, input, output):
         for i in range(4):
