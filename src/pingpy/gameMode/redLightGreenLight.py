@@ -75,7 +75,7 @@ class RedLightGreenLight(GameMode):
         if elapsedTime < 0:
             logger.write_in_log("ERROR", "RedLightGreenLight", "can_move", "Elapsed time is negative.")
         result = elapsedTime < self.durationGreenLight + self.reactionTime
-        logger.write_in_log("DEBUG", "RedLightGreenLight", "can_move", f"ElapsedTime: {elapsedTime}, CanMove: {result}")
+        # logger.write_in_log("DEBUG", "RedLightGreenLight", "can_move", f"ElapsedTime: {elapsedTime}, CanMove: {result}")
         return result
 
     def check_action(self, playerInput, playerOutput, currentTime):
@@ -144,7 +144,7 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
 
-        for i in range(1,2):
+        for i in range(1,4):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:

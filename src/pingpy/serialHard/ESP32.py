@@ -1,5 +1,6 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
+from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY
   
 class ESP32Serial(SerialCom):
     def __init__(self, port, baudrate, timeout):
@@ -17,3 +18,17 @@ class ESP32Serial(SerialCom):
         # process the data
         # if new_line is not None:
         #     logger.write_in_log("INFO", __name__, "read", f"Read {new_line}")
+        
+    def write(self, output_ptr):
+        """Write the next data to the serial port."""
+        for i in range(len(output_ptr.player)):
+            playerOutput = output_ptr.player[i]
+            if playerOutput.linearActuator.moveToRight:
+                playerOutput.linearActuator.moveToRight = None
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i) + PARAM_END_SEP + KEY_SEP + MOVE_TO_RIGHT_LIMIT_KEY)
+            if playerOutput.linearActuator.moveToLeft:
+                playerOutput.linearActuator.moveToLeft = None
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i) + PARAM_END_SEP + KEY_SEP + MOVE_TO_LEFT_LIMIT_KEY)
+            if playerOutput.linearActuator.stop:
+                playerOutput.linearActuator.stop = None
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i) + PARAM_END_SEP + KEY_SEP + STOP_KEY)
