@@ -33,9 +33,9 @@ class UICornerSerial(SerialCom):
         # mode
         if new_line[0] == 'mode':
             if new_line[1] == 'increment':
-                self.modeInc = True
+                input_ptr.UICorner.modeInc = True
             elif new_line[1] == 'decrement':
-                self.modeDec = True
+                input_ptr.UICorner.modeDec = True
                 
                 
             
