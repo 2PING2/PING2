@@ -37,7 +37,8 @@ class RedLightGreenLight(GameMode):
                 playerOutput = Output.player[i]
                 playerOutput.playerLedStrip.area = [-200, 200]
                 playerOutput.playerLedStrip.color =  GREEN
-                playerOutput.linearActuator.move_to = Input.player[i].linearActuator.leftLimit
+                playerOutput.linearActuator.moveToLeft = True
+                playerOutput.linearActuator.setSpeed = 10
             except IndexError:
                 logger.write_in_log("ERROR", "RedLightGreenLight", "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
@@ -89,11 +90,11 @@ class RedLightGreenLight(GameMode):
                 # logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player moved during green light.")
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
-                playerOutput.linearActuator.moveToRight = False
+                playerOutput.linearActuator.stop = True
                 playerOutput.playerLedStrip.color = ORANGE
                 # logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player moved during red light.")
         else:
-            playerOutput.linearActuator.moveToRight = False
+            playerOutput.linearActuator.stop = True
 
     def check_victory(self, playerInput, playerOutput):
         """
