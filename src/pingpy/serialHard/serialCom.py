@@ -32,6 +32,7 @@ class SerialCom:
         self.ser = None
         self.connected = False
         self.queue = []
+        self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
 
     def setup(self):
@@ -67,6 +68,12 @@ class SerialCom:
             new = self.ser.readline().decode('utf-8', errors='ignore').strip()
             self.queue.append(new)
         except Exception as _:
+            self.failed_attempts += 1
+            if self.failed_attempts >= RETRY_ATTEMPTS:
+                try:
+                    self.ser.close()
+                except Exception as e:
+                    logger.write_in_log("ERROR", __name__, "read_data_task", f"Error closing port: {e}")
             self.setup()
             
         
