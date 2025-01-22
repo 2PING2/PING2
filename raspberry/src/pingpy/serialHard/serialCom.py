@@ -44,11 +44,15 @@ class SerialCom:
             return
 
         # Open the port
-        self.ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
-        # make sure the Serial is closed at the beginning
-        self.ser.close()
-        self.ser.open()
-        logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")             
+        try:
+            self.ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
+            # make sure the Serial is closed at the beginning
+            self.ser.close()
+            self.ser.open()
+            logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")   
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "open_port", f"Error opening port {self.symlink}: {e}")
+            return          
 
     
     def read_data_task(self):
