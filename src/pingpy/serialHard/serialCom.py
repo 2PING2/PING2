@@ -40,8 +40,13 @@ class SerialCom:
         self.ser = self.open_port()
         if self.ser:
             self.connected = True
-            self.port = os.path.realpath(self.symlink)
-            logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
+            try:
+                self.port = os.path.realpath(self.symlink)
+                logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
+            except Exception as e:
+                self.connected = False
+                self.port = None
+                logger.write_in_log("ERROR", __name__, "setup", f"Error getting the real path of {self.symlink}: {e}")
         else:
             self.connected = False
             self.port = None
