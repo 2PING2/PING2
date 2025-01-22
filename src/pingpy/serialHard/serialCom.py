@@ -83,7 +83,12 @@ class SerialCom:
 
     def read_data_task(self):
         """Read the next data from the serial port."""
-        self.check_usb_event()
+        try:
+            self.check_usb_event()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read_data_task", f"Error in check_usb_event: {e}")
+            return
+        
         if not self.connected:
             return
         if self.ser is None:
