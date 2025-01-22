@@ -51,7 +51,8 @@ class SerialCom:
                 logger.write_in_log("ERROR", __name__, "setup", f"Error opening port l51 {self.symlink}: {e}")
                 return
             # make sure the Serial is closed at the beginning
-            self.ser.open()
+            if not self.ser.is_open:
+                self.ser.open()
             logger.write_in_log("INFO", __name__, "setup", f"Connected to symlink {self.symlink} at {self.baudrate} baud")   
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
