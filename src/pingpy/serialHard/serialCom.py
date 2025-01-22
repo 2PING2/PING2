@@ -38,19 +38,22 @@ class SerialCom:
     def setup(self):
         """Configure and start reading the serial port."""
         self.ser = self.open_port()
-        if self.ser:
-            self.connected = True
-            try:
-                self.port = os.path.realpath(self.symlink)
-                logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
-            except Exception as e:
-                self.connected = False
-                self.port = None
-                logger.write_in_log("ERROR", __name__, "setup", f"Error getting the real path of {self.symlink}: {e}")
-        else:
-            self.connected = False
-            self.port = None
-            logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+        if self.ser is not None:
+            if self.ser:
+                self.connected = True
+                try:
+                    self.port = os.path.realpath(self.symlink)
+                    logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
+                    return
+                except Exception as e:
+                    self.connected = False
+                    self.port = None
+                    logger.write_in_log("ERROR", __name__, "setup", f"Error getting the real path of {self.symlink}: {e}")
+                    return
+
+        self.connected = False
+        self.port = None
+        logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
 
     def open_port(self):
         """Try to open the serial port."""
@@ -138,8 +141,7 @@ class SerialCom:
         if not wasConnected and self.connected:
             logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
             self.setup()
-            
-        if wasConnected and not self.connected:
+        elif wasConnected and not self.connected:
             logger.write_in_log("WARNING", __name__, "check_usb_event", f"Disconnected from {self.symlink}")
             self.stop_reading()
             
