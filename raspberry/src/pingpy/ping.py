@@ -52,8 +52,10 @@ class Ping:
         self.esp32.read(self.input)
         self.UICorner.read(self.input)
         for i in range(4):
-            self.playerController[i].read(self.input.player[i])
-            
+            try:
+                self.playerController[i].read(self.input.player[i])
+            except Exception as e:
+                logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
         self.runGameMode()
         self.refresh_output()
 
@@ -71,26 +73,30 @@ class Ping:
         # self.UICorner.write(self.output)
         # refresh led trip and speaker
         # self.esp32.send_data("P{1}/C")
-
-        self.refresh_player_led_strip()
-        for i in range(4):
-            if self.output.player[i].linearActuator.moveToLeft is not None:
-                if self.output.player[i].linearActuator.moveToLeft:
-                    self.esp32.send_data(f"P{{{i+1}}}/MTLL")
-                else:
-                    self.esp32.send_data(f"P{{{i+1}}}/S")
-                self.output.player[i].linearActuator.moveToLeft = None
-            if self.output.player[i].linearActuator.moveToRight is not None:
-                if self.output.player[i].linearActuator.moveToRight:
-                    self.esp32.send_data(f"P{{{i+1}}}/MTRL")
-                else:
-                    self.esp32.send_data(f"P{{{i+1}}}/S")
-                self.output.player[i].linearActuator.moveToRight = None
-            if self.output.player[i].bumper.shoot is not None:
-                if self.output.player[i].bumper.shoot:
-                    self.esp32.send_data(f"P{{{i+1}}}/S")
-                self.output.player[i].bumper.shoot = None
-            
+        try :
+            self.refresh_player_led_strip()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_player_led_strip: {e}")
+        try:
+            for i in range(4):
+                if self.output.player[i].linearActuator.moveToLeft is not None:
+                    if self.output.player[i].linearActuator.moveToLeft:
+                        self.esp32.send_data(f"P{{{i+1}}}/MTLL")
+                    else:
+                        self.esp32.send_data(f"P{{{i+1}}}/S")
+                    self.output.player[i].linearActuator.moveToLeft = None
+                if self.output.player[i].linearActuator.moveToRight is not None:
+                    if self.output.player[i].linearActuator.moveToRight:
+                        self.esp32.send_data(f"P{{{i+1}}}/MTRL")
+                    else:
+                        self.esp32.send_data(f"P{{{i+1}}}/S")
+                    self.output.player[i].linearActuator.moveToRight = None
+                if self.output.player[i].bumper.shoot is not None:
+                    if self.output.player[i].bumper.shoot:
+                        self.esp32.send_data(f"P{{{i+1}}}/S")
+                    self.output.player[i].bumper.shoot = None
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_output: {e}")
         
     def refresh_player_led_strip(self):
         for i in range(4):
