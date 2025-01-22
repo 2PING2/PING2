@@ -33,12 +33,22 @@ class SerialCom:
         self.connected = False
         self.retryCount = 0
         self.queue = []
+        self.attemptsIndex = 0
+        self.lastAttemptTime = time.time()
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
 
     def setup(self):
         """Configure and start reading the serial port."""
         try:
-            self.ser = self.open_port()
+            ret = self.open_port()
+            if ret == 0:
+                return
+            elif ret == -1:
+                logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink} after {RETRY_ATTEMPTS} attempts.")
+            self.ser = ret
+            if ret is None:
+                return
+            
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
         try:
@@ -65,29 +75,60 @@ class SerialCom:
 
     def open_port(self):
         """Try to open the serial port."""
-        for _ in range(RETRY_ATTEMPTS):
-            try:
-                # Check if the port exists
-                if not os.path.exists(self.symlink):
-                    logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
-                    return None
-
-                # Try to open the port
-                ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
-                # ser.reset_input_buffer()
-                # ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
-                # make sure the Serial is closed at the beginning
-                ser.close()
-                ser.open()
-                logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")
-                # begin asynchronous reading
-                # Thread(target=self.read_data_task, daemon = True).start()
-                return ser
-            except serial.SerialException as e:
-                logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to symlink {self.symlink}: {e}")
-                time.sleep(RETRY_DELAY)
+        if time.time() - self.lastAttemptTime > RETRY_DELAY:
+            return 0 # return that we did not try to connect to the port
         
-        return None
+        if self.attemptsIndex >= RETRY_ATTEMPTS:
+            return -1 # return that we tried to connect to the port but failed
+        
+        self.attemptsIndex+=1
+        try:
+            # Check if the port exists
+            if not os.path.exists(self.symlink):
+                logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
+                return None
+
+            # Try to open the port
+            ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
+            # ser.reset_input_buffer()
+            # ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
+            # make sure the Serial is closed at the beginning
+            ser.close()
+            ser.open()
+            logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")
+            # begin asynchronous reading
+            # Thread(target=self.read_data_task, daemon = True).start()
+            return ser
+        except serial.SerialException as e:
+            logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to symlink {self.symlink}: {e}")
+            time.sleep(RETRY_DELAY)
+            return None
+    
+        
+
+        # for _ in range(RETRY_ATTEMPTS):
+            # try:
+            #     # Check if the port exists
+            #     if not os.path.exists(self.symlink):
+            #         logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
+            #         return None
+
+            #     # Try to open the port
+            #     ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
+            #     # ser.reset_input_buffer()
+            #     # ser.set_buffer_size(rx_size = 4096, tx_size = 4096)
+            #     # make sure the Serial is closed at the beginning
+            #     ser.close()
+            #     ser.open()
+            #     logger.write_in_log("INFO", __name__, "open_port", f"Connected to symlink {self.symlink} at {self.baudrate} baud")
+            #     # begin asynchronous reading
+            #     # Thread(target=self.read_data_task, daemon = True).start()
+            #     return ser
+            # except serial.SerialException as e:
+            #     logger.write_in_log("ERROR", __name__, "open_port", f"Error connecting to symlink {self.symlink}: {e}")
+            #     time.sleep(RETRY_DELAY)
+        
+        # return None
 
     def read_data_task(self):
         """Read the next data from the serial port."""
