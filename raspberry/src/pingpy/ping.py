@@ -55,7 +55,7 @@ class Ping:
             try:
                 self.playerController[i].read(self.input.player[i])
             except Exception as e:
-                logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")os.path.exists(self.symlink)
+                logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
             # logger.write_in_log("INFO", __name__, "run", f"playerController[{i}].symlink exist: {os.path.exists(self.playerController[i].symlink)}")
         self.runGameMode()
         self.refresh_output()
