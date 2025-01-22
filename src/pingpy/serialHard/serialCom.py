@@ -132,7 +132,11 @@ class SerialCom:
         """Check if a USB device is connected or disconnected."""
         wasConnected = self.connected
         self.connected = False
-        connectedUsb = os.listdir('/dev/')
+        try:
+            connectedUsb = os.listdir('/dev/')
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "check_usb_event", f"Error listing /dev/: {e}")
+            return
         for port in connectedUsb:
             if '/dev/'+port == self.symlink:
                 self.connected = True
