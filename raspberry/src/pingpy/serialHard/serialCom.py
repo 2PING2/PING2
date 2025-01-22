@@ -73,6 +73,7 @@ class SerialCom:
             new = self.ser.readline().decode('utf-8', errors='ignore').strip()
             self.queue.append(new)
         except Exception as _:
+            self.ser=None
             logger.write_in_log("ERROR", __name__, "read_data_task", f"Error reading data from {self.symlink}")
             self.setup()
             
