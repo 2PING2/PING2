@@ -28,6 +28,8 @@ class ControllerSerial(SerialCom):
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "read", f"Error in split: {e}")
             return
+        if len(new_line) < 2:
+            return
         button = new_line[0]
         if new_line[1] == PUSH_KEY:
             self.controllerInput.inAction = True
