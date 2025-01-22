@@ -72,7 +72,6 @@ class SerialCom:
                 self.setup()
         else:
             self.ser=None
-            self.setup()
             
         
     def send_data(self, data):
