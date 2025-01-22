@@ -55,7 +55,6 @@ void RaspComManagement::readData()
     {
         // const char *line = Serial.readStringUntil(LINE_SEP).c_str();
         String l_str = Serial.readStringUntil(LINE_SEP);
-        Serial.println("Received: " + l_str);
         const char *line = l_str.c_str();
         // clear keyValues
         for (int i = 0; i < keyValues.size(); i++)
