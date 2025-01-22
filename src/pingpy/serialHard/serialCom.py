@@ -37,23 +37,31 @@ class SerialCom:
 
     def setup(self):
         """Configure and start reading the serial port."""
-        self.ser = self.open_port()
-        if self.ser is not None:
-            if self.ser:
-                self.connected = True
-                try:
-                    self.port = os.path.realpath(self.symlink)
-                    logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
-                    return
-                except Exception as e:
-                    self.connected = False
-                    self.port = None
-                    logger.write_in_log("ERROR", __name__, "setup", f"Error getting the real path of {self.symlink}: {e}")
-                    return
-
-        self.connected = False
-        self.port = None
-        logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+        try:
+            self.ser = self.open_port()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
+        try:
+            if self.ser is not None:
+                if self.ser:
+                    self.connected = True
+                    try:
+                        self.port = os.path.realpath(self.symlink)
+                        logger.write_in_log("INFO", __name__, "setup", f"Reading started on {self.symlink}")
+                        return
+                    except Exception as e:
+                        self.connected = False
+                        self.port = None
+                        logger.write_in_log("ERROR", __name__, "setup", f"Error getting the real path of {self.symlink}: {e}")
+                        return
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "setup", f"Error starting reading on {self.symlink}: {e}")
+        try:
+            self.connected = False
+            self.port = None
+            logger.write_in_log("WARNING", __name__, "setup", f"Symlink {self.symlink} not connected or not accessible after {RETRY_ATTEMPTS} attempts.")
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "setup", f"Error setting up {self.symlink}: {e}")
 
     def open_port(self):
         """Try to open the serial port."""
