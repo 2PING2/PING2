@@ -61,6 +61,7 @@ class Ping:
                 self.prevGameMode.stop()
             self.currentGameMode.setup(self.input, self.output)
             self.prevGameMode = self.currentGameMode
+        self.waitingRoom.currentGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
         self.currentGameMode = self.waitingRoom.currentGameMode
             
