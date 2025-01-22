@@ -76,7 +76,7 @@ class SerialCom:
             
         
     def send_data(self, data):
-        if not self.connected:
+        if not os.path.exists(self.symlink):
             return
         try:
             self.ser.write(data.encode() + b'\n')
