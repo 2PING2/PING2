@@ -52,6 +52,8 @@ public:
     bool is_right_calibrated() { return rightLimit > -LINEAR_ACTUATOR_RAILHEAD; }
     bool is_left_calibrated() { return leftLimit < LINEAR_ACTUATOR_RAILHEAD; }
     bool is_calibrated() { return is_right_calibrated() && is_left_calibrated(); }
+    bool is_calibrating() { return calibrating; }
+    bool is_busy() { return is_calibrating(); }
 
 #ifndef EVERYTHING_PUBLIC
 private:
