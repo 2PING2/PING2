@@ -53,11 +53,12 @@ class RedLightGreenLight(GameMode):
         Randomize the duration of the green and red lights.
         """
         try:
-            min_duration = (
-                Output.speaker.duration(r"audio\redLightGreenLight\123.wav") +
-                Output.speaker.duration(r"audio\redLightGreenLight\Soleil.wav") +
-                1
-            )
+            #min_duration = (
+            #    Output.speaker.duration(r"audio\redLightGreenLight\123.wav") +
+            #    Output.speaker.duration(r"audio\redLightGreenLight\Soleil.wav") +
+            #    1
+            #)
+            min_duration = ( 1 + 1 + 1 )
             max_duration = 10
             self.durationGreenLight = random.uniform(min_duration, max_duration)
             self.durationRedLight = random.uniform(2 * self.reactionTime, max_duration)
