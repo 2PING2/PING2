@@ -49,16 +49,10 @@ class SerialCom:
 
         # Open the port
         try:
-            try:
-                self.ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
-            except Exception as e:
-                logger.write_in_log("ERROR", __name__, "setup", f"Error opening port l51 {self.symlink}: {e}")
-                return
+            self.ser = serial.Serial(self.symlink, self.baudrate, timeout=self.timeout)
             # make sure the Serial is closed at the beginning
             if not self.ser.is_open:
                 self.ser.open()
-            # self.ser.open()
-            # self.ser.close()
             logger.write_in_log("INFO", __name__, "setup", f"Connected to symlink {self.symlink} at {self.baudrate} baud")   
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
@@ -74,7 +68,6 @@ class SerialCom:
             self.queue.append(new)
         except Exception as _:
             self.ser=None
-            logger.write_in_log("ERROR", __name__, "read_data_task", f"Error reading data from {self.symlink}")
             self.setup()
             
         
