@@ -4,6 +4,7 @@ import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
 from random import random
+from random.random import uniform
 
 
 class RedLightGreenLight(GameMode):
@@ -60,8 +61,8 @@ class RedLightGreenLight(GameMode):
             #)
             min_duration = ( 1 + 1 + 1 )
             max_duration = 10
-            self.durationGreenLight = random.uniform(min_duration, max_duration)
-            self.durationRedLight = random.uniform(2 * self.reactionTime, max_duration)
+            self.durationGreenLight = uniform(min_duration, max_duration)
+            self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
             logger.write_in_log("DEBUG", "RedLightGreenLight", "randomize_duration", 
                                  f"GreenLight: {self.durationGreenLight}s, RedLight: {self.durationRedLight}s")
         except Exception as e:
