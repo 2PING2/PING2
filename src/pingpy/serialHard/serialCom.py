@@ -75,7 +75,7 @@ class SerialCom:
 
     def open_port(self):
         """Try to open the serial port."""
-        if time.time() - self.lastAttemptTime > RETRY_DELAY:
+        if time.time() - self.lastAttemptTime < RETRY_DELAY:
             return 0 # return that we did not try to connect to the port
 
         self.lastAttemptTime = time.time()
