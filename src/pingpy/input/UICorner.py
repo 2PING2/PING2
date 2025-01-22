@@ -9,5 +9,6 @@ class UICornerInput:
         self.modeRelease=None
         self.volume=None
         self.level=None
-        self.reset=None
+        self.resetPush=None
+        self.resetRelease=None
         logger.write_in_log("INFO", __name__, "__init__")

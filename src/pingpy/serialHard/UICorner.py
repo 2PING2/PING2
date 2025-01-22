@@ -1,7 +1,7 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
 
-from pingpy.config.config import SEP_KEY
+from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY
 
 class UICornerSerial(SerialCom):
     def __init__(self, port, baud_rate, timeout):
@@ -31,11 +31,17 @@ class UICornerSerial(SerialCom):
             return
         
         # mode
-        if new_line[0] == 'mode':
-            if new_line[1] == 'increment':
+        if new_line[0] == MODE_KEY:
+            if new_line[1] == INCREMENT_KEY:
                 input_ptr.UICorner.modeInc = True
-            elif new_line[1] == 'decrement':
+            elif new_line[1] == DECREMENT_KEY:
                 input_ptr.UICorner.modeDec = True
                 
+        # reset
+        if new_line[0] == 'reset':
+            if new_line[1] == 'push':
+                input_ptr.UICorner.resetPush = True
+            elif new_line[1] == 'release':
+                input_ptr.UICorner.resetRelease = True                
                 
             
