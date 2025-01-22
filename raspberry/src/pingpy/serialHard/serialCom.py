@@ -66,6 +66,7 @@ class SerialCom:
                 if self.ser.in_waiting == 0:
                     return
                 new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+                logger.write_in_log("INFO", __name__, "read_data_task", f"Data received from {self.symlink}: {new}")
                 self.queue.append(new)
             except Exception as _:
                 self.ser=None
