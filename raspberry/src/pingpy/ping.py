@@ -75,22 +75,22 @@ class Ping:
             self.refresh_player_led_strip()
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_player_led_strip: {e}")
-        try:
-            for i in range(4):
-                if self.output.player[i].linearActuator.moveToLeft is not None:
-                    if self.output.player[i].linearActuator.moveToLeft:
-                        self.esp32.send_data(f"P{{{i+1}}}/MTLL")
-                    else:
-                        self.esp32.send_data(f"P{{{i+1}}}/S")
-                    self.output.player[i].linearActuator.moveToLeft = None
-                if self.output.player[i].linearActuator.moveToRight is not None:
-                    if self.output.player[i].linearActuator.moveToRight:
-                        self.esp32.send_data(f"P{{{i+1}}}/MTRL")
-                    else:
-                        self.esp32.send_data(f"P{{{i+1}}}/S")
-                    self.output.player[i].linearActuator.moveToRight = None
-        except Exception as e:
-            logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_output: {e}")
+        # try:
+        #     for i in range(4):
+        #         if self.output.player[i].linearActuator.moveToLeft is not None:
+        #             if self.output.player[i].linearActuator.moveToLeft:
+        #                 self.esp32.send_data(f"P{{{i+1}}}/MTLL")
+        #             else:
+        #                 self.esp32.send_data(f"P{{{i+1}}}/S")
+        #             self.output.player[i].linearActuator.moveToLeft = None
+        #         if self.output.player[i].linearActuator.moveToRight is not None:
+        #             if self.output.player[i].linearActuator.moveToRight:
+        #                 self.esp32.send_data(f"P{{{i+1}}}/MTRL")
+        #             else:
+        #                 self.esp32.send_data(f"P{{{i+1}}}/S")
+        #             self.output.player[i].linearActuator.moveToRight = None
+        # except Exception as e:
+        #     logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_output: {e}")
         
     def refresh_player_led_strip(self):
         for i in range(4):

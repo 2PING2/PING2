@@ -24,6 +24,7 @@ class ESP32Serial(SerialCom):
         for i in range(len(output_ptr.player)):
             playerOutput = output_ptr.player[i]
             if playerOutput.linearActuator.moveToRight:
+                logger.write_in_log("INFO", __name__, "write", f"Player {i} move to right.")
                 playerOutput.linearActuator.moveToRight = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i) + PARAM_END_SEP + KEY_SEP + MOVE_TO_RIGHT_LIMIT_KEY)
             if playerOutput.linearActuator.moveToLeft:
