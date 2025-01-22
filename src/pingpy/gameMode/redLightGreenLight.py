@@ -86,12 +86,12 @@ class RedLightGreenLight(GameMode):
             if self.can_move(currentTime):
                 playerOutput.linearActuator.moveToRight = True
                 playerOutput.playerLedStrip.color = GREEN
-                logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player moved during green light.")
+                # logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player moved during green light.")
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
                 playerOutput.linearActuator.moveToRight = False
                 playerOutput.playerLedStrip.color = ORANGE
-                logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player moved during red light.")
+                # logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player moved during red light.")
         else:
             playerOutput.linearActuator.moveToRight = False
 
