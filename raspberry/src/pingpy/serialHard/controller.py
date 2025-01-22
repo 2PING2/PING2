@@ -11,11 +11,23 @@ class ControllerSerial(SerialCom):
         logger.write_in_log("INFO", __name__, "__init__")
         
     def read(self, input_ptr):
-        self.read_data_task()
-        new_line = self.consume_older_data()
+        try:
+            self.read_data_task()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in read_data_task: {e}")
+            return
+        try:
+            new_line = self.consume_older_data()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in consume_older_data: {e}")
+            return
         if new_line is None:
             return
-        new_line = new_line.split(SEP_KEY)
+        try:
+            new_line = new_line.split(SEP_KEY)
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "read", f"Error in split: {e}")
+            return
         button = new_line[0]
         if new_line[1] == PUSH_KEY:
             self.controllerInput.inAction = True
