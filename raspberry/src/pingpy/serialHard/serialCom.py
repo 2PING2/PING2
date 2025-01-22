@@ -41,9 +41,12 @@ class SerialCom:
             return
         # Check if the port exists
         if not os.path.exists(self.symlink):
-            self.failed_attempts += 1
             # logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
             return
+        
+        if self.ser is not None:
+            self.failed_attempts += 1
+        
         
         if self.failed_attempts >= RETRY_ATTEMPTS:
             try:
