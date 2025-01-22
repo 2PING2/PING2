@@ -140,17 +140,24 @@ class SerialCom:
             
     def check_usb_event(self):
         """Check if a USB device is connected or disconnected."""
-        wasConnected = self.connected
-        self.connected = False #  a tester ? os.path.exists(self.symlink)
+        try:
+            wasConnected = self.connected
+            self.connected = False #  a tester ? os.path.exists(self.symlink)
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "check_usb_event", f"Error checking {self.symlink} existence: {e}")
         try:
             connectedUsb = os.listdir('/dev/')
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "check_usb_event", f"Error listing /dev/: {e}")
             return
-        for port in connectedUsb:
-            if '/dev/'+port == self.symlink:
-                self.connected = True
-                break
+        try:
+            for port in connectedUsb:
+                if '/dev/'+port == self.symlink:
+                    self.connected = True
+                    break
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "check_usb_event", f"Error checking {self.symlink} in /dev/: {e}")
+            return
             
         if not wasConnected and self.connected:
             logger.write_in_log("INFO", __name__, "check_usb_event", f"Reconnected to {self.symlink}")
