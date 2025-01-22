@@ -131,7 +131,7 @@ class SerialCom:
     def check_usb_event(self):
         """Check if a USB device is connected or disconnected."""
         wasConnected = self.connected
-        self.connected = False
+        self.connected = False #  a tester ? os.path.exists(self.symlink)
         try:
             connectedUsb = os.listdir('/dev/')
         except Exception as e:
