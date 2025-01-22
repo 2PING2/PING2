@@ -20,7 +20,7 @@ class Ping:
         self.input = Input()
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
-        self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
+        # self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
         
         self.gameModeList = [WaitingRoom(), RedLightGreenLight()]
         self.currentGameMode = WaitingRoom()
@@ -37,7 +37,7 @@ class Ping:
         
     def setup(self):
         self.esp32.setup()
-        self.UICorner.setup()
+        # self.UICorner.setup()
         for i in range(4):
             self.playerController[i].setup()
         ledStrip.setup()
@@ -50,7 +50,7 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        self.UICorner.read(self.input)
+        # self.UICorner.read(self.input)
         for i in range(4):
             try:
                 self.playerController[i].read(self.input.player[i])
