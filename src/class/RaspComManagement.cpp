@@ -108,16 +108,44 @@ void RaspComManagement::processKeyValues()
 
 
     Player *player = players->operator[](playerId);
-
-    if (keyValues[1]->key == CALIBRATION_KEY)
+    // ------------ ASK COMMANDS ------------ //
+    if (keyValues[1]->key == ASK_POSITION_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_MAX_SPEED_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+MAX_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.max_speed())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_CALIBRATED)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+CALIBRATION_KEY+PARAM_BEGIN_SEP+String(player->actuator.is_calibrated())+PARAM_END_SEP); 
+    }
+    else if (keyValues[1]->key == ASK_RIGHT_LIMIT_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
+    }
+    else if (keyValues[1]->key == ASK_LEFT_LIMIT_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
+    }   
+    else if (keyValues[1]->key == ASK_SOL_STATE_KEY)
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+ASK_SOL_STATE_KEY+PARAM_BEGIN_SEP+String(player->solenoid.get_state())+PARAM_END_SEP);
+    }
+    else if (player->actuator.is_busy())
+    {
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+BUSY_KEY);
+    }// ------------ COMMANDS ------------ //
+    else if (keyValues[1]->key == CALIBRATION_KEY)
     {
         player->actuator.calibrate();
     }
-    else if (keyValues[1]->key == "MTLL")
+    else if (keyValues[1]->key == MOVE_TO_LEFT_LIMIT_KEY)
     {
         player->actuator.move_left();
     }
-    else if (keyValues[1]->key == "MTRL")
+    else if (keyValues[1]->key == MOVE_TO_RIGHT_LIMIT_KEY)
     {
         player->actuator.move_right();
     }
@@ -165,30 +193,6 @@ void RaspComManagement::processKeyValues()
     else if (keyValues[1]->key == STOP_KEY)
     {
         player->actuator.stop();
-    }
-    else if (keyValues[1]->key == ASK_POSITION_KEY)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
-    }
-    else if (keyValues[1]->key == ASK_MAX_SPEED_KEY)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+MAX_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.max_speed())+PARAM_END_SEP);
-    }
-    else if (keyValues[1]->key == ASK_CALIBRATED)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+CALIBRATION_KEY+PARAM_BEGIN_SEP+String(player->actuator.is_calibrated())+PARAM_END_SEP); 
-    }
-    else if (keyValues[1]->key == ASK_RIGHT_LIMIT_KEY)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
-    }
-    else if (keyValues[1]->key == ASK_LEFT_LIMIT_KEY)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
-    }   
-    else if (keyValues[1]->key == ASK_SOL_STATE_KEY)
-    {
-        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+ASK_SOL_STATE_KEY+PARAM_BEGIN_SEP+String(player->solenoid.get_state())+PARAM_END_SEP);
     }
     else
     {
