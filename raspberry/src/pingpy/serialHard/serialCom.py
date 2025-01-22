@@ -41,6 +41,7 @@ class SerialCom:
             return
         # Check if the port exists
         if not os.path.exists(self.symlink):
+            self.ser = None
             # logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
             return
         
