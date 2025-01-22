@@ -44,16 +44,6 @@ class SerialCom:
             # logger.write_in_log("WARNING", __name__, "open_port", f"symlink {self.symlink} does not exist.")
             return
         
-        if self.ser is not None:
-            self.failed_attempts += 1
-        
-        
-        if self.failed_attempts >= RETRY_ATTEMPTS:
-            try:
-                self.ser.close()
-                self.failed_attempts = 0
-            except Exception as e:
-                logger.write_in_log("ERROR", __name__, "read_data_task", f"Error closing port: {e}")
 
 
         # Open the port
@@ -66,6 +56,8 @@ class SerialCom:
             # make sure the Serial is closed at the beginning
             if not self.ser.is_open:
                 self.ser.open()
+            # self.ser.open()
+            # self.ser.close()
             logger.write_in_log("INFO", __name__, "setup", f"Connected to symlink {self.symlink} at {self.baudrate} baud")   
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
