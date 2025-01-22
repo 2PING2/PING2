@@ -40,9 +40,13 @@ class WaitingRoom(GameMode):
             self.brightness_blink_rate *= -1
             
         if input.UICorner.modeInc:
+            if self.preselectedGameMode is None:
+                self.preselectedGameMode = 0
             self.preselectedGameMode = (self.preselectedGameMode + 1) % len(self.gameModeList)
             input.UICorner.modeInc = None
         elif input.UICorner.modeDec:
+            if self.preselectedGameMode is None:
+                self.preselectedGameMode = 0
             self.preselectedGameMode = (self.preselectedGameMode - 1) % len(self.gameModeList)
             input.UICorner.modeDec = None
         if self.preselectedGameMode is not None:
