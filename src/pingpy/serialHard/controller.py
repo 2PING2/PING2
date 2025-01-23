@@ -11,7 +11,8 @@ class ControllerSerial(SerialCom):
         logger.write_in_log("INFO", __name__, "__init__")
         
     def read(self, controllerInput):
-        self.read_data_task()
+        try:
+            self.read_data_task()
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "read", f"Error in read_data_task: {e}")
             return
