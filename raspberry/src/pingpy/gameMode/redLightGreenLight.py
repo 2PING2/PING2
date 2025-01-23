@@ -83,7 +83,6 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
-        logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Checking action")
         canmove = self.can_move(currentTime)
         if canmove:
             playerOutput.playerLedStrip.color = GREEN
