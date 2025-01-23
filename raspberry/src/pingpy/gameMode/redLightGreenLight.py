@@ -32,7 +32,7 @@ class RedLightGreenLight(GameMode):
             return
 
         Output.speaker.audioPiste = r"audio\redLightGreenLight\Intro_123Soleil.wav"
-        for i in range(1,2):
+        for i in range(4):
             try:
                 playerOutput = Output.player[i]
                 playerOutput.playerLedStrip.area = [-200, 200]
@@ -83,18 +83,19 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
+        canmove = self.can_move(currentTime)
+        if canmove:
+            playerOutput.playerLedStrip.color = GREEN
+        else:
+            playerOutput.playerLedStrip.color = RED
+            
         if playerInput.gameController.inAction:
-            if self.can_move(currentTime):
+            playerInput.gameController.inAction = None
+            if canmove:
                 playerOutput.linearActuator.moveToRight = True
-                playerOutput.playerLedStrip.color = GREEN
-                # logger.write_in_log("INFO", "RedLightGreenLight", "check_action", f"Player moved during green light.")
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
-                playerOutput.linearActuator.stop = True
                 playerOutput.playerLedStrip.color = ORANGE
-                # logger.write_in_log("WARNING", "RedLightGreenLight", "check_action", f"Player moved during red light.")
-        else:
-            playerOutput.linearActuator.stop = True
 
     def check_victory(self, playerInput, playerOutput):
         """
