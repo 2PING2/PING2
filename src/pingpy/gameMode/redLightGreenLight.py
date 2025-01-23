@@ -83,7 +83,7 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
-        logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Checking action for player {playerInput.playerID}.")
+        logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Checking action")
         canmove = self.can_move(currentTime)
         if canmove:
             playerOutput.playerLedStrip.color = GREEN
@@ -91,10 +91,10 @@ class RedLightGreenLight(GameMode):
             playerOutput.playerLedStrip.color = RED
             
         if playerInput.gameController.inAction:
-            logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Player {playerInput.playerID} is in action.")
+            logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f" is in action.")
             playerInput.gameController.inAction = None
             if canmove:
-                logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Player {playerInput.playerID} moved.")
+                logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f" moved.")
                 playerOutput.linearActuator.moveToRight = True
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
