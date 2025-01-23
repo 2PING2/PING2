@@ -160,8 +160,9 @@ void RaspComManagement::processKeyValues()
     else if (keyValues[1]->key == SET_MAX_SPEED_KEY)
     {
         try {
-            player->actuator.set_speed(keyValues[1]->param.toFloat());
-            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(playerId+1)+PARAM_END_SEP+KEY_SEP+MAX_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.max_speed())+PARAM_END_SEP);
+            float new_speed = keyValues[1]->param.toFloat();
+            player->actuator.set_speed(new_speed);
+            Serial.println("New speed : " + String(new_speed));
         } catch (const std::exception& e) {
             Serial.println("Invalid set_speed parameter e : " + String(e.what()));
         }
