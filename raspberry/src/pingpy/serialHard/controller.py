@@ -32,18 +32,18 @@ class ControllerSerial(SerialCom):
             return
         button = new_line[0]
         if new_line[1] == PUSH_KEY:
-            player_input_ptr.linearActuator.inAction = True
+            player_input_ptr.gameController.inAction = True
             if button == LEFT_BUTTON_KEY:
-                player_input_ptr.linearActuator.left = True
+                player_input_ptr.gameController.left = True
             if button == RIGHT_BUTTON_KEY:
-                player_input_ptr.linearActuator.right = True
+                player_input_ptr.gameController.right = True
             if button == SHOOT_BUTTON_KEY:
-                player_input_ptr.linearActuator.shoot = True
+                player_input_ptr.gameController.shoot = True
         elif new_line[1] == RELEASE_KEY:
-            player_input_ptr.linearActuator.inAction = False
+            player_input_ptr.gameController.inAction = False
             if button == LEFT_BUTTON_KEY:
-                player_input_ptr.linearActuator.left = False
+                player_input_ptr.gameController.left = False
             if button == RIGHT_BUTTON_KEY:
-                player_input_ptr.linearActuator.right = False
+                player_input_ptr.gameController.right = False
             if button == SHOOT_BUTTON_KEY:
-                player_input_ptr.linearActuator.shoot = False
+                player_input_ptr.gameController.shoot = False
