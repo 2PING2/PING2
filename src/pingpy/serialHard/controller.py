@@ -10,7 +10,7 @@ class ControllerSerial(SerialCom):
         self.controllerInput = controllerInput
         logger.write_in_log("INFO", __name__, "__init__")
         
-    def read(self, input_ptr):
+    def read(self, player_input_ptr):
         try:
             self.read_data_task()
         except Exception as e:
@@ -32,18 +32,18 @@ class ControllerSerial(SerialCom):
             return
         button = new_line[0]
         if new_line[1] == PUSH_KEY:
-            self.controllerInput.inAction = True
+            player_input_ptr.inAction = True
             if button == LEFT_BUTTON_KEY:
-                self.controllerInput.left = True
+                player_input_ptr.left = True
             if button == RIGHT_BUTTON_KEY:
-                self.controllerInput.right = True
+                player_input_ptr.right = True
             if button == SHOOT_BUTTON_KEY:
-                self.controllerInput.shoot = True
+                player_input_ptr.shoot = True
         elif new_line[1] == RELEASE_KEY:
-            self.controllerInput.inAction = False
+            player_input_ptr.inAction = False
             if button == LEFT_BUTTON_KEY:
-                self.controllerInput.left = False
+                player_input_ptr.left = False
             if button == RIGHT_BUTTON_KEY:
-                self.controllerInput.right = False
+                player_input_ptr.right = False
             if button == SHOOT_BUTTON_KEY:
-                self.controllerInput.shoot = False
+                player_input_ptr.shoot = False
