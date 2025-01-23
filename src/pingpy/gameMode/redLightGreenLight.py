@@ -83,6 +83,7 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
+        logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Checking action for player {playerInput.playerID}.")
         canmove = self.can_move(currentTime)
         if canmove:
             playerOutput.playerLedStrip.color = GREEN
@@ -140,10 +141,6 @@ class RedLightGreenLight(GameMode):
         """
         Executes an iteration of the game mode.
         """
-        if not self.initialized:
-            self.setup(Input, Output)
-            self.initialized = True
-
         if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
