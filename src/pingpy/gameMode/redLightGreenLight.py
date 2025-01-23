@@ -90,8 +90,10 @@ class RedLightGreenLight(GameMode):
             playerOutput.playerLedStrip.color = RED
             
         if playerInput.gameController.inAction:
+            logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Player {playerInput.playerID} is in action.")
             playerInput.gameController.inAction = None
             if canmove:
+                logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f"Player {playerInput.playerID} moved.")
                 playerOutput.linearActuator.moveToRight = True
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
