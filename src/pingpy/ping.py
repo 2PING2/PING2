@@ -49,7 +49,7 @@ class Ping:
         self.UICorner.read(self.input)
         for i in range(4):
             try:
-                self.playerController[i].read(self.input.player[i])
+                self.playerController[i].read(self.input.player[i].gameController)
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
         self.runGameMode()
