@@ -32,7 +32,6 @@ class ControllerSerial(SerialCom):
             return
         button = new_line[0]
         if new_line[1] == PUSH_KEY:
-            logger.write_in_log("INFO", __name__, "read", f"In action")
             player_input_ptr.inAction = True
             if button == LEFT_BUTTON_KEY:
                 player_input_ptr.left = True
