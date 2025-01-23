@@ -88,16 +88,21 @@ class RedLightGreenLight(GameMode):
             playerOutput.playerLedStrip.color = GREEN
         else:
             playerOutput.playerLedStrip.color = RED
-            
+        
+        if playerInput.gameController.inAction is None:
+            return
+        
         if playerInput.gameController.inAction:
-            logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f" is in action.")
-            playerInput.gameController.inAction = None
             if canmove:
-                logger.write_in_log("DEBUG", "RedLightGreenLight", "check_action", f" moved.")
                 playerOutput.linearActuator.moveToRight = True
             else:
                 playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
                 playerOutput.playerLedStrip.color = ORANGE
+        else:
+            playerOutput.linearActuator.stop = True
+        
+        playerInput.gameController.inAction = None
+
 
     def check_victory(self, playerInput, playerOutput):
         """
@@ -144,7 +149,7 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
 
-        for i in range(1,4):
+        for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:
@@ -155,7 +160,7 @@ class RedLightGreenLight(GameMode):
         """
         Stops the game and resets the outputs.
         """
-        for i in range(1,2):
+        for i in range(4):
             playerOutput = Output.player[i]
             playerOutput.playerLedStrip.color(None)
             playerOutput.linearActuator.moveToRight = False
