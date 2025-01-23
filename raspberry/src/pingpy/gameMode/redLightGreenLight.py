@@ -39,7 +39,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200]
                 playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.moveToLeft = True
-                playerOutput.linearActuator.setSpeed = 10.0
+                playerOutput.linearActuator.setSpeed = 20.0
                 playerInput.gameController.inAction = None
             except IndexError:
                 logger.write_in_log("ERROR", "RedLightGreenLight", "setup", f"No output found for player ID {Input.playerInput[i]}.")
@@ -98,7 +98,8 @@ class RedLightGreenLight(GameMode):
             if canmove:
                 playerOutput.linearActuator.moveToRight = True
             else:
-                playerOutput.linearActuator.moveTo = playerInput.linearActuator.leftLimit
+                # playerOutput.linearActuator.setSpeed = 100.0
+                playerOutput.linearActuator.moveToLeft = True
                 playerOutput.playerLedStrip.color = ORANGE
         else:
             playerOutput.linearActuator.stop = True
