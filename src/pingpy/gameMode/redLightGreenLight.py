@@ -101,9 +101,11 @@ class RedLightGreenLight(GameMode):
                 playerInput.linearActuator.moving = True
             else:
                 self.lose(playerOutput)
+                playerInput.linearActuator.moving = False 
         else:
             if not canmove:
                 self.lose(playerOutput)
+                playerInput.linearActuator.moving = False 
             else:
                 playerOutput.linearActuator.stop = True
                 playerInput.linearActuator.moving = False        
