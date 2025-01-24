@@ -94,22 +94,43 @@ class RedLightGreenLight(GameMode):
             return
         
            
+        # if playerInput.gameController.inAction:
+        #     if canmove:
+        #         playerOutput.linearActuator.setSpeed = 10.0
+        #         playerOutput.linearActuator.moveToRight = True
+        #         playerInput.linearActuator.moving = True
+        #     else:
+        #         self.lose(playerOutput)            
+        # else:
+        #     if not canmove and playerInput.linearActuator.moving:
+        #         self.lose(playerOutput)
+        #     else:
+        #         playerOutput.linearActuator.stop = True
+        #         playerInput.linearActuator.moving = False       
+             
+        # playerInput.gameController.inAction = None
+            
         if playerInput.gameController.inAction:
             if canmove:
+                # Autoriser le déplacement
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
                 playerInput.linearActuator.moving = True
             else:
-                self.lose(playerOutput)            
+                # Le joueur perd si le déplacement est interdit
+                self.lose(playerOutput)
         else:
+            # Si aucune action mais que le vérin bouge alors que c'est interdit
             if not canmove and playerInput.linearActuator.moving:
                 self.lose(playerOutput)
             else:
+                # Sinon, arrêter le vérin
                 playerOutput.linearActuator.stop = True
-                playerInput.linearActuator.moving = False       
-             
+                playerInput.linearActuator.moving = False
+
+        # Réinitialiser l'état d'action
         playerInput.gameController.inAction = None
-            
+
         
         
     def lose(self, playerOutput):
