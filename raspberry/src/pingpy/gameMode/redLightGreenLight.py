@@ -100,7 +100,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
             else:
-                f.lose(playerOutput)
+                self.lose(playerOutput)
         else:
             if not canmove:
                 self.lose(playerOutput)
