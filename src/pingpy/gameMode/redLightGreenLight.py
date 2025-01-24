@@ -92,8 +92,11 @@ class RedLightGreenLight(GameMode):
             playerOutput.playerLedStrip.color = RED # red light
         
         if playerInput.gameController.inAction is None:
+            if not canmove:
+                self.lose(playerOutput)
             return
-        
+    
+
         
         if playerInput.gameController.inAction:
             if canmove:
