@@ -114,7 +114,7 @@ class RedLightGreenLight(GameMode):
         """
         playerOutput.linearActuator.setSpeed = 200.0
         playerOutput.linearActuator.moveToLeft = True
-        playerOutput.playerLedStrip.color = RED
+        playerOutput.playerLedStrip.color = ORANGE
         logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
         
 
