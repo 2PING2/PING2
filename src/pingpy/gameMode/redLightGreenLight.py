@@ -102,17 +102,18 @@ class RedLightGreenLight(GameMode):
             if canmove:
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
-                playerInput.linearActuator.moving = True
             else:
                 self.lose(playerOutput)
+            playerInput.linearActuator.moving = True
         else:
             if not canmove:
                 self.lose(playerOutput)
             else:
                 playerOutput.linearActuator.stop = True
-                playerInput.linearActuator.moving = False        
+            playerInput.linearActuator.moving = False       
+             
         playerInput.gameController.inAction = None
-
+        print(playerInput.linearActuator.moving)
     def lose(self, playerOutput):
         """
         Handles the player's loss by moving them back to the left at speed 200.
