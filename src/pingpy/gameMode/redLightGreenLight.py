@@ -91,12 +91,7 @@ class RedLightGreenLight(GameMode):
         else:
             playerOutput.playerLedStrip.color = RED # red light
         
-        if playerInput.gameController.inAction is None or playerInput.linearActuator.moving:
-            return
-            
-        if playerInput.linearActuator.moving and not canmove:
-            self.lose(playerOutput)
-            playerInput.linearActuator.moving = False 
+        if playerInput.gameController.inAction is None:
             return
             
         if playerInput.gameController.inAction:
@@ -106,11 +101,9 @@ class RedLightGreenLight(GameMode):
                 playerInput.linearActuator.moving = True
             else:
                 self.lose(playerOutput)
-                playerInput.linearActuator.moving = False 
         else:
             if not canmove:
                 self.lose(playerOutput)
-                playerInput.linearActuator.moving = False 
             else:
                 playerOutput.linearActuator.stop = True
                 playerInput.linearActuator.moving = False        
