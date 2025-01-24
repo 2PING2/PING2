@@ -12,10 +12,10 @@ class ESP32Serial(SerialCom):
         self.read_data_task()
         new_line = self.consume_older_data()
         
-        if new_line is not None:
-            # enregistrer le currentPose du player
-            if new_line[0] == PLAYER_KEY:
-                pass
+        # if new_line is not None:
+        #     # enregistrer le currentPose du player
+        #     if new_line[0] == PLAYER_KEY:
+        #         pass
         
     def write(self, output_ptr):
         """Write the next data to the serial port."""

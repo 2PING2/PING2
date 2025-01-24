@@ -93,27 +93,27 @@ class RedLightGreenLight(GameMode):
         if playerInput.gameController.inAction is None:
             return
         
-        print(playerInput.linearActuator.moving)
-        if playerInput.linearActuator.moving and not canmove:
-            print(" PERDU pedant le temps rouge")
-            self.lose(playerOutput)
-            
+           
         if playerInput.gameController.inAction:
             if canmove:
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
+                playerInput.linearActuator.moving = True
             else:
-                self.lose(playerOutput)
-            playerInput.linearActuator.moving = True
+                self.lose(playerOutput)            
         else:
             if not canmove:
                 self.lose(playerOutput)
             else:
                 playerOutput.linearActuator.stop = True
-            playerInput.linearActuator.moving = False       
+                playerInput.linearActuator.moving = False       
              
         playerInput.gameController.inAction = None
-        print(playerInput.linearActuator.moving)
+        
+        if not canmove and playerInput.linearActuator.moving:
+            self.lose(playerOutput)        
+        
+        
     def lose(self, playerOutput):
         """
         Handles the player's loss by moving them back to the left at speed 200.
