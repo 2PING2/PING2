@@ -105,7 +105,7 @@ class RedLightGreenLight(GameMode):
             if not canmove:
                 self.lose(playerOutput)
             else:
-                self.lose(playerOutput)        
+                playerOutput.linearActuator.stop = True        
         playerInput.gameController.inAction = None
 
     def lose(self, playerOutput):
