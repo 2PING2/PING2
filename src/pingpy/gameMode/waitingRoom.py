@@ -31,6 +31,7 @@ class WaitingRoom(GameMode):
         dt = t - self.last_time
         self.last_time = t
         
+        ####### Blinking effect
         self.currentLed_brightness += self.brightness_blink_rate * dt
         if self.currentLed_brightness > 1.0:
             self.currentLed_brightness = 1.0
@@ -39,6 +40,12 @@ class WaitingRoom(GameMode):
             self.currentLed_brightness = 0.0
             self.brightness_blink_rate *= -1
             
+        for i in range(4):
+            output.player[i].playerLedStrip.area = [-200, 200]
+            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in self.currentColor)
+        ####### end of blinking effect
+            
+        
         if input.UICorner.modeInc:
             if self.preselectedGameMode is None:
                 self.preselectedGameMode = 0
@@ -49,6 +56,7 @@ class WaitingRoom(GameMode):
                 self.preselectedGameMode = 0
             self.preselectedGameMode = (self.preselectedGameMode - 1) % len(self.gameModeList)
             input.UICorner.modeDec = None
+            
         if self.preselectedGameMode is not None:
             self.currentColor = self.gameModeList[self.preselectedGameMode].color
             if input.UICorner.resetPush:
@@ -56,11 +64,6 @@ class WaitingRoom(GameMode):
                 self.preselectedGameMode = None
                 input.UICorner.resetPush = None
         
-    
-        for i in range(4):
-            output.player[i].playerLedStrip.area = [-200, 200]
-            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in self.currentColor)
-
     def stop(self):
         pass
         # for i in range(4):
