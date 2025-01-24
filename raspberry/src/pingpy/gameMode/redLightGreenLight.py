@@ -66,8 +66,7 @@ class RedLightGreenLight(GameMode):
             max_duration = 10
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
-            logger.write_in_log("DEBUG", __name__, "randomize_duration", 
-                                 f"GreenLight: {self.durationGreenLight}s, RedLight: {self.durationRedLight}s")
+            # logger.write_in_log("DEBUG", __name__, "randomize_duration", f"GreenLight: {self.durationGreenLight}s, RedLight: {self.durationRedLight}s")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
 
@@ -94,7 +93,9 @@ class RedLightGreenLight(GameMode):
         if playerInput.gameController.inAction is None:
             return
         
+        print(playerInput.linearActuator.moving)
         if playerInput.linearActuator.moving and not canmove:
+            print(" PERDU pedant le temps rouge")
             self.lose(playerOutput)
             
         if playerInput.gameController.inAction:
