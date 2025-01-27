@@ -36,7 +36,7 @@ class ESP32Serial(SerialCom):
             else:
                 key += char
             
-            self.process_key_values()
+        self.process_key_values()
 
     def process_key_values(self):
         """Processes the parsed key-value pairs."""

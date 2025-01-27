@@ -101,7 +101,8 @@ void LinearActuator::instant_stop()
 int LinearActuator::run()
 {
     bool r = motor.run();
-    mvt_flag = !r;
+    if (mvt_flag && !r)
+        mvt_flag = false;
     return r;
 }
 
