@@ -32,8 +32,8 @@ git subtree pull --prefix=hardwareName ./ refs/remotes/origin/hardware/hardwareN
 ```
 - Phase de Test : Les codes sont testés ensemble pour s'assurer qu'ils fonctionnent de manière cohérente sur l'ensemble du système. Durant cette phase d'integration, est souvent necessaire d'effectuer des changements directement depuis la branche `dev`. Il sera alors nécessaire de propager les commits aux branches ```hardware/*``` concernées. Cela se fait avec :
 ```bash
-   git subtree push --prefix=hardwareName ./ hardware/hardwareName
-   git checkout hardware/raspberry
+   git subtree push --prefix=hardwareName origin hardware/hardwareName
+   git checkout hardware/hardwareName
    git push
 ```
 - Validation : Une fois les tests concluants, la branche dev est fusionnée (merge) dans la branche main, qui représente alors la version stable et prête pour la production du projet.
