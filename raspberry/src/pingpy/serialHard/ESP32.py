@@ -21,8 +21,9 @@ class ESP32Serial(SerialCom):
         is_param = False
         self.key_values = []
 
-        for char in new_line:
-            if char == KEY_SEP or char == '\0':
+        for i in range(len(new_line)):
+            char = new_line[i]
+            if char == KEY_SEP or i == len(new_line) - 1:
                 # Store the key-value pair
                 self.key_values.append({"key": key, "param": param})
                 key = ""
