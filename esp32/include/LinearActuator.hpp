@@ -34,7 +34,7 @@ public:
     bool move(float relativePosition);
     void move_right() { move_to(rightLimit); }
     void move_left() { move_to(leftLimit); }
-    void stop() { motor.stop(); }
+    void stop() { begin_mvt_flag = true; motor.stop(); }
     void instant_stop();
     void calibrate()
     {
