@@ -19,6 +19,7 @@ class ESP32Serial(SerialCom):
         key = ""
         param = ""
         is_param = False
+        self.key_values = []
 
         for char in new_line:
             if char == KEY_SEP or char == '\0':
