@@ -78,6 +78,7 @@ private:
     bool stallResult = false;
     bool calibrating = false;
     bool mvt_flag = false;
+    bool begin_mvt_flag = false;
     bool cal_flag = false;
     // calibrationSteps
     bool c_step1();
