@@ -71,12 +71,13 @@ void LinearActuator::setup()
     driver.toff(4);
     driver.blank_time(24);
     driver.rms_current(TMC_MAX_CURRENT);
+    
     driver.mres(8 - MICROSTEP_POWER_OF_2);
     driver.TCOOLTHRS(0xFFFFF); // 20bit max
     driver.semin(5);
     driver.semax(2);
     driver.shaft(shaft);
-    // driver.pwm_autoscale(true); // Needed for stealthChop
+    driver.pwm_autoscale(false); // Needed for stealthChop
 }
 
 bool LinearActuator::get_stall_result()
@@ -99,17 +100,21 @@ void LinearActuator::instant_stop()
 
 int LinearActuator::run()
 {
-    return motor.run();
+    bool r = motor.run();
+    mvt_flag = !r;
+    return r;
 }
 
 bool LinearActuator::move_to(float position)
 {
+    mvt_flag = true;
     motor.moveTo(position * MICRO_STEPS_PER_MM);
     return motor.distanceToGo() == 0;
 }
 
 bool LinearActuator::move(float relativePosition)
 {
+    mvt_flag = true;
     motor.move(relativePosition * MICRO_STEPS_PER_MM);
     return motor.distanceToGo() == 0;
 }
@@ -357,6 +362,7 @@ bool LinearActuator::calibration(int64_t time)
         {
 
             currentCalibrationSteps = 0;
+            cal_flag = true;
             return true;
         }
         else

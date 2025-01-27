@@ -19,8 +19,8 @@ void RaspComManagement::setup(Vector<Player *> *players)
     Serial.println((unsigned long)players);
     Serial.println(players->size());
     
-    xTaskCreatePinnedToCore(this->readDataTask,
-                            "readDataTask",
+    xTaskCreatePinnedToCore(this->readWriteDataTask,
+                            "readWriteDataTask",
                             10000,
                             this,
                             TASK_RASP_COMMUNICATION_PRIORITY,
@@ -28,12 +28,13 @@ void RaspComManagement::setup(Vector<Player *> *players)
                             TASK_RASP_COMMUNICATION_CORE);
 }
 
-void RaspComManagement::readDataTask(void *pvParameters)
+void RaspComManagement::readWriteDataTask(void *pvParameters)
 {
     RaspComManagement *raspComManagement = (RaspComManagement *)pvParameters;
     for (;;)
     {
         raspComManagement->readData();
+        raspComManagement->writeData();
         vTaskDelay(TASK_RASP_COMMUNICATION_DELAY_MS / portTICK_PERIOD_MS);
     }
 }
@@ -200,4 +201,18 @@ void RaspComManagement::processKeyValues()
         Serial.println("Invalid command");
     }
 
+}
+
+void RaspComManagement::writeData()
+{
+    for (int i = 0; i < players->size(); i++)
+    {
+        Player *player = players->operator[](i);
+        if (player->actuator.consume_mvt_flag())
+            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
+        if (player->actuator.consume_cal_flag())
+            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
+            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
+   
+    }
 }

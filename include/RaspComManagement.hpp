@@ -16,9 +16,10 @@ public:
 
     void setup(Vector <Player*> *players);
 
-    static void readDataTask(void *pvParameters);
+    static void readWriteDataTask(void *pvParameters);
 
     void readData();
+    void writeData();
 
 private:
     int baudRate;
