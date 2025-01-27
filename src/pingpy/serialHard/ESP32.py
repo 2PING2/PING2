@@ -51,11 +51,11 @@ class ESP32Serial(SerialCom):
             playerOutput = output_ptr.player[i]
             playerInput = input_ptr.player[i]
             if playerOutput.linearActuator.moveToRight:
-                playerInput.linearActuator.moving = True
+                # playerInput.linearActuator.moving = True
                 playerOutput.linearActuator.moveToRight = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_RIGHT_LIMIT_KEY)
             if playerOutput.linearActuator.moveToLeft:
-                playerInput.linearActuator.moving = True
+                # playerInput.linearActuator.moving = True
                 playerOutput.linearActuator.moveToLeft = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_LEFT_LIMIT_KEY)
             if playerOutput.linearActuator.stop:
