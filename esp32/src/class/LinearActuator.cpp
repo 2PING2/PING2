@@ -77,7 +77,7 @@ void LinearActuator::setup()
     driver.semin(5);
     driver.semax(2);
     driver.shaft(shaft);
-    driver.pwm_autoscale(true); // Needed for stealthChop
+    // driver.pwm_autoscale(true); // Needed for stealthChop
 }
 
 bool LinearActuator::get_stall_result()
