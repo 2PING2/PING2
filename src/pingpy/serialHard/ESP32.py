@@ -41,7 +41,7 @@ class ESP32Serial(SerialCom):
         """Processes the parsed key-value pairs."""
         # Replace this method with your own logic
         for kv in self.key_values:
-            print(f"Key: {kv['key']}, Param: {kv['param']}")
+            logger.write_in_log("INFO", __name__, "process_key_values", f"Key: {kv['key']}, Param: {kv['param']}")
         
         
     def write(self, output_ptr, input_ptr):
