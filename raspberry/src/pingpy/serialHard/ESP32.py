@@ -26,9 +26,9 @@ class ESP32Serial(SerialCom):
                 self.key_values.append({"key": key, "param": param})
                 key = ""
                 param = ""
-            elif char == self.param_begin_sep:
+            elif char == PARAM_BEGIN_SEP:
                 is_param = True
-            elif char == self.param_end_sep:
+            elif char == PARAM_END_SEP:
                 is_param = False
             elif is_param:
                 param += char
