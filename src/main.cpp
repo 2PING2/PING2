@@ -18,6 +18,6 @@ void setup()
 void loop()
 {
     for (LinearActuator *la : LinearActuator::all)
-            la->motor.run();
+            la->run();
 }
 
