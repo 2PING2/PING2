@@ -54,6 +54,8 @@ public:
     bool is_calibrated() { return is_right_calibrated() && is_left_calibrated(); }
     bool is_calibrating() { return calibrating; }
     bool is_busy() { return is_calibrating(); }
+    bool consume_mvt_flag() { bool tmp = mvt_flag; mvt_flag = false; return tmp; }
+    bool consume_cal_flag() { bool tmp = cal_flag; cal_flag = false; return tmp; }
 
 #ifndef EVERYTHING_PUBLIC
 private:
@@ -75,7 +77,8 @@ private:
     uint8_t updateSgTh = 0;
     bool stallResult = false;
     bool calibrating = false;
-
+    bool mvt_flag = false;
+    bool cal_flag = false;
     // calibrationSteps
     bool c_step1();
     bool c_step2(int64_t time = esp_timer_get_time());
