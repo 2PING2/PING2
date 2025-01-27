@@ -213,10 +213,14 @@ void RaspComManagement::writeData()
     {
         Player *player = players->operator[](i);
         if (player->actuator.consume_mvt_flag())
+        {
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_speed())+PARAM_END_SEP);
+        }
         if (player->actuator.consume_cal_flag())
+        {
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
+        }
     }
 }
