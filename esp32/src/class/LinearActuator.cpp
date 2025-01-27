@@ -101,21 +101,24 @@ void LinearActuator::instant_stop()
 int LinearActuator::run()
 {
     bool r = motor.run();
-    if (!mvt_flag && !r)
+    if (begin_mvt_flag && !r)
+    {
+        begin_mvt_flag = false;
         mvt_flag = true;
+    }
     return r;
 }
 
 bool LinearActuator::move_to(float position)
 {
-    mvt_flag = false;
+    begin_mvt_flag = true;
     motor.moveTo(position * MICRO_STEPS_PER_MM);
     return motor.distanceToGo() == 0;
 }
 
 bool LinearActuator::move(float relativePosition)
 {
-    mvt_flag = false;
+    begin_mvt_flag = true;
     motor.move(relativePosition * MICRO_STEPS_PER_MM);
     return motor.distanceToGo() == 0;
 }
