@@ -1,6 +1,6 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
-from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY
+from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY
   
 class ESP32Serial(SerialCom):
     def __init__(self, port, baudrate, timeout):
@@ -37,13 +37,33 @@ class ESP32Serial(SerialCom):
             else:
                 key += char
             
-        self.process_key_values()
+        self.process_key_values(input_ptr)
 
-    def process_key_values(self):
+    def process_key_values(self, input_ptr):
         """Processes the parsed key-value pairs."""
         # Replace this method with your own logic
-        for kv in self.key_values:
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Key: {kv['key']}, Param: {kv['param']}")
+        # for kv in self.key_values:
+        #     logger.write_in_log("INFO", __name__, "process_key_values", f"Key: {kv['key']}, Param: {kv['param']}")
+        if self.key_values[0]['key'] != PLAYER_KEY:
+            return
+        # get player id
+        player_id = int(self.key_values[0]['param'])-1
+        playerInput = input_ptr.player[player_id]
+        if self.key_values[1]['key'] == CURRENT_SPEED_KEY:
+            playerInput.linearActuator.currentSpeed = float(self.key_values[1]['param'])
+            if playerInput.linearActuator.currentSpeed == 0:
+                playerInput.linearActuator.moving = False
+            else:
+                playerInput.linearActuator.moving = True
+                
+        elif self.key_values[1]['key'] == CURRENT_POSITION_KEY:
+            playerInput.linearActuator.currentPosition = float(self.key_values[1]['param'])
+        elif self.key_values[1]['key'] == RIGHT_LIMIT_KEY:
+            playerInput.linearActuator.rightLimit = float(self.key_values[1]['param'])
+        elif self.key_values[1]['key'] == LEFT_LIMIT_KEY:
+            playerInput.linearActuator.leftLimit = float(self.key_values[1]['param'])
+            
+            
         
         
     def write(self, output_ptr, input_ptr):
@@ -52,11 +72,11 @@ class ESP32Serial(SerialCom):
             playerOutput = output_ptr.player[i]
             playerInput = input_ptr.player[i]
             if playerOutput.linearActuator.moveToRight:
-                # playerInput.linearActuator.moving = True
+                playerInput.linearActuator.moving = True
                 playerOutput.linearActuator.moveToRight = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_RIGHT_LIMIT_KEY)
             if playerOutput.linearActuator.moveToLeft:
-                # playerInput.linearActuator.moving = True
+                playerInput.linearActuator.moving = True
                 playerOutput.linearActuator.moveToLeft = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_LEFT_LIMIT_KEY)
             if playerOutput.linearActuator.stop:
@@ -65,7 +85,3 @@ class ESP32Serial(SerialCom):
             if playerOutput.linearActuator.setSpeed:
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setSpeed) + PARAM_END_SEP)
                 playerOutput.linearActuator.setSpeed = None
-            
-            # lorsqu'on demande la current pose
-            # if playerOutput.linearActuator. 
-                # pass
