@@ -93,14 +93,12 @@ class RedLightGreenLight(GameMode):
         if playerInput.gameController.inAction is None:
             if not canmove and playerInput.linearActuator.moving:
                 self.lose(playerOutput)
-                playerInput.linearActuator.moving = False
             return
         
         if playerInput.gameController.inAction:
             if canmove:
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
-                playerInput.linearActuator.moving = True
             else:
                 self.lose(playerOutput)            
         else:
