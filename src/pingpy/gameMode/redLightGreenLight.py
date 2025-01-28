@@ -141,7 +141,8 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", __name__, "check_victory", "Right limit is not set.")
             return False
         
-        if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
+        # if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
+        if playerInput.linearActuator.currentPose <= 130 + 1e-3:
             playerOutput.isWinner = True
             playerOutput.playerLedStrip.color = YELLOW
             return True
@@ -198,6 +199,7 @@ class RedLightGreenLight(GameMode):
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output, i) 
+                break
             else:
                 self.check_action(Input.player[i], Output.player[i], time.time())
                 self.cycle(time.time(), Output)
@@ -208,7 +210,7 @@ class RedLightGreenLight(GameMode):
         """
         Stops the game and resets the outputs.
         """
-        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped, winner is player " + str(winnerID + 1))
         self.inGame = False
         for i in range(4):
             if i == winnerID:
