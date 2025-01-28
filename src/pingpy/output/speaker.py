@@ -11,7 +11,7 @@ class SpeakerOutput:
             pygame.init()
             pygame.mixer.init()
         except Exception as e:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "Error in initializing audio:{}".format(e))
+            logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
         logger.write_in_log("INFO", __name__, "__init__")
 
     def play(self):
