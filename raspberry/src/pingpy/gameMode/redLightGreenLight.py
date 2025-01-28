@@ -170,13 +170,13 @@ class RedLightGreenLight(GameMode):
         if not self.inGame:
             return
 
-        self.cycle(time.time(), Output)
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:
                 self.check_action(Input.player[i], Output.player[i], time.time())
-        
+        self.cycle(time.time(), Output)
+
 
     def stop(self, Input, Output):
         """
