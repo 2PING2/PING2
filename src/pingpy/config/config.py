@@ -48,6 +48,7 @@ CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
 ####################################
 ROOT_PATH = '/home/pi/Documents'  # Root path of the project
 import os
+os.environ["SDL_AUDIODRIVER"] = "alsa"
 GIT_CLONE_PATH = os.path.join(ROOT_PATH, "PING2")# Github repository path
 GIT_BRANCH = 'dev'  # Branch to check for updates
 # Update with the correct files (all files to check)

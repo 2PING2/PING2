@@ -14,6 +14,7 @@ try :
 except Exception as e:
     print(f"Error: {e}")
     import os
+    os.environ["SDL_AUDIODRIVER"] = "alsa"
     # restore from the backup
     import subprocess
 
