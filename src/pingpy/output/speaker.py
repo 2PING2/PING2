@@ -28,9 +28,9 @@ class SpeakerOutput:
             sound.play()
 
         except FileNotFoundError:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(self.audioPiste))
+            logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
         except Exception as e:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "Error in playing audio:{}".format(e))
+            logger.write_in_log("ERROR", __name__, "Error in playing audio:{}".format(e))
         
         self.audioPiste = None
             
@@ -39,7 +39,7 @@ class SpeakerOutput:
         # try :
         #     return pygame.mixer.Sound(audio_file).get_length()
         # except Exception as e:
-        #     logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(audio_file))
+        #     logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(audio_file))
         #     return 0
         return 0
 
