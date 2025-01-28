@@ -12,6 +12,7 @@ class RedLightGreenLight(GameMode):
     def __init__(self):
         self.isLightGreen = False
         self.timeInit = 0
+        self.waitForStart = False
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.5  # Time of reaction
@@ -51,15 +52,20 @@ class RedLightGreenLight(GameMode):
         self.randomize_duration() 
         Output.speaker.audioPiste = None 
         self.inGame = True
+        self.waitForStart = True
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
     def wait_for_start(self, Input, Output):
+        if not self.waitForStart:
+            return True
         for player in Input.player:
             if player.linearActuator.currentPose is None or player.linearActuator.leftLimit is None:
                 return False
             elif player.linearActuator.currentPose < player.linearActuator.leftLimit - 1e-3:
                 return False
+        
+        self.waitForStart = False
         return True
     
     def randomize_duration(self):
