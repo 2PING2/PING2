@@ -119,6 +119,7 @@ class RedLightGreenLight(GameMode):
         playerOutput.linearActuator.moveToLeft = True
         playerOutput.linearActuator.setSpeed = 100.0
         playerOutput.playerLedStrip.color = ORANGE
+        playerOutput.playerRunningRedLightAt = time.time()
         logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
         
 
@@ -156,6 +157,16 @@ class RedLightGreenLight(GameMode):
                 self.isLightGreen = True
                 self.randomize_duration()
             # logger.write_in_log("DEBUG", "RedLightGreenLight", "cycle", f"ElapsedTime: {elapsedTime}, LightGreen: {self.isLightGreen}")
+            for playerOutput in Output.player:
+                try:
+                    if playerOutput.playerRunningRedLightAt is None:
+                        continue
+                    if currentTime - playerOutput.playerRunningRedLightAt < 2:
+                        playerOutput.playerLedStrip.color = ORANGE
+                    else:
+                        playerOutput.playerRunningRedLightAt = None
+                except Exception as e:
+                    pass
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
 
