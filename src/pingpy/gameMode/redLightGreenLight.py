@@ -170,7 +170,6 @@ class RedLightGreenLight(GameMode):
                 self.timeInit = currentTime
                 self.isLightGreen = True
                 self.randomize_duration()
-            logger.write_in_log("DEBUG", "RedLightGreenLight", "cycle", f"ElapsedTime: {elapsedTime}, LightGreen: {self.isLightGreen}")
             for playerOutput in Output.player:
                 try:
                     if playerOutput.playerRunningRedLightAt is None:
