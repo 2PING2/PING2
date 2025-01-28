@@ -1,7 +1,8 @@
-from pingpy.debug import logger
+import os
+os.environ['SDL_AUDIODRIVER'] = 'alsa'
 
+from pingpy.debug import logger
 import pygame
-import time
 
 class SpeakerOutput:
     def __init__(self):
@@ -24,8 +25,8 @@ class SpeakerOutput:
         
         try:
             self.isBusy = True
-            sound = pygame.mixer.Sound(self.audioPiste)
-            sound.play()
+            pygame.mixer.music.load(self.audioPiste)
+            pygame.mixer.music.play()
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
