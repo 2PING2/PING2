@@ -31,6 +31,8 @@ class SpeakerOutput:
             logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(self.audioPiste))
         except Exception as e:
             logger.write_in_log("ERROR", "gameMode", "cycle", "Error in playing audio:{}".format(e))
+        
+        self.audioPiste = None
             
 
     def duration(self, audio_file):
