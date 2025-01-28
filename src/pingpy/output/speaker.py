@@ -1,6 +1,3 @@
-import os
-os.environ['SDL_AUDIODRIVER'] = 'alsa'
-
 from pingpy.debug import logger
 import pygame
 
