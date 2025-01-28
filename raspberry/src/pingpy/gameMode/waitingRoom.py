@@ -59,6 +59,7 @@ class WaitingRoom(GameMode):
             
         if self.preselectedGameMode is not None:
             self.currentColor = self.gameModeList[self.preselectedGameMode].color
+            output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
             if input.UICorner.resetPush:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
                 self.preselectedGameMode = None

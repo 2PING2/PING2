@@ -69,8 +69,7 @@ class Ping:
         # pass
         self.esp32.write(self.output, self.input)
         # self.UICorner.write(self.output)
-        # refresh led trip and speaker
-        # self.esp32.send_data("P{1}/C")
+        self.output.speaker.play()
         try :
             self.refresh_player_led_strip()
         except Exception as e:

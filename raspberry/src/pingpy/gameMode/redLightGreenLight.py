@@ -17,6 +17,7 @@ class RedLightGreenLight(GameMode):
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.5  # Time of reaction
         self.color = GREEN
+        self.descriptionAudioPath = r"audio\redLightGreenLight\Intro_123Soleil.wav"
 
         # self.initialized = False
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
@@ -156,7 +157,7 @@ class RedLightGreenLight(GameMode):
             return False
         
         # if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
-        if playerInput.linearActuator.currentPose <= 130 + 1e-3:
+        if playerInput.linearActuator.currentPose <= 100 + 1e-3:
             playerOutput.isWinner = True
             playerOutput.playerLedStrip.color = YELLOW
             return True
