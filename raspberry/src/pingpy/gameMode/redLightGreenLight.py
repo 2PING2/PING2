@@ -209,8 +209,4 @@ class RedLightGreenLight(GameMode):
         Stops the game and resets the outputs.
         """
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
-        for i in range(4):
-            playerOutput = Output.player[i]
-            playerOutput.playerLedStrip.color(None)
-            playerOutput.linearActuator.moveToRight = False
         self.inGame = False
