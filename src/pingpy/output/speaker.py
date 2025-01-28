@@ -7,8 +7,11 @@ class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
         self.isBusy = False
-        pygame.init()
-        pygame.mixer.init()
+        try:
+            pygame.init()
+            pygame.mixer.init()
+        except Exception as e:
+            logger.write_in_log("ERROR", "gameMode", "cycle", "Error in initializing audio:{}".format(e))
         logger.write_in_log("INFO", __name__, "__init__")
 
     def play(self):
