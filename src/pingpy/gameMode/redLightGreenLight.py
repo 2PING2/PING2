@@ -85,6 +85,12 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
+        try : 
+            if playerOutput.playerRunningRedLightAt is not None:
+                return
+        except Exception as e:
+            pass
+        
         canmove = self.can_move(currentTime)
         if canmove:
             playerOutput.playerLedStrip.color = GREEN # 1 2 3 soleil
@@ -193,8 +199,9 @@ class RedLightGreenLight(GameMode):
         """
         Stops the game and resets the outputs.
         """
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
         for i in range(4):
             playerOutput = Output.player[i]
             playerOutput.playerLedStrip.color(None)
             playerOutput.linearActuator.moveToRight = False
-            self.inGame = False
+        self.inGame = False
