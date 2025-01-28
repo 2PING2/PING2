@@ -14,6 +14,7 @@ class GameMode(ABC):
     def __init__(self):
         super().__init__()
         self.inGame = False
+        self.descriptionAudioPath = None
     
     @abstractmethod
     def setup(self, output):

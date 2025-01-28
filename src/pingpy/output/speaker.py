@@ -1,23 +1,34 @@
 from pingpy.debug import logger
 
-# import pygame
+import pygame
 import time
 
 class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
-        # pygame.mixer.init()
+        self.isBusy = False
+        pygame.init()
+        pygame.mixer.init()
+        logger.write_in_log("INFO", __name__, "__init__")
 
-    def play(self, audio_file):
-        self.audioPiste = audio_file
+    def play(self):
+        
+        self.isBusy = pygame.mixer.get_busy()
+        if self.isBusy:
+            return
+        if self.audioPiste is None:
+            return
+        
         try:
-            pygame.mixer.music.load(audio_file)
-            pygame.mixer.music.play()
-            while pygame.mixer.music.get_busy():
-                pygame.time.Clock().tick(10)
-            self.lastPlayedAudio = audio_file
+            self.isBusy = True
+            sound = pygame.mixer.Sound(self.audioPiste)
+            sound.play()
+
         except FileNotFoundError:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(audio_file))
+            logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(self.audioPiste))
+        except Exception as e:
+            logger.write_in_log("ERROR", "gameMode", "cycle", "Error in playing audio:{}".format(e))
+            
 
     def duration(self, audio_file):
         # try :
