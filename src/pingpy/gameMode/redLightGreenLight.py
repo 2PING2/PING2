@@ -141,8 +141,6 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", __name__, "check_victory", "Right limit is not set.")
             return False
         
-        logger.write_in_log("DEBUG", __name__, "check_victory", f"Current pose: {playerInput.linearActuator.currentPose}, Right limit: {playerInput.linearActuator.rightLimit}")
-
         if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
             playerOutput.playerLedStrip.color = YELLOW
             return True
