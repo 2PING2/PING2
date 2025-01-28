@@ -11,6 +11,10 @@ class GameMode(ABC):
     Every game mode describe the behavior of outputs (LEDs, sound, and player moves) 
     based on the inputs (game controller, ball pose, and player pose). additional, it take UI panel as settings.
     """
+    def __init__(self):
+        super().__init__()
+        self.inGame = False
+    
     @abstractmethod
     def setup(self, output):
         pass

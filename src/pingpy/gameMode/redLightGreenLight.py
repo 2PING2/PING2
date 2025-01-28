@@ -49,6 +49,7 @@ class RedLightGreenLight(GameMode):
         self.isLightGreen = True 
         self.randomize_duration() 
         Output.speaker.audioPiste = None 
+        self.inGame = True
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
 
@@ -93,14 +94,12 @@ class RedLightGreenLight(GameMode):
         if playerInput.gameController.inAction is None:
             if not canmove and playerInput.linearActuator.moving:
                 self.lose(playerOutput)
-                # playerInput.linearActuator.moving = False        
             return
         
         if playerInput.gameController.inAction:
             if canmove:
                 playerOutput.linearActuator.setSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
-                # playerInput.linearActuator.moving = True
             else:
                 self.lose(playerOutput)  
         else:
@@ -108,7 +107,6 @@ class RedLightGreenLight(GameMode):
                 self.lose(playerOutput)
             else:
                 playerOutput.linearActuator.stop = True
-                # playerInput.linearActuator.moving = False       
              
         playerInput.gameController.inAction = None
             
@@ -168,13 +166,17 @@ class RedLightGreenLight(GameMode):
         if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
+        
+        if not self.inGame:
+            return
 
+        self.cycle(time.time(), Output)
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
                 self.stop(Input, Output)
             else:
                 self.check_action(Input.player[i], Output.player[i], time.time())
-        self.cycle(time.time(), Output)
+        
 
     def stop(self, Input, Output):
         """
@@ -184,3 +186,4 @@ class RedLightGreenLight(GameMode):
             playerOutput = Output.player[i]
             playerOutput.playerLedStrip.color(None)
             playerOutput.linearActuator.moveToRight = False
+            self.inGame = False
