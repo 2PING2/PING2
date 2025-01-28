@@ -70,7 +70,7 @@ class ESP32Serial(SerialCom):
                 
         elif self.key_values[1]['key'] == CURRENT_POSITION_KEY:
             playerInput.linearActuator.currentPose = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPosition}")
+            logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPose}")
         elif self.key_values[1]['key'] == RIGHT_LIMIT_KEY:
             playerInput.linearActuator.rightLimit = float(self.key_values[1]['param'])
             logger.write_in_log("INFO", __name__, "process_key_values", f"Right limit: {playerInput.linearActuator.rightLimit}")
