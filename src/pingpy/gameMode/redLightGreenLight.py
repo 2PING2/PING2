@@ -42,7 +42,7 @@ class RedLightGreenLight(GameMode):
                 playerInput.gameController.inAction = None
                 
                 # demander et attendre la réponse du joueur
-                
+        
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
@@ -53,7 +53,15 @@ class RedLightGreenLight(GameMode):
         self.inGame = True
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
-
+    
+    def wait_for_start(self, Input, Output):
+        for player in Input.player:
+            if player.linearActuator.currentPose is None or player.linearActuator.leftLimit is None:
+                return False
+            elif player.linearActuator.currentPose < player.linearActuator.leftLimit - 1e-3:
+                return False
+        return True
+    
     def randomize_duration(self):
         """
         Randomize the duration of the green and red lights.
@@ -189,6 +197,9 @@ class RedLightGreenLight(GameMode):
         """
         Executes an iteration of the game mode.
         """
+        if(not self.wait_for_start(Input, Output)):
+            return
+        
         if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
