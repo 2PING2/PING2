@@ -142,6 +142,7 @@ class RedLightGreenLight(GameMode):
             return False
         
         if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
+            playerOutput.isWinner = True
             playerOutput.playerLedStrip.color = YELLOW
             return True
         
@@ -170,16 +171,17 @@ class RedLightGreenLight(GameMode):
                 self.isLightGreen = True
                 self.randomize_duration()
             # logger.write_in_log("DEBUG", "RedLightGreenLight", "cycle", f"ElapsedTime: {elapsedTime}, LightGreen: {self.isLightGreen}")
-            for playerOutput in Output.player:
-                try:
-                    if playerOutput.playerRunningRedLightAt is None:
-                        continue
-                    if currentTime - playerOutput.playerRunningRedLightAt < 2:
-                        playerOutput.playerLedStrip.color = ORANGE
-                    else:
-                        playerOutput.playerRunningRedLightAt = None
-                except Exception as e:
-                    pass
+            # for playerOutput in Output.player:
+            #     try:
+            #         if playerOutput.playerRunningRedLightAt is None:
+            #             continue
+            #         if currentTime - playerOutput.playerRunningRedLightAt < 2:
+            #             playerOutput.playerLedStrip.color = ORANGE
+            #         else:
+            #             playerOutput.playerRunningRedLightAt = None
+            #     except Exception as e:
+            #         pass
+                
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
 
@@ -196,15 +198,21 @@ class RedLightGreenLight(GameMode):
 
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
-                self.stop(Input, Output)
+                self.stop(Input, Output, i) 
             else:
                 self.check_action(Input.player[i], Output.player[i], time.time())
-        self.cycle(time.time(), Output)
+                self.cycle(time.time(), Output)
 
+        
 
-    def stop(self, Input, Output):
+    def stop(self, Input, Output, winnerID):
         """
         Stops the game and resets the outputs.
         """
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
         self.inGame = False
+        for i in range(4):
+            if i == winnerID:
+                Output.player[i].playerLedStrip.color = GREEN
+            else:
+                Output.player[i].playerLedStrip.color = RED
