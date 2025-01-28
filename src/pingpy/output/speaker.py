@@ -1,7 +1,6 @@
-import os
-
-
 from pingpy.debug import logger
+import os
+os.environ["SDL_AUDIODRIVER"] = "alsa"
 import pygame
 
 class SpeakerOutput:
@@ -9,7 +8,7 @@ class SpeakerOutput:
         self.audioPiste = None
         self.isBusy = False
         try:
-            os.environ["SDL_AUDIODRIVER"] = "alsa"
+            
             pygame.init()
             pygame.mixer.init()
         except Exception as e:
