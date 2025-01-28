@@ -290,6 +290,12 @@ bool LinearActuator::c_step16()
     rightLimit = -amplitude / 2 + NO_COLLISION_MARGIN;
     leftLimit = amplitude / 2 - NO_COLLISION_MARGIN;
 
+    long rightLimitMicroSteps = floor(rightLimit * MICRO_STEPS_PER_MM);
+    long leftLimitMicroSteps = floor(leftLimit * MICRO_STEPS_PER_MM);
+
+    rightLimit = rightLimitMicroSteps / MICRO_STEPS_PER_MM;
+    leftLimit = leftLimitMicroSteps / MICRO_STEPS_PER_MM;
+    
     motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
     move_to(0);
