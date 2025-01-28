@@ -97,6 +97,6 @@ class ESP32Serial(SerialCom):
             if playerOutput.linearActuator.stop:
                 playerOutput.linearActuator.stop = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + STOP_KEY)
-            if playerOutput.linearActuator.setSpeed:
-                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setSpeed) + PARAM_END_SEP)
-                playerOutput.linearActuator.setSpeed = None
+            if playerOutput.linearActuator.setMaxSpeed:
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxSpeed) + PARAM_END_SEP)
+                playerOutput.linearActuator.setMaxSpeed = None
