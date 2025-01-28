@@ -32,7 +32,7 @@ class Ping:
         logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self):
-        self.esp32.setup()
+        self.esp32.setup(self.output)
         self.UICorner.setup()
         for i in range(4):
             self.playerController[i].setup()
