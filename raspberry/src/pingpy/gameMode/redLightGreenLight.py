@@ -38,7 +38,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.moveToLeft = True
                 playerOutput.linearActuator.setMaxSpeed = 300.0
-                playerOutput.linearActuator.setMaxAccel = 500.0
+                playerOutput.linearActuator.setMaxAccel = 200.0
                 playerInput.gameController.inAction = None
                 
                 # demander et attendre la réponse du joueur
