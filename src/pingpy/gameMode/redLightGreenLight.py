@@ -37,7 +37,8 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200] 
                 playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.moveToLeft = True
-                playerOutput.linearActuator.setSpeed = 100.0
+                playerOutput.linearActuator.setMaxSpeed = 300.0
+                playerOutput.linearActuator.setMaxAccel = 500.0
                 playerInput.gameController.inAction = None
                 
                 # demander et attendre la réponse du joueur
@@ -104,7 +105,7 @@ class RedLightGreenLight(GameMode):
         
         if playerInput.gameController.inAction:
             if canmove:
-                playerOutput.linearActuator.setSpeed = 10.0
+                playerOutput.linearActuator.setMaxSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
             else:
                 self.lose(playerOutput)  
@@ -123,7 +124,7 @@ class RedLightGreenLight(GameMode):
         Handles the player's loss by moving them back to the left at speed 200.
         """
         playerOutput.linearActuator.moveToLeft = True
-        playerOutput.linearActuator.setSpeed = 100.0
+        playerOutput.linearActuator.setMaxSpeed = 300.0
         playerOutput.playerLedStrip.color = ORANGE
         playerOutput.playerRunningRedLightAt = time.time()
         logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
@@ -133,11 +134,18 @@ class RedLightGreenLight(GameMode):
         """
         Checks if a player has won.
         """
-        if playerInput.linearActuator.currentPose is None or playerInput.linearActuator.rightLimit is None:
+        if playerInput.linearActuator.currentPose is None :
             return False
-        if playerInput.linearActuator.currentPose >= playerInput.linearActuator.rightLimit:
+        
+        if playerInput.linearActuator.rightLimit is None :
+            logger.write_in_log("ERROR", __name__, "check_victory", "Right limit is not set.")
+            return False
+        
+
+        if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
             playerOutput.playerLedStrip.color = YELLOW
             return True
+        
         return False
 
     def cycle(self, currentTime, Output):

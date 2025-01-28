@@ -8,6 +8,14 @@ class ESP32Serial(SerialCom):
         logger.write_in_log("INFO", __name__, "__init__")
         self.key_values = []
         
+    def setup(self, output_ptr):
+        super().setup()
+        # OUTPUT lpayer -> ask calibration = True
+        for playerOutput in output_ptr.player:
+            playerOutput.linearActuator.askForCalibration = True
+            
+        
+        
     def read(self, input_ptr):
         """Read the next data from the serial port."""
         self.read_data_task()
@@ -44,6 +52,10 @@ class ESP32Serial(SerialCom):
         # Replace this method with your own logic
         # for kv in self.key_values:
         #     logger.write_in_log("INFO", __name__, "process_key_values", f"Key: {kv['key']}, Param: {kv['param']}")
+        if len(self.key_values) < 2:
+            logger.write_in_log("ERROR", __name__, "process_key_values", "Not enough key-values.")
+            return
+        
         if self.key_values[0]['key'] != PLAYER_KEY:
             return
         # get player id
