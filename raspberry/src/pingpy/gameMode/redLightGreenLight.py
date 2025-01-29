@@ -30,6 +30,8 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", __name__, "setup", "Input or Output data is missing.")
             return
 
+        # Output.speaker.audioPiste = r"audio/redLightGreenLight/Intro_123Soleil.wav"
+        
         for i in range(4):
             try:
                 playerOutput = Output.player[i]
@@ -169,10 +171,10 @@ class RedLightGreenLight(GameMode):
         elapsedTime = currentTime - self.timeInit
         try:
             if elapsedTime <= self.durationGreenLight:
-                if elapsedTime < self.durationGreenLight - Output.speaker.duration("Soleil.wav"):
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
-                else:
+                if elapsedTime < self.durationGreenLight - Output.speaker.duration("raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"):
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
+                elif elapsedTime < Output.speaker.duration("raspberry/src/pingpy/audio/redLightGreenLight/123.wav"): 
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
                 for PlayerOutput in Output.player:
                     PlayerOutput.playerLedStrip.color = GREEN
                 self.isLightGreen = True
