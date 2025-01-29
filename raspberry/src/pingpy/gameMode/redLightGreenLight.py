@@ -15,7 +15,7 @@ class RedLightGreenLight(GameMode):
         self.waitForStart = False
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
-        self.reactionTime = 0.3  # Time of reaction
+        self.reactionTime = 0.2  # Time of reaction
         self.color = BLUE
         self.descriptionAudioPath = r"raspberry/src/pingpy/audio/redLightGreenLight/Intro_123SOLEIL.wav"
 
@@ -91,9 +91,13 @@ class RedLightGreenLight(GameMode):
         """
         Checks the player's action according to the current state of the light.
         """
+        
+        
         try : 
             if playerOutput.playerRunningRedLightAt is not None:
-                return
+                if playerInput.linearActuator.currentPose is not None :
+                    if playerInput.linearActuator.currentPose > playerInput.linearActuator.leftLimit + 1e-3:
+                        playerOutput.playerRunningRedLightAt = None
         except Exception as e:
             pass
         
@@ -126,6 +130,8 @@ class RedLightGreenLight(GameMode):
         playerOutput.linearActuator.moveToLeft = True
         playerOutput.linearActuator.setMaxSpeed = 250.0
         playerOutput.playerRunningRedLightAt = time.time()
+        playerOutput.playerLedStrip.color = ORANGE
+
         logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
         
 
@@ -171,16 +177,14 @@ class RedLightGreenLight(GameMode):
             else:
                 self.timeInit = currentTime
                 self.randomize_duration(Output)
-            for playerOutput in Output.player:
-                try:
-                    if playerOutput.playerRunningRedLightAt is None:
-                        continue
-                    if currentTime - playerOutput.playerRunningRedLightAt < 2:
-                        playerOutput.playerLedStrip.color = ORANGE
-                    else:
-                        playerOutput.playerRunningRedLightAt = None
-                except Exception as e:
-                    pass
+            # for playerOutput in Output.player:
+            #     try:
+            #         if playerOutput.playerRunningRedLightAt is None:
+            #             continue
+            #         playerOutput.playerLedStrip.color = ORANGE
+            #         playerOutput.playerRunningRedLightAt = None
+                # except Exception as e:
+                #     pass
                 
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
