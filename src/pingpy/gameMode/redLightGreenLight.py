@@ -217,5 +217,5 @@ class RedLightGreenLight(GameMode):
         """
         Stops the game and resets the outputs.
         """
-        logger.write_in_log("INFO", __name__, "stop", "Game stopped, winner is player " + str(winnerID + 1))
         self.inGame = False
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
