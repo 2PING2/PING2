@@ -66,7 +66,7 @@ class Ping:
         self.currentGameMode = self.waitingRoom.currentGameMode
         if self.input.UICorner.resetLongPush:
             logger.write_in_log("INFO", __name__, "runGameMode", "return to waiting room")
-            input.UICorner.resetLongPush = None
+            self.input.UICorner.resetLongPush = None
             self.currentGameMode = self.waitingRoom
             
             
