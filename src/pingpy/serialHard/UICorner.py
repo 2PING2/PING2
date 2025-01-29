@@ -46,6 +46,6 @@ class UICornerSerial(SerialCom):
                 
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(int(new_line[1])/1023.0*MAX_VOLUME)
-            output_ptr.speacker.volume = input_ptr.UICorner.volume
+            output_ptr.speaker.volume = input_ptr.UICorner.volume
                 
             
