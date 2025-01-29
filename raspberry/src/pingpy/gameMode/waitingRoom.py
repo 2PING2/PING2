@@ -22,6 +22,9 @@ class WaitingRoom(GameMode):
         self.last_time = time.time()
         
     def setup(self, input, output):
+        self.preselectedGameMode = None
+        self.preselectedGameModeFlag = False
+        self.currentColor = self.color
         for i in range(4):
             output.player[i].playerLedStrip.area = [-200, 200]
             output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in self.currentColor)
