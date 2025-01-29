@@ -11,4 +11,6 @@ class UICornerInput:
         self.level=None
         self.resetPush=None
         self.resetRelease=None
+        self.resetShortPush=None
+        self.resetLongPush=None
         logger.write_in_log("INFO", __name__, "__init__")

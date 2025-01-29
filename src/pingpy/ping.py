@@ -64,6 +64,10 @@ class Ping:
         self.waitingRoom.currentGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
         self.currentGameMode = self.waitingRoom.currentGameMode
+        if self.input.UICorner.resetLongPush:
+            input.UICorner.resetLongPush = None
+            self.currentGameMode = self.waitingRoom
+            
             
     def refresh_output(self):
         # pass
