@@ -19,7 +19,7 @@ class SpeakerOutput:
     def play(self):
         
         if self.stop:
-            logger.write_in_log("INFO", __name__, "Stop audio:{}".format(self.audioPiste))
+            logger.write_in_log("INFO", __name__, "Stop audio")
             pygame.mixer.music.stop()
             self.stop = False
             
