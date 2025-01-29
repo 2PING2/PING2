@@ -17,7 +17,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
-MAX_VOLUME = 100
+MAX_VOLUME = 75
 
 
 ####################################
@@ -76,6 +76,10 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 SEP_KEY = '/'
 RESET_KEY = 'reset'
 MODE_KEY = 'mode'
+VOLUME_KEY = 'volume'
+LIGHT_KEY = 'light'
+LEVEL_KEY = 'level'
+
 LEFT_BUTTON_KEY = "left"
 RIGHT_BUTTON_KEY = "right"
 SHOOT_BUTTON_KEY = "shoot"
