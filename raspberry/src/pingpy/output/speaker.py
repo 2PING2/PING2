@@ -21,7 +21,7 @@ class SpeakerOutput:
 
     def play(self):
         
-        # self.isBusy = pygame.mixer.get_busy()
+        self.isBusy = pygame.mixer.get_busy()
         # check if it finishes playing
         if self.isBusy:
             return
@@ -30,11 +30,11 @@ class SpeakerOutput:
         
         try:
             self.isBusy = True
-            # pygame.mixer.music.load(self.audioPiste)
-            # pygame.mixer.music.play()
-            sound = AudioSegment.from_file(self.audioPiste)
-            _play_with_ffplay(sound)
-            self.isBusy = False
+            pygame.mixer.music.load(self.audioPiste)
+            pygame.mixer.music.play()
+            # sound = AudioSegment.from_file(self.audioPiste)
+            # _play_with_ffplay(sound)
+            # self.isBusy = False
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
