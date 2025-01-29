@@ -127,7 +127,7 @@ bool LinearActuator::c_step1()
 {
     if (!true)
         return false;
-    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION/50.0);
+    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION/10.0);
     set_max_speed(COARSE_CALIBRATION_SPEED);
     move_left();
     return true;
