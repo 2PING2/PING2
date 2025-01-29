@@ -1,7 +1,7 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
-
-from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY
+import subprocess
+from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME
 
 class UICornerSerial(SerialCom):
     def __init__(self, port, baud_rate, timeout):
@@ -42,6 +42,10 @@ class UICornerSerial(SerialCom):
             if new_line[1] == PUSH_KEY:
                 input_ptr.UICorner.resetPush = True
             elif new_line[1] == RELEASE_KEY:
-                input_ptr.UICorner.resetRelease = True                
+                input_ptr.UICorner.resetRelease = True    
+                
+        if new_line[0] == VOLUME_KEY:
+            input_ptr.UICorner.volume = int(int(new_line[1])/1023.0*MAX_VOLUME)
+            subprocess.run(["amixer", "set", "Master", f"{input_ptr.UICorner.volume}%"]) 
                 
             
