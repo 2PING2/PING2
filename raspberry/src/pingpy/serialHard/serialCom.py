@@ -61,7 +61,7 @@ class SerialCom:
             return          
 
     
-    def read_data_task(self, onDisconnect = None):
+    def read_data_task(self, onDisconnect = None, args = None):
         """Read the next data from the serial port."""
         if os.path.exists(self.symlink):
             try:
