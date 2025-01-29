@@ -2,7 +2,7 @@ from .gameMode import GameMode
 from ..output.output import Output
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, YELLOW, RED
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE
 from random import uniform
 
 class RedLightGreenLight(GameMode):
@@ -16,7 +16,7 @@ class RedLightGreenLight(GameMode):
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
-        self.color = GREEN
+        self.color = BLUE
         self.descriptionAudioPath = r"raspberry/src/pingpy/audio/redLightGreenLight/Intro_123SOLEIL.wav"
 
         # self.initialized = False
@@ -162,6 +162,7 @@ class RedLightGreenLight(GameMode):
                 if not self.isLightGreen:
                     self.isLightGreen = True
                     logger.write_in_log("INFO", __name__, "cycle", "Green light.")
+                    # Output.speaker.stop = True
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = GREEN

@@ -19,6 +19,7 @@ class SpeakerOutput:
     def play(self):
         
         if self.stop:
+            logger.write_in_log("INFO", __name__, "Stop audio:{}".format(self.audioPiste))
             pygame.mixer.music.stop()
             self.stop = False
             
@@ -46,7 +47,6 @@ class SpeakerOutput:
     def duration(self, audio_file):
         try :
             ret = pygame.mixer.Sound(audio_file).get_length()
-            logger.write_in_log("INFO", __name__, "Duration of audio file:{} is {}".format(audio_file, ret))
             return ret
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(audio_file))
