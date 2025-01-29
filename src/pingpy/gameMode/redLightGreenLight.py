@@ -171,17 +171,18 @@ class RedLightGreenLight(GameMode):
         elapsedTime = currentTime - self.timeInit
         try:
             if elapsedTime <= self.durationGreenLight:
-                if elapsedTime > self.durationGreenLight:
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
-                elif elapsedTime < Output.speaker.duration("raspberry/src/pingpy/audio/redLightGreenLight/123.wav"): 
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
-                for PlayerOutput in Output.player:
-                    PlayerOutput.playerLedStrip.color = GREEN
-                self.isLightGreen = True
+                if not self.isLightGreen:
+                    self.isLightGreen = True
+                    if elapsedTime < Output.speaker.duration("raspberry/src/pingpy/audio/redLightGreenLight/123.wav"): 
+                        Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
+                    for PlayerOutput in Output.player:
+                        PlayerOutput.playerLedStrip.color = GREEN
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
-                for PlayerOutput in Output.player:
-                    PlayerOutput.playerLedStrip.color = RED
-                self.isLightGreen = False
+                if self.isLightGreen:
+                    self.isLightGreen = False
+                    for PlayerOutput in Output.player:
+                        PlayerOutput.playerLedStrip.color = RED
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
             else:
                 self.timeInit = currentTime
                 self.isLightGreen = True
