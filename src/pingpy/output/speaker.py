@@ -33,6 +33,7 @@ class SpeakerOutput:
         
         if self.volume is not None:
             pygame.mixer.music.set_volume(self.volume)
+            logger.write_in_log("INFO", __name__, "Volume set:{}".format(self.volume))
             self.volume = None
         
         try:

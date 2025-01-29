@@ -17,7 +17,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
-MAX_VOLUME = 75
+MAX_VOLUME = 0.75
 
 
 ####################################
