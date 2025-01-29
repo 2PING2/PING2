@@ -39,7 +39,9 @@ class SpeakerOutput:
 
     def duration(self, audio_file):
         try :
-            return pygame.mixer.Sound(audio_file).get_length()
+            ret = pygame.mixer.Sound(audio_file).get_length()
+            logger.write_in_log("INFO", __name__, "Duration of audio file:{} is {}".format(audio_file, ret))
+            return ret
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(audio_file))
             return 0
