@@ -73,10 +73,8 @@ class SerialCom:
                 self.queue.append(new)
             except (OSError, serial.SerialException) as e:
                 logger.write_in_log("ERROR", __name__, "read_data_task", f"Serial error: {e}")
-                self.ser = None
                 self.setup()
         else:
-            self.ser = None
             if self.connected:
                 self.connected = False
                 if callable(onDisconnect):  
