@@ -24,6 +24,11 @@ class SpeakerOutput:
             pygame.mixer.music.stop()
             self.stop = False
             
+        if self.volume is not None:
+            pygame.mixer.music.set_volume(self.volume)
+            logger.write_in_log("INFO", __name__, "Volume set:{}".format(self.volume))
+            self.volume = None
+            
         self.isBusy = pygame.mixer.get_busy()
         # check if it finishes playing
         if self.isBusy:
@@ -31,10 +36,7 @@ class SpeakerOutput:
         if self.audioPiste is None:
             return
         
-        if self.volume is not None:
-            pygame.mixer.music.set_volume(self.volume)
-            logger.write_in_log("INFO", __name__, "Volume set:{}".format(self.volume))
-            self.volume = None
+
         
         try:
             self.isBusy = True
