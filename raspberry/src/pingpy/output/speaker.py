@@ -2,7 +2,7 @@ from pingpy.debug import logger
 
 import time
 import os
-os.environ["SDL_AUDIODRIVER"] = "alsa"
+os.environ["SDL_AUDIODRIVER"] = "pulseaudio"
 # os.environ["AUDIODEV"] = "default" 
 import pygame
 
