@@ -194,10 +194,13 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
-        # if self.standby:
+        
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
             self.setup(Input, Output)
+            
+        if self.standby:
+            return
         
         if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
@@ -234,3 +237,7 @@ class RedLightGreenLight(GameMode):
         """
         self.inGame = False
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
+        
+        for i in range(4):
+            Output.player[i].linearActuator.stop = True
+        
