@@ -50,7 +50,7 @@ class RedLightGreenLight(GameMode):
 
         self.timeInit = time.time()
         self.isLightGreen = True 
-        self.randomize_duration() 
+        self.randomize_duration(Output)
         Output.speaker.audioPiste = None 
         self.inGame = True
         self.waitForStart = True
@@ -69,7 +69,7 @@ class RedLightGreenLight(GameMode):
         self.waitForStart = False
         return True
     
-    def randomize_duration(self):
+    def randomize_duration(self, Output=None):
         """
         Randomize the duration of the green and red lights.
         """
@@ -177,7 +177,7 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
             else:
                 self.timeInit = currentTime
-                self.randomize_duration()
+                self.randomize_duration(Output)
             for playerOutput in Output.player:
                 try:
                     if playerOutput.playerRunningRedLightAt is None:
