@@ -75,10 +75,10 @@ class RedLightGreenLight(GameMode):
         """
         try:
             min_duration = Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav")+Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") + 1.0
+            logger.write_in_log("DEBUG", __name__, "randomize_duration", f"Min duration: {min_duration}")
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
-            logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
 
@@ -190,7 +190,7 @@ class RedLightGreenLight(GameMode):
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
 
-    def compute(self, Input, Output, t = time.time()):
+    def compute(self, Input, Output):
         """
         Executes an iteration of the game mode.
         """
@@ -209,8 +209,8 @@ class RedLightGreenLight(GameMode):
                 self.stop(Input, Output, i) 
                 break
             else:
-                self.check_action(Input.player[i], Output.player[i], t)
-                self.cycle(t, Output)
+                self.check_action(Input.player[i], Output.player[i], time.time())
+                self.cycle(time.time(), Output)
 
         
 
