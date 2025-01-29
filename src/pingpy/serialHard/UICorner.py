@@ -11,6 +11,15 @@ class UICornerSerial(SerialCom):
         self.lastResetPressedTime = None
         self.resetButtonState = None
         
+    def manageResetButton(self, input_ptr):
+        if self.resetButtonState is not None and not self.lastResetPressedTime is None:
+            if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
+                logger.write_in_log("INFO", __name__, "read", "Rebooting the system...")
+                # subprocess.run(["sudo", "reboot"]) 
+            elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
+                logger.write_in_log("INFO", __name__, "read", "long press")
+                input_ptr.UICorner.resetLongPush = True
+        
     def read(self, input_ptr, output_ptr):
         """Read the next data from the serial port."""
         try:
@@ -23,6 +32,9 @@ class UICornerSerial(SerialCom):
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "read", f"Error in consume_older_data: {e}")
             return
+
+        self.manageResetButton(input_ptr)
+        
         if new_line is None:
             return
         try:
@@ -51,15 +63,7 @@ class UICornerSerial(SerialCom):
                 self.resetButtonState = False
                 if time.time() - self.lastResetPressedTime < SHORT_PRESS_DELAY:
                     input_ptr.UICorner.resetShortPush = True
-        
-        if self.resetButtonState is not None and not self.lastResetPressedTime is None:
-            if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
-                logger.write_in_log("INFO", __name__, "read", "Rebooting the system...")
-                # subprocess.run(["sudo", "reboot"]) 
-            elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
-                logger.write_in_log("INFO", __name__, "read", "long press")
-                input_ptr.UICorner.resetLongPush = True
-                
+                                    
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(new_line[1])/1023.0*MAX_VOLUME
             output_ptr.speaker.volume = input_ptr.UICorner.volume
