@@ -190,12 +190,12 @@ class RedLightGreenLight(GameMode):
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
 
-    def compute(self, Input, Output):
+    def compute(self, Input, Output, t = time.time()):
         """
         Executes an iteration of the game mode.
         """
         if(not self.wait_for_start(Input, Output)):
-            self.timeInit = time.time()
+            self.timeInit = t
             return
         
         if not Input.player:
@@ -210,8 +210,8 @@ class RedLightGreenLight(GameMode):
                 self.stop(Input, Output, i) 
                 break
             else:
-                self.check_action(Input.player[i], Output.player[i], time.time())
-                self.cycle(time.time(), Output)
+                self.check_action(Input.player[i], Output.player[i], t)
+                self.cycle(t, Output)
 
         
 
