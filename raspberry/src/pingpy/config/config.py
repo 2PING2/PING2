@@ -19,6 +19,9 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 MAX_VOLUME = 0.75
 
+RESET_DELAY_AFTER_BUTTON_PRESS = 10
+SHORT_PRESS_DELAY = 0.5
+LONG_PRESS_DELAY = 2
 
 ####################################
 # SERIAL SETTINGS

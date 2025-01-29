@@ -19,7 +19,6 @@ class RedLightGreenLight(GameMode):
         self.color = BLUE
         self.descriptionAudioPath = r"raspberry/src/pingpy/audio/redLightGreenLight/Intro_123SOLEIL.wav"
 
-        # self.initialized = False
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
     def setup(self, Input, Output):
@@ -73,7 +72,7 @@ class RedLightGreenLight(GameMode):
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
-            logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
+            # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
 
@@ -162,29 +161,20 @@ class RedLightGreenLight(GameMode):
             if elapsedTime < self.durationGreenLight:
                 if not self.isLightGreen:
                     self.isLightGreen = True
-                    logger.write_in_log("INFO", __name__, "cycle", "Green light.")
-                    # Output.speaker.stop = True
+                    # logger.write_in_log("INFO", __name__, "cycle", "Green light.")
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = GREEN
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
                 if self.isLightGreen:
                     self.isLightGreen = False
-                    logger.write_in_log("INFO", __name__, "cycle", "Red light.")
+                    # logger.write_in_log("INFO", __name__, "cycle", "Red light.")
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = RED
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
             else:
                 self.timeInit = currentTime
                 self.randomize_duration(Output)
-            # for playerOutput in Output.player:
-            #     try:
-            #         if playerOutput.playerRunningRedLightAt is None:
-            #             continue
-            #         playerOutput.playerLedStrip.color = ORANGE
-            #         playerOutput.playerRunningRedLightAt = None
-                # except Exception as e:
-                #     pass
                 
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
