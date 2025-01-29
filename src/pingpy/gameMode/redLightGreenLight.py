@@ -74,11 +74,11 @@ class RedLightGreenLight(GameMode):
         Randomize the duration of the green and red lights.
         """
         try:
-            min_duration = (
-               Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav") +
-               Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") +
-               1
-            )
+            # min_duration = (
+            #    Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav") +
+            #    Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") +
+            #    1
+            # )
             logger.write_in_log("DEBUG", __name__, "randomize_duration", f"Min duration: {min_duration}")
             min_duration =  1 + 1 + 1
             max_duration = min_duration + 5
