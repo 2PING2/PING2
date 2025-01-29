@@ -1,7 +1,7 @@
 from pingpy.debug import logger
 from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMWARE_PATH, GIT_CLONE_PATH, HOTSPOT_TIMEOUT, CHECK_WIFI_DELAY, GIT_BRANCH, ROOT_PATH, ESP_BOOTLOADER_PATH, ESP_PARTITION_PATH
 import os
-os.environ["SDL_AUDIODRIVER"] = "dsp"
+# os.environ["SDL_AUDIODRIVER"] = "alsa"
 # os.environ["AUDIODEV"] = "default" 
 import subprocess
 import time
