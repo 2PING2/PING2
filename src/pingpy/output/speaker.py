@@ -26,7 +26,6 @@ class SpeakerOutput:
             
         if self.volume is not None:
             pygame.mixer.music.set_volume(self.volume)
-            # logger.write_in_log("INFO", __name__, "Volume set:{}".format(self.volume))
             self.volume = None
             
         self.isBusy = pygame.mixer.get_busy()
@@ -35,14 +34,12 @@ class SpeakerOutput:
             return
         if self.audioPiste is None:
             return
-        
-
-        
+               
         try:
             self.isBusy = True
             pygame.mixer.music.load(self.audioPiste)
             pygame.mixer.music.play()
-            logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
+            # logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
