@@ -1,7 +1,9 @@
 from pingpy.debug import logger
 import os
-os.environ["SDL_AUDIODRIVER"] = "ALSA"
+os.environ["SDL_AUDIODRIVER"] = "alsa"
 import pygame
+print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
+
 try:
     pygame.mixer.init()
 except Exception as e:
