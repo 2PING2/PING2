@@ -20,8 +20,8 @@ class SpeakerOutput:
         # check if it finishes playing
         if self.isBusy:
             return
-        # if self.audioPiste is None:
-        #     return
+        if self.audioPiste is None:
+            return
         
         try:
             self.isBusy = True
