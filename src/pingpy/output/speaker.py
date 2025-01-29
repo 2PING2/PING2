@@ -27,8 +27,7 @@ class SpeakerOutput:
             self.isBusy = True
             pygame.mixer.music.load(self.audioPiste)
             pygame.mixer.music.play()
-            # logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
-            self.audioPiste = None
+            logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
