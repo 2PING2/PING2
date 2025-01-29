@@ -33,6 +33,7 @@ class SerialCom:
         self.timeout = TIMEOUT
         self.ser = None
         self.connected = False
+        self.disconnectFlag = False
         self.queue = []
         self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
@@ -65,6 +66,7 @@ class SerialCom:
         """Read the next data from the serial port."""
         if os.path.exists(self.symlink):
             try:
+                self.disconnectFlag = False
                 if self.ser.in_waiting == 0:
                     return
                 new = self.ser.readline().decode('utf-8', errors='ignore').strip()
@@ -75,6 +77,11 @@ class SerialCom:
                 self.setup()
         else:
             self.ser=None
+            self.connected = False
+            if not self.disconnectFlag:
+                self.disconnectFlag = True
+                logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")
+                
             
         
     def send_data(self, data):

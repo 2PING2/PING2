@@ -235,3 +235,5 @@ class RedLightGreenLight(GameMode):
                 Output.player[i].playerLedStrip.color = GREEN
             else:
                 Output.player[i].playerLedStrip.color = RED
+                
+            Output.player[i].linearActuator.stop = True
