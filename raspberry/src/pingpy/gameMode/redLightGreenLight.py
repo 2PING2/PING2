@@ -15,7 +15,7 @@ class RedLightGreenLight(GameMode):
         self.waitForStart = False
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
-        self.reactionTime = 0.2  # Time of reaction
+        self.reactionTime = 0.3  # Time of reaction
         self.color = BLUE
         self.descriptionAudioPath = r"raspberry/src/pingpy/audio/redLightGreenLight/Intro_123SOLEIL.wav"
 
@@ -37,7 +37,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200] 
                 # playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.moveToLeft = True
-                playerOutput.linearActuator.setMaxSpeed = 250.0
+                playerOutput.linearActuator.setMaxSpeed = 200.0
                 playerOutput.linearActuator.setMaxAccel = 200.0
                 playerInput.gameController.inAction = None
         
@@ -128,7 +128,7 @@ class RedLightGreenLight(GameMode):
         Handles the player's loss by moving them back to the left at speed 200.
         """
         playerOutput.linearActuator.moveToLeft = True
-        playerOutput.linearActuator.setMaxSpeed = 250.0
+        playerOutput.linearActuator.setMaxSpeed = 200.0
         playerOutput.playerRunningRedLightAt = time.time()
         playerOutput.playerLedStrip.color = ORANGE
 
