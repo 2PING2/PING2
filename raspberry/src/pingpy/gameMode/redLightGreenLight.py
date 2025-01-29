@@ -196,6 +196,7 @@ class RedLightGreenLight(GameMode):
         
         # if self.standby:
         if Input.UICorner.resetShortPress:
+            Input.UICorner.resetShortPress = None
             self.setup(Input, Output)
         
         if not Input.player:
