@@ -10,6 +10,7 @@ class RedLightGreenLight(GameMode):
     Game mode of Red Light Green Light. 1 2 3 soleil in French.
     """
     def __init__(self):
+        self.standby = False
         self.isLightGreen = False
         self.timeInit = 0
         self.waitForStart = False
@@ -54,6 +55,7 @@ class RedLightGreenLight(GameMode):
         Output.speaker.audioPiste = None 
         self.inGame = True
         self.waitForStart = True
+        self.standby = False
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
@@ -192,6 +194,10 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
+        # if self.standby:
+        if Input.UICorner.resetShortPress:
+            self.setup(Input, Output)
+        
         if not Input.player:
             logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
             return
@@ -217,6 +223,8 @@ class RedLightGreenLight(GameMode):
             else:
                 Output.player[i].playerLedStrip.color = RED
             Output.player[i].linearActuator.stop = True
+            
+        self.standby = True
                 
 
     def stop(self):

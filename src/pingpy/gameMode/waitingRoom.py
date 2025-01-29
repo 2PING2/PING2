@@ -72,11 +72,11 @@ class WaitingRoom(GameMode):
                 output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
                 logger.write_in_log("INFO", __name__, "preselectedGameMode: " + str(self.preselectedGameMode))
             
-            if input.UICorner.resetShortPush:
+            if input.UICorner.resetShortPress:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
                 output.speaker.stop = True
                 self.preselectedGameMode = None
-                input.UICorner.resetShortPush = None
+                input.UICorner.resetShortPress = None
                 self.preselectedGameModeFlag = False
         
     def stop(self):
