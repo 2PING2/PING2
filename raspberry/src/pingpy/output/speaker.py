@@ -2,10 +2,10 @@ from pingpy.debug import logger
 
 import time
 import os
-os.environ["SDL_AUDIODRIVER"] = "pipewire"
-os.environ["AUDIODEV"] = "default" 
+os.environ["SDL_AUDIODRIVER"] = "alsa"
+# os.environ["AUDIODEV"] = "default" 
 import pygame
-pygame.init()
+# pygame.init()
 time.sleep(1)
 print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
 
