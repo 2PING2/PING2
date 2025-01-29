@@ -55,6 +55,8 @@ class RedLightGreenLight(GameMode):
         self.inGame = True
         self.waitForStart = True
 
+        duration = Output.speaker.duration("raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav")
+        logger.write_in_log("INFO", __name__, "setup", f"Game mode setup. Duration of soleil: {duration}s")
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
     def wait_for_start(self, Input, Output):
