@@ -3,6 +3,7 @@ from pingpy.debug import logger
 import subprocess
 from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY
 import time 
+import os
 
 class UICornerSerial(SerialCom):
     def __init__(self, port, baud_rate, timeout):
@@ -14,11 +15,12 @@ class UICornerSerial(SerialCom):
     def manageResetButton(self, input_ptr):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
-                logger.write_in_log("INFO", __name__, "read", "Rebooting the system...")
-                # subprocess.run(["sudo", "reboot"]) 
+                logger.write_in_log("INFO", __name__, "read", "restart main.py")
+                os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
+
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
                 logger.write_in_log("INFO", __name__, "read", "long press")
-                input_ptr.UICorner.resetLongPush = True
+                input_ptr.UICorner.resetLongPress = True
         
     def read(self, input_ptr, output_ptr):
         """Read the next data from the serial port."""
@@ -62,7 +64,7 @@ class UICornerSerial(SerialCom):
                 input_ptr.UICorner.resetRelease = True   
                 self.resetButtonState = False
                 if time.time() - self.lastResetPressedTime < SHORT_PRESS_DELAY:
-                    input_ptr.UICorner.resetShortPush = True
+                    input_ptr.UICorner.resetShortPress = True
                                     
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(new_line[1])/1023.0*MAX_VOLUME
