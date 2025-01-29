@@ -75,8 +75,8 @@ class RedLightGreenLight(GameMode):
         """
         try:
             min_duration = (
-               Output.speaker.duration(r"raspberry/src/pingpy/audio\redLightGreenLight\123.wav") +
-               Output.speaker.duration(r"raspberry/src/pingpy/audio\redLightGreenLight\Soleil.wav") +
+               Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav") +
+               Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") +
                1
             )
             # min_duration = ( 1 + 1 + 1 )
