@@ -184,7 +184,6 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
             else:
                 self.timeInit = currentTime
-                self.isLightGreen = False
                 self.randomize_duration()
             for playerOutput in Output.player:
                 try:
