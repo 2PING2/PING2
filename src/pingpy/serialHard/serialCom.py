@@ -61,7 +61,7 @@ class SerialCom:
             return          
 
     
-    def read_data_task(self, onDisconnect = None):
+    def read_data_task(self, onDisconnect=None, *args, **kwargs):
         """Read the next data from the serial port."""
         if os.path.exists(self.symlink):
             try:
@@ -71,17 +71,20 @@ class SerialCom:
                 new = self.ser.readline().decode('utf-8', errors='ignore').strip()
                 logger.write_in_log("INFO", __name__, "read_data_task", f"Data received from {self.symlink}: {new}")
                 self.queue.append(new)
-            except Exception as _:
-                self.ser=None
+            except (OSError, serial.SerialException) as e:
+                logger.write_in_log("ERROR", __name__, "read_data_task", f"Serial error: {e}")
+                self.ser = None
                 self.setup()
         else:
-            self.ser=None
+            self.ser = None
             if self.connected:
                 self.connected = False
-                if onDisconnect is not None:
-                    onDisconnect()
-                logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")
-                
+                if callable(onDisconnect):  
+                    try:
+                        onDisconnect(*args, **kwargs)  # Passe les arguments dynamiquement
+                    except Exception as e:
+                        logger.write_in_log("ERROR", __name__, "read_data_task", f"Error in onDisconnect callback: {e}")
+                logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")                
             
         
     def send_data(self, data):

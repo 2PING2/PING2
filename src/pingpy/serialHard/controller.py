@@ -10,9 +10,12 @@ class ControllerSerial(SerialCom):
         self.controllerInput = controllerInput
         logger.write_in_log("INFO", __name__, "__init__")
         
-    def read(self, controllerInput):
+    def stopOnDisconnect(self,controllerOutput):
+        controllerOutput.stop = True
+        
+    def read(self, controllerInput, controllerOutput=None):
         try:
-            self.read_data_task()
+            self.read_data_task(self.stopOnDisconnect, "controllerOutput", controllerInput)
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "read", f"Error in read_data_task: {e}")
             return

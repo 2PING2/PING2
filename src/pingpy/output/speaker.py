@@ -1,16 +1,8 @@
 from pingpy.debug import logger
 
-import time
-import os
-os.environ["SDL_AUDIODRIVER"] = "pulseaudio"
-# os.environ["AUDIODEV"] = "default" 
-import pygame
+from pydub import AudioSegment
+from pydub.playback import _play_with_ffplay
 
-print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
-try:
-    pygame.mixer.init()
-except Exception as e:
-    logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
         
 class SpeakerOutput:
     def __init__(self):
@@ -24,16 +16,19 @@ class SpeakerOutput:
 
     def play(self):
         
-        self.isBusy = pygame.mixer.get_busy()
+        # self.isBusy = pygame.mixer.get_busy()
+        # check if it finishes playing
         if self.isBusy:
             return
-        if self.audioPiste is None:
-            return
+        # if self.audioPiste is None:
+        #     return
         
         try:
             self.isBusy = True
-            pygame.mixer.music.load(self.audioPiste)
-            pygame.mixer.music.play()
+            # pygame.mixer.music.load(self.audioPiste)
+            # pygame.mixer.music.play()
+            sound = AudioSegment.from_file(self.audioPiste)
+            _play_with_ffplay(sound)
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
