@@ -13,6 +13,10 @@ try :
   
 except Exception as e:
     print(f"Error: {e}")
+    # print also the line where the error occured
+    import traceback
+    print(traceback.format_exc())
+
     import os
     os.environ["SDL_AUDIODRIVER"] = "alsa"
     # restore from the backup
