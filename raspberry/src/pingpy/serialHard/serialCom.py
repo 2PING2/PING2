@@ -16,7 +16,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 import serial
 import time
 import os
-# os.environ["SDL_AUDIODRIVER"] = "alsa"
+os.environ["SDL_AUDIODRIVER"] = "alsa"
 # os.environ["AUDIODEV"] = "default" 
 from threading import Thread
 from pingpy.config.config import RETRY_ATTEMPTS, RETRY_DELAY
