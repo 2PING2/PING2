@@ -30,8 +30,6 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", __name__, "setup", "Input or Output data is missing.")
             return
 
-        # Output.speaker.audioPiste = r"audio/redLightGreenLight/Intro_123Soleil.wav"
-        
         for i in range(4):
             try:
                 playerOutput = Output.player[i]
@@ -42,14 +40,11 @@ class RedLightGreenLight(GameMode):
                 playerOutput.linearActuator.setMaxSpeed = 250.0
                 playerOutput.linearActuator.setMaxAccel = 200.0
                 playerInput.gameController.inAction = None
-                
-                # demander et attendre la réponse du joueur
         
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
         self.timeInit = time.time()
-        self.isLightGreen = True 
         self.randomize_duration(Output)
         Output.speaker.audioPiste = None 
         self.inGame = True
@@ -75,10 +70,10 @@ class RedLightGreenLight(GameMode):
         """
         try:
             min_duration = Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav")+Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") + 1.0
-            logger.write_in_log("DEBUG", __name__, "randomize_duration", f"Min duration: {min_duration}")
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
+            logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
 
