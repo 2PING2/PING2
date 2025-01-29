@@ -3,7 +3,7 @@ import os
 os.environ["SDL_AUDIODRIVER"] = "alsa"
 os.environ["AUDIODEV"] = "default" 
 import pygame
-pygame.init()
+# pygame.init()
 pygame.mixer.init()
 
 class SpeakerOutput:
