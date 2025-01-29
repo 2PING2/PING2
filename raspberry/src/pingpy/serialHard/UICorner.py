@@ -57,6 +57,7 @@ class UICornerSerial(SerialCom):
                 logger.write_in_log("INFO", __name__, "read", "Rebooting the system...")
                 # subprocess.run(["sudo", "reboot"]) 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
+                logger.write_in_log("INFO", __name__, "read", "long press")
                 input_ptr.UICorner.resetLongPush = True
                 
         if new_line[0] == VOLUME_KEY:
