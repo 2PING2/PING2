@@ -8,7 +8,7 @@ class UICornerSerial(SerialCom):
         super().__init__(port, baud_rate, timeout)
         logger.write_in_log("INFO", __name__, "__init__")
         
-    def read(self, input_ptr):
+    def read(self, input_ptr, output_ptr):
         """Read the next data from the serial port."""
         try:
             self.read_data_task()
@@ -46,6 +46,6 @@ class UICornerSerial(SerialCom):
                 
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(int(new_line[1])/1023.0*MAX_VOLUME)
-            subprocess.run(["amixer", "sset", "Master", f"{input_ptr.UICorner.volume}%"]) 
+            output_ptr.speacker.volume = input_ptr.UICorner.volume
                 
             

@@ -9,6 +9,7 @@ class SpeakerOutput:
         self.audioPiste = None
         self.isBusy = False
         self.stop = False
+        self.volume = None
         try:
             pygame.mixer.pre_init(44100, -16, 2, 2048)  
             pygame.mixer.init()
@@ -29,6 +30,10 @@ class SpeakerOutput:
             return
         if self.audioPiste is None:
             return
+        
+        if self.volume is not None:
+            pygame.mixer.music.set_volume(self.volume)
+            self.volume = None
         
         try:
             self.isBusy = True

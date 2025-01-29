@@ -46,7 +46,7 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        self.UICorner.read(self.input)
+        self.UICorner.read(self.input, self.output)
         for i in range(4):
             try:
                 self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
