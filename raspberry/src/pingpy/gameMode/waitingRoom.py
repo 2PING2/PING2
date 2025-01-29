@@ -79,7 +79,7 @@ class WaitingRoom(GameMode):
                 input.UICorner.resetShortPress = None
                 self.preselectedGameModeFlag = False
         
-    def stop(self):
+    def stop(self, output_ptr):
         pass
         # for i in range(4):
         #     output.player[i].playerLedStrip.area = [-200, 200]
