@@ -1,8 +1,10 @@
 from pingpy.debug import logger
 import os
 os.environ["SDL_AUDIODRIVER"] = "alsa"
+
 import pygame
 pygame.init()
+logger.write_in_log("INFO", __name__, "pygame initialized.")
 
 class SpeakerOutput:
     def __init__(self):
@@ -12,7 +14,7 @@ class SpeakerOutput:
             pygame.mixer.init()
         except Exception as e:
             logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
-        logger.write_in_log("INFO", __name__, "__init__")
+        logger.write_in_log("INFO", __name__, "__________________________________________________init__")
 
     def play(self):
         
