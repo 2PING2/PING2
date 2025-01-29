@@ -231,7 +231,7 @@ class RedLightGreenLight(GameMode):
         self.standby = True
                 
 
-    def stop(self):
+    def stop(self, output_ptr):
         """
         Stops the game and resets the outputs.
         """
@@ -239,5 +239,5 @@ class RedLightGreenLight(GameMode):
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
         
         for i in range(4):
-            Output.player[i].linearActuator.stop = True
+            output_ptr.player[i].linearActuator.stop = True
         
