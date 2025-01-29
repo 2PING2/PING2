@@ -25,6 +25,12 @@ class RedLightGreenLight(GameMode):
         """
         Setup the game mode.
         """
+        self.isLightGreen = False
+        self.timeInit = 0
+        self.waitForStart = False
+        self.durationGreenLight = None  # Time of green light
+        self.durationRedLight = None # Time of red light
+
         if not Input.player or not Output.player:
             logger.write_in_log("ERROR", __name__, "setup", "Input or Output data is missing.")
             return
