@@ -8,7 +8,9 @@ class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
         self.isBusy = False
+        self.stop = False
         try:
+            pygame.mixer.pre_init(44100, -16, 2, 2048)  
             pygame.mixer.init()
         except Exception as e:
             logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
@@ -16,6 +18,10 @@ class SpeakerOutput:
 
     def play(self):
         
+        if self.stop:
+            pygame.mixer.music.stop()
+            self.stop = False
+            
         self.isBusy = pygame.mixer.get_busy()
         # check if it finishes playing
         if self.isBusy:
