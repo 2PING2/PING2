@@ -195,24 +195,27 @@ class RedLightGreenLight(GameMode):
 
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
-                self.stop(Input, Output, i) 
+                self.makeWin(Output, i)
                 break
             else:
                 self.check_action(Input.player[i], Output.player[i], time.time())
                 self.cycle(time.time(), Output)
 
-        
-
-    def stop(self, Input, Output, winnerID):
+    def makeWin(self, Output, winnerID):
         """
-        Stops the game and resets the outputs.
+        Makes a player win the game.
         """
-        logger.write_in_log("INFO", __name__, "stop", "Game stopped, winner is player " + str(winnerID + 1))
-        self.inGame = False
         for i in range(4):
             if i == winnerID:
                 Output.player[i].playerLedStrip.color = GREEN
             else:
                 Output.player[i].playerLedStrip.color = RED
-                
             Output.player[i].linearActuator.stop = True
+                
+
+    def stop(self):
+        """
+        Stops the game and resets the outputs.
+        """
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped, winner is player " + str(winnerID + 1))
+        self.inGame = False
