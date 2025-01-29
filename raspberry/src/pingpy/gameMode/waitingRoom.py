@@ -70,7 +70,7 @@ class WaitingRoom(GameMode):
             
             if input.UICorner.resetPush:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
-                self.output.speaker.stop = True
+                output.speaker.stop = True
                 self.preselectedGameMode = None
                 input.UICorner.resetPush = None
                 self.preselectedGameModeFlag = False
