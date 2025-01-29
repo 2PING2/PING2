@@ -17,7 +17,7 @@ class RedLightGreenLight(GameMode):
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.5  # Time of reaction
         self.color = GREEN
-        self.descriptionAudioPath = r"pingpy\audio\redLightGreenLight\Intro_123Soleil.wav"
+        self.descriptionAudioPath = r"pingpy/audio/redLightGreenLight/Intro_123Soleil.wav"
 
         # self.initialized = False
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
