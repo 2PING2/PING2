@@ -48,7 +48,7 @@ class RedLightGreenLight(GameMode):
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
-        # self.timeInit = time.time()
+        self.timeInit = time.time()
         self.isLightGreen = True 
         self.randomize_duration(Output)
         Output.speaker.audioPiste = None 
@@ -195,7 +195,6 @@ class RedLightGreenLight(GameMode):
         Executes an iteration of the game mode.
         """
         if(not self.wait_for_start(Input, Output)):
-            self.timeInit = t
             return
         
         if not Input.player:
