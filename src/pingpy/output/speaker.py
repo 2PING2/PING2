@@ -29,6 +29,7 @@ class SpeakerOutput:
             # pygame.mixer.music.play()
             sound = AudioSegment.from_file(self.audioPiste)
             _play_with_ffplay(sound)
+            self.isBusy = False
 
         except FileNotFoundError:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
