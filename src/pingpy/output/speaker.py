@@ -1,9 +1,11 @@
 from pingpy.debug import logger
 
-from pydub import AudioSegment
-from pydub.playback import _play_with_ffplay
-
-        
+import pygame
+try:
+    pygame.mixer.init()
+except Exception as e:
+    logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
+    
 class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
