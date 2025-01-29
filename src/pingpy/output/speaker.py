@@ -44,6 +44,6 @@ class SpeakerOutput:
             return ret
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(audio_file))
-            return 0
+        return 0
 
 
