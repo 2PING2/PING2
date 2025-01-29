@@ -13,6 +13,7 @@ class WaitingRoom(GameMode):
         logger.write_in_log("INFO", __name__, "__init__")
         self.gameModeList = gameModeList
         self.preselectedGameMode = None
+        self.preselectedGameModeFlag = False
         self.color = PURPLE
         self.currentColor = self.color
         self.currentGameMode = currentGameMode
@@ -51,20 +52,27 @@ class WaitingRoom(GameMode):
                 self.preselectedGameMode = 0
             self.preselectedGameMode = (self.preselectedGameMode + 1) % len(self.gameModeList)
             input.UICorner.modeInc = None
+            self.preselectedGameModeFlag = False
+            
         elif input.UICorner.modeDec:
             if self.preselectedGameMode is None:
                 self.preselectedGameMode = 0
             self.preselectedGameMode = (self.preselectedGameMode - 1) % len(self.gameModeList)
             input.UICorner.modeDec = None
+            self.preselectedGameModeFlag = False
             
         if self.preselectedGameMode is not None:
-            logger.write_in_log("INFO", __name__, "preselectedGameMode: " + str(self.preselectedGameMode))
-            self.currentColor = self.gameModeList[self.preselectedGameMode].color
-            output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
-            self.preselectedGameMode = None
+            if self.preselectedGameModeFlag is False:
+                self.preselectedGameModeFlag = True
+                self.currentColor = self.gameModeList[self.preselectedGameMode].color
+                output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
+                logger.write_in_log("INFO", __name__, "preselectedGameMode: " + str(self.preselectedGameMode))
+            
             if input.UICorner.resetPush:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
+                self.preselectedGameMode = None
                 input.UICorner.resetPush = None
+                self.preselectedGameModeFlag = False
         
     def stop(self):
         pass
