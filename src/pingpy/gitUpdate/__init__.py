@@ -3,8 +3,6 @@ from pingpy.debug import logger
 import uuid
 import time
 import os
-# os.environ["SDL_AUDIODRIVER"] = "alsa"
-# os.environ["AUDIODEV"] = "default" 
 from datetime import datetime
 from flask import Flask, request, send_from_directory
 from pingpy.config.config import HTML_PATH, CSS_PATH

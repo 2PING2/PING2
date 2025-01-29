@@ -65,6 +65,7 @@ class WaitingRoom(GameMode):
             if self.preselectedGameModeFlag is False:
                 self.preselectedGameModeFlag = True
                 self.currentColor = self.gameModeList[self.preselectedGameMode].color
+                output.speaker.stop = True
                 output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
                 logger.write_in_log("INFO", __name__, "preselectedGameMode: " + str(self.preselectedGameMode))
             
