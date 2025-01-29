@@ -1,8 +1,9 @@
 from pingpy.debug import logger
+
+import pygame
 import os
 os.environ["SDL_AUDIODRIVER"] = "alsa"
 os.environ["AUDIODEV"] = "default" 
-import pygame
 # pygame.init()
 try:
     pygame.mixer.init()
