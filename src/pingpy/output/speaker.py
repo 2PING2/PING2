@@ -5,17 +5,12 @@ import os
 os.environ["SDL_AUDIODRIVER"] = "alsa"
 # os.environ["AUDIODEV"] = "default" 
 import pygame
-# pygame.init()
-time.sleep(1)
-print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
 
+print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
 try:
     pygame.mixer.init()
 except Exception as e:
     logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
-    
-print("SDL_AUDIODRIVER =", os.environ.get("SDL_AUDIODRIVER"))
-time.sleep(1)
         
 class SpeakerOutput:
     def __init__(self):
@@ -25,7 +20,7 @@ class SpeakerOutput:
         #     pygame.mixer.init()
         # except Exception as e:
         #     logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
-        logger.write_in_log("INFO", __name__, "__________________________________________________init__")
+        logger.write_in_log("INFO", __name__, "__init__")
 
     def play(self):
         
