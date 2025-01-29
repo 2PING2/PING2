@@ -107,12 +107,7 @@ class RedLightGreenLight(GameMode):
         except Exception as e:
             pass
         
-        canmove = self.can_move(currentTime)
-        if canmove:
-            playerOutput.playerLedStrip.color = GREEN # 1 2 3 soleil
-        else:
-            playerOutput.playerLedStrip.color = RED # red light
-        
+        canmove = self.can_move(currentTime)        
         if playerInput.gameController.inAction is None:
             if not canmove and playerInput.linearActuator.moving:
                 self.lose(playerOutput)
@@ -140,7 +135,6 @@ class RedLightGreenLight(GameMode):
         """
         playerOutput.linearActuator.moveToLeft = True
         playerOutput.linearActuator.setMaxSpeed = 250.0
-        playerOutput.playerLedStrip.color = ORANGE
         playerOutput.playerRunningRedLightAt = time.time()
         logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
         
@@ -159,7 +153,6 @@ class RedLightGreenLight(GameMode):
         if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
         # if playerInput.linearActuator.currentPose <= 100 + 1e-3:
             playerOutput.isWinner = True
-            playerOutput.playerLedStrip.color = YELLOW
             return True
         
         return False
