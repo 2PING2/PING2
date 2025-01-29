@@ -25,8 +25,8 @@ class SpeakerOutput:
         
         try:
             self.isBusy = True
-            # pygame.mixer.music.load(self.audioPiste)
-            # pygame.mixer.music.play()
+            pygame.mixer.music.load(self.audioPiste)
+            pygame.mixer.music.play()
             logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
 
         except FileNotFoundError:

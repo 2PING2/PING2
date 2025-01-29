@@ -173,12 +173,14 @@ class RedLightGreenLight(GameMode):
             if elapsedTime < self.durationGreenLight:
                 if not self.isLightGreen:
                     self.isLightGreen = True
+                    logger.write_in_log("INFO", __name__, "cycle", "Green light.")
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = GREEN
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
                 if self.isLightGreen:
                     self.isLightGreen = False
+                    logger.write_in_log("INFO", __name__, "cycle", "Red light.")
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = RED
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
