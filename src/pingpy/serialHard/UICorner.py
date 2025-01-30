@@ -15,7 +15,7 @@ class UICornerSerial(SerialCom):
     def setup(self, output_ptr):
         super().setup()        
         output_ptr.UICorner.askForStatusSettings = True
-        # output_ptr.UICorner.statusLed = True        
+        output_ptr.UICorner.statusLed = True        
         
     def manageResetButton(self, input_ptr):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
@@ -79,11 +79,11 @@ class UICornerSerial(SerialCom):
         """Write the next data to the serial port."""
         if output_ptr.UICorner.askForStatusSettings:
             output_ptr.UICorner.askForStatusSettings = None
-            self.send_data(ASK_STATUS_SETTINGS + SEP_KEY)
+            self.send_data(ASK_STATUS_SETTINGS + SEP_KEY + "0")
         if not output_ptr.UICorner.statusLed is None:
-            if output_ptr.UICorner.statusLed:
+            if output_ptr.UICorner.statusLed == True:
                 self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_ON)
-            if not output_ptr.UICorner.statusLed:
+            if output_ptr.UICorner.statusLed == False:
                 self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_OFF)
             output_ptr.UICorner.statusLed = None
 
