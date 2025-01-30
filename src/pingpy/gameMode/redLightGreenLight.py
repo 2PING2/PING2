@@ -41,7 +41,6 @@ class RedLightGreenLight(GameMode):
                 playerOutput = Output.player[i]
                 playerInput = Input.player[i]
                 playerOutput.playerLedStrip.area = [-200, 200] 
-                # playerOutput.playerLedStrip.color =  GREEN
                 playerOutput.linearActuator.moveToLeft = True
                 playerOutput.linearActuator.setMaxSpeed = 200.0
                 playerOutput.linearActuator.setMaxAccel = 200.0
@@ -139,7 +138,7 @@ class RedLightGreenLight(GameMode):
         playerOutput.playerRunningRedLightAt = time.time()
         playerOutput.playerLedStrip.color = ORANGE
 
-        logger.write_in_log("INFO", __name__, "lose", "Player has lost.")
+        logger.write_in_log("INFO", __name__, "lose", "Player {playerOutput.playerID} lost.")
         
 
     def check_victory(self, playerInput, playerOutput):
@@ -198,6 +197,7 @@ class RedLightGreenLight(GameMode):
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
             self.setup(Input, Output)
+            return
             
         if self.standby:
             return
@@ -224,6 +224,14 @@ class RedLightGreenLight(GameMode):
         for i in range(4):
             if i == winnerID:
                 Output.player[i].playerLedStrip.color = GREEN
+                if Output.player[i] == 0:
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Le_joueur_jaune.wav"
+                elif Output.player[i] == 1:
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Le_joueur_vert.wav"
+                elif Output.player[i] == 2:
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Le_joueur_rouge.wav"
+                elif Output.player[i] == 3:
+                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Le_joueur_bleu.wav"
             else:
                 Output.player[i].playerLedStrip.color = RED
             Output.player[i].linearActuator.stop = True
