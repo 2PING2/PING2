@@ -127,6 +127,12 @@ ASK_CALIBRATED = (ASK_KEY+CALIBRATION_KEY)
 ASK_RIGHT_LIMIT_KEY = (ASK_KEY+RIGHT_LIMIT_KEY)
 ASK_LEFT_LIMIT_KEY = (ASK_KEY+LEFT_LIMIT_KEY)
 ASK_SOL_STATE_KEY = (ASK_KEY+SOL_SATE_KEY)
+
+ASK_STATUS_SETTINGS = ("ask_status_settings")
+
+STATUS_LED_KEY = ("status_led")
+STATUS_LED_ON = ("on")
+STATUS_LED_OFF = ("off")
 ####################################
 # LED STRIP SETTINGS
 ####################################

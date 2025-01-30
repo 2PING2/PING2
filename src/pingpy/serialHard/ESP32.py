@@ -13,8 +13,7 @@ class ESP32Serial(SerialCom):
         # OUTPUT lpayer -> ask calibration = True
         for playerOutput in output_ptr.player:
             playerOutput.linearActuator.askForCalibration = True
-            
-        
+
         
     def read(self, input_ptr):
         """Read the next data from the serial port."""
