@@ -1,7 +1,7 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
 import subprocess
-from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY
+from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY, ASK_STATUS_SETTINGS, STATUS_LED_KEY, STATUS_LED_ON, STATUS_LED_OFF
 import time 
 import os
 
@@ -11,6 +11,11 @@ class UICornerSerial(SerialCom):
         logger.write_in_log("INFO", __name__, "__init__")
         self.lastResetPressedTime = None
         self.resetButtonState = None
+        
+    def setup(self, output_ptr):
+        super().setup()        
+        output_ptr.UICorner.askForStatusSettings = True
+        output_ptr.UICorner.statusLed = True        
         
     def manageResetButton(self, input_ptr):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
@@ -69,5 +74,17 @@ class UICornerSerial(SerialCom):
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(new_line[1])/1023.0*MAX_VOLUME
             output_ptr.speaker.volume = input_ptr.UICorner.volume
+            
+    def write(self, output_ptr, input_ptr):
+        """Write the next data to the serial port."""
+        if output_ptr.UICorner.askForStatusSettings:
+            output_ptr.UICorner.askForStatusSettings = None
+            self.send_data(ASK_STATUS_SETTINGS + SEP_KEY)
+        if output_ptr.UICorners.statusLed:
+            output_ptr.UICorners.statusLed = None
+            self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_ON)
+        else:
+            output_ptr.UICorners.statusLed = None
+            self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_OFF)
                 
             

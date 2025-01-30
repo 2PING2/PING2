@@ -20,9 +20,7 @@ class Ping:
         self.currentGameMode = None
         self.waitingRoom = WaitingRoom(self.gameModeList, self.currentGameMode)
         self.currentGameMode = self.waitingRoom
-        # self.currentGameMode = self.gameModeList[0]
         self.prevGameMode = None
-        # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
         
         for i in range(4):
@@ -33,16 +31,13 @@ class Ping:
         
     def setup(self):
         self.esp32.setup(self.output)
-        self.UICorner.setup()
+        self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
         ledStrip.setup()
         ledStrip.clear()
-        # self.esp32.send_data("P{1}/C")
         logger.write_in_log("INFO", __name__, "setup")
-        
-        
-        
+       
     
     def run(self):
         self.esp32.read(self.input)
@@ -71,17 +66,12 @@ class Ping:
             
             
     def refresh_output(self):
-        # pass
         self.esp32.write(self.output, self.input)
-        # self.UICorner.write(self.output)
+        self.UICorner.write(self.output, self.input)
         self.output.speaker.play()
-        try :
-            self.refresh_player_led_strip()
-        except Exception as e:
-            logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_player_led_strip: {e}")
+        self.refresh_player_led_strip()        
         
     def refresh_player_led_strip(self):
         for i in range(4):
-            self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
-            
+            self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color) 
         ledStrip.show()
