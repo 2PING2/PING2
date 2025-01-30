@@ -178,7 +178,6 @@ private:
 
         if (Serial.available() > 0) {
             String message = Serial.readStringUntil('\n'); // Lire la ligne jusqu'à '\n'
-            message.remove(message.length() - 1);
             // remove the '\n' character
             int separatorIndex = message.indexOf('/');
 
