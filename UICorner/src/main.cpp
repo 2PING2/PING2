@@ -5,6 +5,7 @@ Corner corner;
 
 void setup() {
   Serial.begin(9600);
+  Serial.setTimeout(50);
   corner.setup();
 }
 
