@@ -80,11 +80,11 @@ class UICornerSerial(SerialCom):
         if output_ptr.UICorner.askForStatusSettings:
             output_ptr.UICorner.askForStatusSettings = None
             self.send_data(ASK_STATUS_SETTINGS + SEP_KEY)
-        if output_ptr.UICorners.statusLed:
-            output_ptr.UICorners.statusLed = None
+        if output_ptr.UICorner.statusLed:
+            output_ptr.UICorner.statusLed = None
             self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_ON)
         else:
-            output_ptr.UICorners.statusLed = None
+            output_ptr.UICorner.statusLed = None
             self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_OFF)
                 
             
