@@ -232,8 +232,8 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_rouge.wav"
                 elif i == 3:
                     Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_bleu.wav"
-                # Output.speaker.audioPiste = [Output.speaker.audioPiste]
-                # Output.speaker.audioPiste.append(r"raspberry/src/pingpy/audio/a_gagne.wav")
+                Output.speaker.audioPiste = [Output.speaker.audioPiste]
+                Output.speaker.audioPiste.append(r"raspberry/src/pingpy/audio/a_gagne.wav")
                 
             else:
                 Output.player[i].playerLedStrip.color = RED
