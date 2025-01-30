@@ -30,6 +30,7 @@ class SpeakerOutput:
             
         self.isBusy = pygame.mixer.get_busy()
         # check if it finishes playing
+        logger.write_in_log("DEBUG", __name__, "is busy :{}".format(self.isBusy))
         if self.isBusy:
             return
         if self.audioPiste is None:
