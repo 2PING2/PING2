@@ -116,7 +116,7 @@ class RedLightGreenLight(GameMode):
         
         if playerInput.gameController.inAction:
             if canmove:
-                playerOutput.linearActuator.setMaxSpeed = 100.0
+                playerOutput.linearActuator.setMaxSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
             else:
                 self.lose(playerOutput)  
@@ -154,7 +154,6 @@ class RedLightGreenLight(GameMode):
             return False
         
         if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
-        # if playerInput.linearActuator.currentPose <= 100 + 1e-3:
             playerOutput.isWinner = True
             return True
         

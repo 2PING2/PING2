@@ -17,7 +17,7 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
-MAX_VOLUME = 0.75
+MAX_VOLUME = 0.80
 
 RESET_DELAY_AFTER_BUTTON_PRESS = 10
 SHORT_PRESS_DELAY = 0.5
