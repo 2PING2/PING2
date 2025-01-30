@@ -71,6 +71,7 @@ class UICornerSerial(SerialCom):
                 self.resetButtonState = False
                 if time.time() - self.lastResetPressedTime < SHORT_PRESS_DELAY:
                     input_ptr.UICorner.resetShortPress = True
+                    logger.write_in_log("INFO", __name__, "read", "short press")
                                     
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(new_line[1])/1023.0*MAX_VOLUME
