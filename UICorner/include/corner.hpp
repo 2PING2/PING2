@@ -186,10 +186,6 @@ private:
                 msg.key = message.substring(0, separatorIndex);
                 msg.action = message.substring(separatorIndex + 1);
                 msg.valid = true; // Le message est valide
-                Serial.print("Received: ");
-                Serial.print(msg.key);
-                Serial.print("/");
-                Serial.println(msg.action);
             } else {
                 msg.key = "Error";
                 msg.action = "Invalid format";
