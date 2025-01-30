@@ -86,6 +86,3 @@ class UICornerSerial(SerialCom):
             if output_ptr.UICorner.statusLed == False:
                 self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_OFF)
             output_ptr.UICorner.statusLed = None
-
-                
-            

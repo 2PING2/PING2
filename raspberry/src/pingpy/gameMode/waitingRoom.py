@@ -54,6 +54,7 @@ class WaitingRoom(GameMode):
         if input.UICorner.modeInc:
             if self.preselectedGameMode is None:
                 self.preselectedGameMode = 0
+            input.UICorner.resetShortPress = None
             self.preselectedGameMode = (self.preselectedGameMode + 1) % len(self.gameModeList)
             input.UICorner.modeInc = None
             self.preselectedGameModeFlag = False
@@ -61,6 +62,7 @@ class WaitingRoom(GameMode):
         elif input.UICorner.modeDec:
             if self.preselectedGameMode is None:
                 self.preselectedGameMode = 0
+            input.UICorner.resetShortPress = None
             self.preselectedGameMode = (self.preselectedGameMode - 1) % len(self.gameModeList)
             input.UICorner.modeDec = None
             self.preselectedGameModeFlag = False
