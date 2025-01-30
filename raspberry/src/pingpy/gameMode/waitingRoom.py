@@ -72,6 +72,7 @@ class WaitingRoom(GameMode):
                 self.preselectedGameModeFlag = True
                 self.currentColor = self.gameModeList[self.preselectedGameMode].color
                 output.speaker.audioPiste = self.gameModeList[self.preselectedGameMode].descriptionAudioPath
+                output.speaker.stop = True
                 logger.write_in_log("INFO", __name__, "preselectedGameMode: " + str(self.preselectedGameMode))
             
             if input.UICorner.resetShortPress:
