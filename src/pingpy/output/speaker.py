@@ -34,19 +34,29 @@ class SpeakerOutput:
             return
         if self.audioPiste is None:
             return
+        
+
+        if type(self.audioPiste) is list:
+            pisteToPLay = self.audioPiste[0]
+            if len(self.audioPiste) > 1 :
+                self.audioPiste = self.audioPiste[1:]
+            else:
+                self.audioPiste = None
+        else:
+            pisteToPLay = self.audioPiste
+            self.audioPiste = None
                
         try:
             self.isBusy = True
-            pygame.mixer.music.load(self.audioPiste)
+            pygame.mixer.music.load(pisteToPLay)
             pygame.mixer.music.play()
-            # logger.write_in_log("INFO", __name__, "Playing audio:{}".format(self.audioPiste))
+            logger.write_in_log("INFO", __name__, "Playing audio:{}".format(pisteToPLay))
 
         except FileNotFoundError:
-            logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(self.audioPiste))
+            logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(pisteToPLay))
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "Error in playing audio:{}".format(e))
         
-        self.audioPiste = None
             
 
     def duration(self, audio_file):
