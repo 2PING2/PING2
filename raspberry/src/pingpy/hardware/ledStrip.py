@@ -27,16 +27,16 @@ class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=50):
         """Init the LED strip.""" 
         self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
-        logger.write_in_log("INFO", "ledStrip", "__init__", "LED strip created")
+        logger.write_in_log("INFO", __name__, "__init__", "LED strip created")
      
     def setup(self):
         """Config the LED strip."""
         try:
             result = self.strip.begin()
             # light one all the LEDs
-            logger.write_in_log("INFO", "ledStrip", "__init__", f"LED strip setup: {result}")
+            logger.write_in_log("INFO", __name__, "__init__", f"LED strip setup")
         except Exception as e:
-            logger.write_in_log("ERROR", "ledStrip", "__init__", f"Failed to initialize LED strip: {e}")
+            logger.write_in_log("ERROR", __name__, "__init__", f"Failed to initialize LED strip: {e}")
                          
     def setLedStrip(self, color, OFFSET_MIN, OFFSET_MAX):
         """Set the LED strip between OFFSET_MIN and OFFSET_MAX to a color."""
@@ -58,7 +58,7 @@ class LedStrip:
     def setBrightness(self, brightness):
         """Set the brightness of the LED strip."""
         if not isinstance(brightness, int) or brightness < 0 or brightness > MAX_BRIGTHNESS:
-            logger.write_in_log("ERROR", "LedStrip", "setBrightness", f"Invalid brightness value: {brightness}")
+            logger.write_in_log("ERROR", __name__, "setBrightness", f"Invalid brightness value: {brightness}")
             return
         self.strip.setBrightness(brightness)
         self.strip.show()
@@ -111,22 +111,3 @@ class PlayerLedStrip:
     def clearPlayer(self):
         """Clear all the LEDs."""
         self.onPlayer(Color(0, 0, 0))
-    
-        
-'''
-from led_strip import LedStrip, PlayerLedStrip
-'''
-
-''' 
-# Création d'un objet LedStrip (pour un bandeau LED complet)
-led_strip = LedStrip(LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS) 
-
-player1led = PlayerLedStrip(led_strip, PLAYER_OFFSETS[1])
-
-player1led.onPlayer(Color(255, 0, 0))
-time.sleep(1)
-player1led.clearPlayer()
-
-led_strip.onLedStrip(Color(255, 0, 0))
-
-'''
