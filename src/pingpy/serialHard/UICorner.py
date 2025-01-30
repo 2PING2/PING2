@@ -26,6 +26,7 @@ class UICornerSerial(SerialCom):
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
                 logger.write_in_log("INFO", __name__, "read", "long press")
                 input_ptr.UICorner.resetLongPress = True
+                self.resetButtonState = False
         
     def read(self, input_ptr, output_ptr):
         """Read the next data from the serial port."""
