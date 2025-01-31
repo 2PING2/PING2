@@ -19,7 +19,6 @@ except ImportError:
     from .rpi_ws281xMock import PixelStrip, Color
     
 import time
-from pingpy.config.config import MAX_BRIGTHNESS
 from pingpy.debug import logger
 
 ''' LedStrip class useful for the management of the LED strip. '''
