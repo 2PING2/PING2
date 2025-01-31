@@ -38,3 +38,4 @@ except Exception as e:
         pass
     # os.system(f'sleep 0.1 && python /home/pi/Documents/PING2/raspberry/src/main.py')
     os.execv(sys.executable, ['python'] + sys.argv)
+    exit(0)
