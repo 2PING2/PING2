@@ -98,7 +98,7 @@ class PlayerLedStrip:
             min_led = self.min
         if max_led > self.max:
             max_led = self.max
-        self.ledStrip.setLedStrip(Color(color[0]*self.brightness,color[1]*self.brightness,color[2]*self.brightness), min_led, max_led)
+        self.ledStrip.setLedStrip(Color(int(color[0]*self.brightness),int(color[1]*self.brightness),int(color[2]*self.brightness)), min_led, max_led)
     
     def clearPlayer(self):
         """Clear all the LEDs."""
