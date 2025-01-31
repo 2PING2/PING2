@@ -1,7 +1,7 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
 import subprocess
-from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY, ASK_STATUS_SETTINGS, STATUS_LED_KEY, STATUS_LED_ON, STATUS_LED_OFF
+from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY, ASK_STATUS_SETTINGS, STATUS_LED_KEY, STATUS_LED_ON, STATUS_LED_OFF, MAX_BRIGHTNESS
 import time 
 import os
 
@@ -76,10 +76,19 @@ class UICornerSerial(SerialCom):
                 if time.time() - self.lastResetPressedTime < SHORT_PRESS_DELAY:
                     input_ptr.UICorner.resetShortPress = True
                     logger.write_in_log("INFO", __name__, "read", "short press")
-                                    
+                      
+        # volume              
         if new_line[0] == VOLUME_KEY:
             input_ptr.UICorner.volume = int(new_line[1])/1023.0*MAX_VOLUME
             output_ptr.speaker.volume = input_ptr.UICorner.volume
+            
+        # light
+        if new_line[0] == LIGHT_KEY:
+            input_ptr.UICorner.light = int(new_line[1])/1023.0*MAX_BRIGHTNESS            
+    
+        # level
+        if new_line[0] == LEVEL_KEY:
+            input_ptr.UICorner.level = int(new_line[1])/1023.0
             
     def write(self, output_ptr, input_ptr):
         """Write the next data to the serial port."""
