@@ -62,6 +62,8 @@ class Ping:
         if self.input.UICorner.resetLongPress:
             logger.write_in_log("INFO", __name__, "runGameMode", "return to waiting room")
             self.input.UICorner.resetLongPress = None
+            self.input.UICorner.modeInc = None
+            self.input.UICorner.modeDec = None
             self.currentGameMode = self.waitingRoom
             
             
