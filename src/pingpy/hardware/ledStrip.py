@@ -25,7 +25,7 @@ from pingpy.debug import logger
 class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS):
         """Init the LED strip.""" 
-        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
+        self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=255)
         logger.write_in_log("INFO", __name__, "__init__", "LED strip created")
      
     def setup(self):
@@ -50,9 +50,9 @@ class LedStrip:
     def show(self):
         self.strip.show()
                    
-    def setBrightness(self, input_ptr):
-        """Set the brightness of the LED strip."""
-        self.strip.setBrightness(input_ptr.UICorner.light)
+    # def setBrightness(self, input_ptr):
+    #     """Set the brightness of the LED strip."""
+    #     pass
     
     def clear(self):
         '''Clear the LED strip'''
@@ -72,6 +72,8 @@ class PlayerLedStrip:
         self.len_mm = self.n_led / self.n_led_per_mm
         self.min_mm = -self.len_mm / 2
         self.max_mm = self.len_mm / 2
+        self.brightness = 1.0
+        
         
     def onPlayer(self, color):
         """Turn on all the LEDs."""
@@ -96,12 +98,12 @@ class PlayerLedStrip:
             min_led = self.min
         if max_led > self.max:
             max_led = self.max
-        self.ledStrip.setLedStrip(Color(color[0],color[1],color[2]), min_led, max_led)
+        self.ledStrip.setLedStrip(Color(color[0]*self.brightness,color[1]*self.brightness,color[2]*self.brightness), min_led, max_led)
     
-    def set_brightness(self, input_ptr):
-        """Set the brightness of the player LED strip."""
-        self.ledStrip.setBrightness(input_ptr.UICorner.light)
-         
     def clearPlayer(self):
         """Clear all the LEDs."""
         self.onPlayer(Color(0, 0, 0))
+        
+    def set_brightness(self, brightness):
+        """Set the brightness of the player LED strip."""
+        self.brightness = brightness
