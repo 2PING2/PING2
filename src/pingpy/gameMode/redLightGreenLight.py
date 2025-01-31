@@ -60,6 +60,15 @@ class RedLightGreenLight(GameMode):
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
     def wait_for_start(self, Input, Output):
+        """_summary_
+
+        Args:
+            Input (_type_): 
+            Output (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         if not self.waitForStart:
             return True
         for player in Input.player:
