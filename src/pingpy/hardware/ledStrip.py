@@ -17,14 +17,14 @@ try:
     from rpi_ws281x import PixelStrip, Color
 except ImportError:
     from .rpi_ws281xMock import PixelStrip, Color
-
+    
 import time
 from pingpy.config.config import MAX_BRIGTHNESS
 from pingpy.debug import logger
 
 ''' LedStrip class useful for the management of the LED strip. '''
 class LedStrip:
-    def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS=50):
+    def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS):
         """Init the LED strip.""" 
         self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=BRIGHTNESS)
         logger.write_in_log("INFO", __name__, "__init__", "LED strip created")
@@ -43,25 +43,17 @@ class LedStrip:
         if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
             logger.write_in_log("ERROR", __name__, f"Invalid offset : {OFFSET_MIN, OFFSET_MAX}")
             return
-        # if not isinstance(color, int) or color < 0:
-        #     logger.write_in_log("ERROR", __name__, f"Invalid color value: {color}")
-        #     return
         try:
             for i in range(OFFSET_MIN, OFFSET_MAX):
                 self.strip.setPixelColor(i, color)
-            # logger.write_in_log("INFO", __name__, f"LED strip set to {color} between {OFFSET_MIN} and {OFFSET_MAX}")
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
     def show(self):
         self.strip.show()
                    
-    def setBrightness(self, brightness):
+    def setBrightness(self, input_ptr):
         """Set the brightness of the LED strip."""
-        if not isinstance(brightness, int) or brightness < 0 or brightness > MAX_BRIGTHNESS:
-            logger.write_in_log("ERROR", __name__, "setBrightness", f"Invalid brightness value: {brightness}")
-            return
-        self.strip.setBrightness(brightness)
-        self.strip.show()
+        self.strip.setBrightness(input_ptr.UICorner.light)
     
     def clear(self):
         '''Clear the LED strip'''
@@ -92,7 +84,6 @@ class PlayerLedStrip:
         min_mm, max_mm = area_mm
         min_led = round(self.n_led/2 + min_mm * self.n_led_per_mm)
         max_led = round(self.n_led/2 + max_mm * self.n_led_per_mm)
-        # logger.write_in_log("INFO", __name__, f"min_mm {min_mm} -> {min_led} and max_mm {max_mm} -> {max_led}")
 
         self.set_led_index([min_led, max_led], color)
         
@@ -107,6 +98,10 @@ class PlayerLedStrip:
         if max_led > self.max:
             max_led = self.max
         self.ledStrip.setLedStrip(Color(color[0],color[1],color[2]), min_led, max_led)
+    
+    def set_brightness(self, input_ptr):
+        """Set the brightness of the player LED strip."""
+        self.ledStrip.setBrightness(input_ptr.UICorner.light)
          
     def clearPlayer(self):
         """Clear all the LEDs."""
