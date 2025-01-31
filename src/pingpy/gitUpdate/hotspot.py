@@ -20,8 +20,6 @@ class Hotspot:
             self.check_git_update()
         else:
             self.start_services()
-            # app.run(host='0.0.0.0', port=80) 
-            # make a thread to run the app.run
             Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port':80}).start()
         logger.write_in_log("INFO", __name__, "setup")
 
