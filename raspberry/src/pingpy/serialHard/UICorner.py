@@ -84,7 +84,9 @@ class UICornerSerial(SerialCom):
             
         # light
         if new_line[0] == LIGHT_KEY:
-            input_ptr.UICorner.light = int(new_line[1])/1023.0*MAX_BRIGHTNESS            
+            input_ptr.UICorner.light = int(new_line[1])/1023.0*MAX_BRIGHTNESS     
+            for playerOutput in output_ptr.player:
+                playerOutput.playerLedStrip.brightness = input_ptr.UICorner.light     
     
         # level
         if new_line[0] == LEVEL_KEY:

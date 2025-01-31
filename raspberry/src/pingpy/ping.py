@@ -75,6 +75,12 @@ class Ping:
         
     def refresh_player_led_strip(self):
         for i in range(4):
-            self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color) 
-            self.playerLedStrip[i].set_brightness(self.input.player[i].UICorner.light)
+            if self.output.player[i].playerLedStrip.brightness is not None:
+                self.playerLedStrip[i].set_brightness(self.output.player[i].playerLedStrip.brightness)
+                self.output.player[i].playerLedStrip.brightness = None
+            if self.output.player[i].playerLedStrip.area is not None and self.output.player[i].playerLedStrip.color is not None:
+                self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
+                self.output.player[i].playerLedStrip.area = None
+                self.output.player[i].playerLedStrip.color = None
+
         ledStrip.show()
