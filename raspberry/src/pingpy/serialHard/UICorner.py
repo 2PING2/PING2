@@ -21,7 +21,7 @@ class UICornerSerial(SerialCom):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
                 logger.write_in_log("INFO", __name__, "read", "restart main.py")
-                os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
+                # os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
                 logger.write_in_log("INFO", __name__, "read", "long press")
