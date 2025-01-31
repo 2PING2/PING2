@@ -15,7 +15,8 @@ class UICornerSerial(SerialCom):
     def setup(self, output_ptr):
         super().setup()        
         output_ptr.UICorner.askForStatusSettings = True
-        output_ptr.UICorner.statusLed = True        
+        output_ptr.UICorner.statusLed = True  
+              
         
     def manageResetButton(self, input_ptr):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
