@@ -18,7 +18,6 @@ except Exception as e:
     print(traceback.format_exc())
 
     import os
-    os.environ["SDL_AUDIODRIVER"] = "alsa"
     # restore from the backup
     import subprocess
 
@@ -37,4 +36,4 @@ except Exception as e:
     except:
         pass
     os.system(f'sleep 0.1 && python /home/pi/Documents/PING2/raspberry/src/main.py')
-    exit(1)
+    os.exit(1)
