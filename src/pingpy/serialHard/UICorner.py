@@ -18,14 +18,20 @@ class UICornerSerial(SerialCom):
         output_ptr.UICorner.statusLed = True  
               
         
-    def manageResetButton(self, input_ptr):
+    def manageResetButton(self, input_ptr, output_ptr):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
                 logger.write_in_log("INFO", __name__, "read", "restart main.py")
                 # os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
                 ###########################""
-                # faire attention a la condition de sortie
+                # faire attention a la condition de sortie par eapport au bouton
                 ###########################
+                # eteindre toutes les leds
+                for i in range(4):
+                    pass
+                # dire au coin config de blink dans 10 secondes (cela veut dire à l'utilisat)
+                
+                # faire sudo halt (pour eteindre propre la platforme)
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY:
                 logger.write_in_log("INFO", __name__, "read", "long press")
