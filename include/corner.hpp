@@ -57,6 +57,7 @@ public:
         pinMode(MODE_PIN_B, INPUT_PULLUP);
         pinMode(RESET_PIN, INPUT_PULLUP);
         pinMode(STATUS_LED, OUTPUT);
+        digitalWrite(STATUS_LED, LOW);
     }
     void loop()
     {
@@ -147,10 +148,6 @@ private:
             handleEncoder(); // Handle the encoder only if mode_pb is pressed
         }
         
-                
-        
-
-        
 
         // Reset
 
@@ -175,18 +172,13 @@ private:
         Serial.print("/");
         Serial.println(action);
     }
-    // void send(String key, String action)
-    // {
-    //     Serial.print(key);
-    //     Serial.print("/");
-    //     Serial.println(action);
-    // }
 
     Messages receive() {
         Messages msg = {"", "", false}; // Initialise un message vide
 
         if (Serial.available() > 0) {
             String message = Serial.readStringUntil('\n'); // Lire la ligne jusqu'à '\n'
+            // remove the '\n' character
             int separatorIndex = message.indexOf('/');
 
             if (separatorIndex != -1) {
@@ -197,28 +189,30 @@ private:
                 msg.key = "Error";
                 msg.action = "Invalid format";
                 msg.valid = false;
+                Serial.println("Invalid format");
             }
         }
-
         return msg;
     }
 
     void updateOutputs()
     {
         Messages msg = receive();
-        if (!msg.valid) return; // Ignore invalid messages
+        if (!msg.valid) return;
+
         if (msg.key == STATUS_LED_KEY)
         {
             if (msg.action == STATUS_LED_ON)
-            {
                 outputs.status_led = true;
-                //Serial.println("status_led on");
-            }
             else if (msg.action == STATUS_LED_OFF)
-            {
                 outputs.status_led = false;
-                //Serial.println("status_led off");
-            }
+        }
+        // si on recoit un message ASK_STATUS_SETTINGS, on renvoie les valeurs des inputs
+        if (msg.key == ASK_STATUS_SETTINGS)
+        {
+            lastInputs.volume = -ANTI_NOISE_THRESHOLD-1;
+            lastInputs.level = -ANTI_NOISE_THRESHOLD-1;
+            lastInputs.light = -ANTI_NOISE_THRESHOLD-1;             
         }
     }
 
