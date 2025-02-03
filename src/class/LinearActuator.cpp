@@ -127,6 +127,7 @@ bool LinearActuator::c_step1()
 {
     if (!true)
         return false;
+    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION/2.0);
     set_max_speed(COARSE_CALIBRATION_SPEED);
     move_left();
     return true;
@@ -137,6 +138,7 @@ bool LinearActuator::c_step2(int64_t time)
     if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
+    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION);
     updateSgTh = COARSE_CALIBRATION_STALL_VALUE;
     return true;
 }
@@ -290,6 +292,12 @@ bool LinearActuator::c_step16()
     rightLimit = -amplitude / 2 + NO_COLLISION_MARGIN;
     leftLimit = amplitude / 2 - NO_COLLISION_MARGIN;
 
+    long rightLimitMicroSteps = floor(rightLimit * MICRO_STEPS_PER_MM);
+    long leftLimitMicroSteps = floor(leftLimit * MICRO_STEPS_PER_MM);
+
+    rightLimit = rightLimitMicroSteps / MICRO_STEPS_PER_MM;
+    leftLimit = leftLimitMicroSteps / MICRO_STEPS_PER_MM;
+    
     motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
     move_to(0);
