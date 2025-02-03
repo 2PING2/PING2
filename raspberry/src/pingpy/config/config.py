@@ -168,7 +168,7 @@ AUTO_LED4_PIN = 20
 # AUDIO SETTINGS
 ####################################
 MAX_VOLUME = 0.65
-PATH_AUDIO = ("home/pi/Documents/PING2/src/raspberry/src/pingpy/audio/")
+PATH_AUDIO = ("home/pi/Documents/PING2/raspberry/src/pingpy/audio/")
 
 PATH_AUDIO_GAGNE = PATH_AUDIO + "a_gagne.wav"
 PATH_AUDIO_PLAYER_BLEU = PATH_AUDIO + "Le_joueur_bleu.wav"
