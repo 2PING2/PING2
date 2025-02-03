@@ -3,6 +3,7 @@ from pingpy.config.config import PORT_ESP32, FILE_AND_FOLDER_TO_CHECK, ESP_FIRMW
 import os
 import subprocess
 import time
+import sys
 
 
 from threading import Thread
@@ -19,8 +20,6 @@ class Hotspot:
             self.check_git_update()
         else:
             self.start_services()
-            # app.run(host='0.0.0.0', port=80) 
-            # make a thread to run the app.run
             Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port':80}).start()
         logger.write_in_log("INFO", __name__, "setup")
 
@@ -72,13 +71,12 @@ class Hotspot:
             return
         if espFlashNeeded:
             self.update_esp()
-            # Commande spécifique à votre application
-            os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
-            exit(1)
-        if restartNeeded:
+            os.execv(sys.executable, ['python'] + sys.argv)
+            exit(0)
+        elif restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
-            os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
-            exit(1) 
+            os.execv(sys.executable, ['python'] + sys.argv)
+            exit(0)
 
     def build_backup(self):
         backup_dir = os.path.join(ROOT_PATH, "backup")

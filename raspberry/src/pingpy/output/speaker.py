@@ -1,30 +1,69 @@
 from pingpy.debug import logger
+import os
+os.environ["SDL_AUDIODRIVER"] = "alsa"
+import pygame
 
-# import pygame
-import time
-
+ 
 class SpeakerOutput:
     def __init__(self):
         self.audioPiste = None
-        # pygame.mixer.init()
-
-    def play(self, audio_file):
-        self.audioPiste = audio_file
+        self.isBusy = False
+        self.stop = False
+        self.volume = None
         try:
-            pygame.mixer.music.load(audio_file)
+            pygame.mixer.pre_init(44100, -16, 2, 2048)  
+            pygame.mixer.init()
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
+        logger.write_in_log("INFO", __name__, "__init__")
+
+    def play(self):
+        
+        if self.stop:
+            logger.write_in_log("INFO", __name__, "Stop audio")
+            pygame.mixer.music.stop()
+            self.stop = False
+            
+        if self.volume is not None:
+            pygame.mixer.music.set_volume(self.volume)
+            self.volume = None
+            
+        self.isBusy = pygame.mixer.music.get_busy()
+        if self.isBusy == True:
+            return
+        if self.audioPiste is None:
+            return
+        
+
+        if type(self.audioPiste) is list:
+            pisteToPLay = self.audioPiste[0]
+            if len(self.audioPiste) > 1 :
+                self.audioPiste = self.audioPiste[1:]
+            else:
+                self.audioPiste = None
+        else:
+            pisteToPLay = self.audioPiste
+            self.audioPiste = None
+               
+        try:
+            self.isBusy = True
+            pygame.mixer.music.load(pisteToPLay)
             pygame.mixer.music.play()
-            while pygame.mixer.music.get_busy():
-                pygame.time.Clock().tick(10)
-            self.lastPlayedAudio = audio_file
+            logger.write_in_log("INFO", __name__, "Playing audio:{}".format(pisteToPLay))
+
         except FileNotFoundError:
-            logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(audio_file))
+            logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(pisteToPLay))
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "Error in playing audio:{}".format(e))
+        
+            
 
     def duration(self, audio_file):
-        # try :
-        #     return pygame.mixer.Sound(audio_file).get_length()
-        # except Exception as e:
-        #     logger.write_in_log("ERROR", "gameMode", "cycle", "Audio file missing:{}".format(audio_file))
-        #     return 0
+        try :
+            ret = pygame.mixer.Sound(audio_file).get_length()
+            return ret
+        except Exception as e:
+            logger.write_in_log("ERROR", __name__, "Audio file missing:{}".format(audio_file))
         return 0
 
 

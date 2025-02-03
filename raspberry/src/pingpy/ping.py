@@ -20,9 +20,7 @@ class Ping:
         self.currentGameMode = None
         self.waitingRoom = WaitingRoom(self.gameModeList, self.currentGameMode)
         self.currentGameMode = self.waitingRoom
-        # self.currentGameMode = self.gameModeList[0]
         self.prevGameMode = None
-        # self.player1LedStrip = PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[1])
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
         
         for i in range(4):
@@ -32,24 +30,21 @@ class Ping:
         logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self):
-        self.esp32.setup()
-        self.UICorner.setup()
+        self.esp32.setup(self.output)
+        self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
         ledStrip.setup()
         ledStrip.clear()
-        # self.esp32.send_data("P{1}/C")
         logger.write_in_log("INFO", __name__, "setup")
-        
-        
-        
+       
     
     def run(self):
         self.esp32.read(self.input)
-        self.UICorner.read(self.input)
+        self.UICorner.read(self.input, self.output)
         for i in range(4):
             try:
-                self.playerController[i].read(self.input.player[i].gameController)
+                self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
         self.runGameMode()
@@ -58,26 +53,31 @@ class Ping:
     def runGameMode(self):
         if self.prevGameMode!=self.currentGameMode:
             if self.prevGameMode is not None:
-                self.prevGameMode.stop()
+                self.prevGameMode.stop(self.output)
             self.currentGameMode.setup(self.input, self.output)
             self.prevGameMode = self.currentGameMode
         self.waitingRoom.currentGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
         self.currentGameMode = self.waitingRoom.currentGameMode
+        if self.input.UICorner.resetLongPress:
+            logger.write_in_log("INFO", __name__, "runGameMode", "return to waiting room")
+            self.input.UICorner.resetLongPress = None
+            self.input.UICorner.modeInc = None
+            self.input.UICorner.modeDec = None
+            self.currentGameMode = self.waitingRoom
+            
             
     def refresh_output(self):
-        # pass
         self.esp32.write(self.output, self.input)
-        # self.UICorner.write(self.output)
-        # refresh led trip and speaker
-        # self.esp32.send_data("P{1}/C")
-        try :
-            self.refresh_player_led_strip()
-        except Exception as e:
-            logger.write_in_log("ERROR", __name__, "refresh_output", f"Error in refresh_player_led_strip: {e}")
+        self.UICorner.write(self.output, self.input)
+        self.output.speaker.play()
+        self.refresh_player_led_strip()        
         
     def refresh_player_led_strip(self):
         for i in range(4):
-            self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
-            
+            if self.output.player[i].playerLedStrip.brightness is not None:
+                self.playerLedStrip[i].set_brightness(self.output.player[i].playerLedStrip.brightness)
+            if self.output.player[i].playerLedStrip.area is not None and self.output.player[i].playerLedStrip.color is not None:
+                self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
+
         ledStrip.show()

@@ -1,12 +1,19 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
-from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY
+from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY, CALIBRATION_KEY
   
 class ESP32Serial(SerialCom):
     def __init__(self, port, baudrate, timeout):
         super().__init__(port, baudrate, timeout)
         logger.write_in_log("INFO", __name__, "__init__")
         self.key_values = []
+        
+    def setup(self, output_ptr):
+        super().setup()
+        # OUTPUT lpayer -> ask calibration = True
+        for playerOutput in output_ptr.player:
+            playerOutput.linearActuator.askForCalibration = True
+
         
     def read(self, input_ptr):
         """Read the next data from the serial port."""
@@ -44,6 +51,10 @@ class ESP32Serial(SerialCom):
         # Replace this method with your own logic
         # for kv in self.key_values:
         #     logger.write_in_log("INFO", __name__, "process_key_values", f"Key: {kv['key']}, Param: {kv['param']}")
+        if len(self.key_values) < 2:
+            logger.write_in_log("ERROR", __name__, "process_key_values", "Not enough key-values.")
+            return
+        
         if self.key_values[0]['key'] != PLAYER_KEY:
             return
         # get player id
@@ -57,11 +68,14 @@ class ESP32Serial(SerialCom):
                 playerInput.linearActuator.moving = True
                 
         elif self.key_values[1]['key'] == CURRENT_POSITION_KEY:
-            playerInput.linearActuator.currentPosition = float(self.key_values[1]['param'])
+            playerInput.linearActuator.currentPose = float(self.key_values[1]['param'])
+            logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPose}")
         elif self.key_values[1]['key'] == RIGHT_LIMIT_KEY:
             playerInput.linearActuator.rightLimit = float(self.key_values[1]['param'])
+            logger.write_in_log("INFO", __name__, "process_key_values", f"Right limit: {playerInput.linearActuator.rightLimit}")
         elif self.key_values[1]['key'] == LEFT_LIMIT_KEY:
             playerInput.linearActuator.leftLimit = float(self.key_values[1]['param'])
+            logger.write_in_log("INFO", __name__, "process_key_values", f"Left limit: {playerInput.linearActuator.leftLimit}")
             
             
         
@@ -82,6 +96,9 @@ class ESP32Serial(SerialCom):
             if playerOutput.linearActuator.stop:
                 playerOutput.linearActuator.stop = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + STOP_KEY)
-            if playerOutput.linearActuator.setSpeed:
-                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setSpeed) + PARAM_END_SEP)
-                playerOutput.linearActuator.setSpeed = None
+            if playerOutput.linearActuator.setMaxSpeed:
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxSpeed) + PARAM_END_SEP)
+                playerOutput.linearActuator.setMaxSpeed = None
+            if playerOutput.linearActuator.askForCalibration:
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + CALIBRATION_KEY)
+                playerOutput.linearActuator.askForCalibration = None

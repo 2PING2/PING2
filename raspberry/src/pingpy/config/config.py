@@ -17,8 +17,11 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 # RASPBERY PI SETTINGS
 ####################################
-MAX_VOLUME = 100
+MAX_VOLUME = 0.65
 
+RESET_DELAY_AFTER_BUTTON_PRESS = 10
+SHORT_PRESS_DELAY = 0.5
+LONG_PRESS_DELAY = 2
 
 ####################################
 # SERIAL SETTINGS
@@ -48,6 +51,7 @@ CONTROLLER_TYPE_1BUTTON_1JOYSTICK = "1button_1joystick"
 ####################################
 ROOT_PATH = '/home/pi/Documents'  # Root path of the project
 import os
+os.environ["SDL_AUDIODRIVER"] = "alsa"
 GIT_CLONE_PATH = os.path.join(ROOT_PATH, "PING2")# Github repository path
 GIT_BRANCH = 'dev'  # Branch to check for updates
 # Update with the correct files (all files to check)
@@ -75,6 +79,10 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 SEP_KEY = '/'
 RESET_KEY = 'reset'
 MODE_KEY = 'mode'
+VOLUME_KEY = 'volume'
+LIGHT_KEY = 'light'
+LEVEL_KEY = 'level'
+
 LEFT_BUTTON_KEY = "left"
 RIGHT_BUTTON_KEY = "right"
 SHOOT_BUTTON_KEY = "shoot"
@@ -119,6 +127,12 @@ ASK_CALIBRATED = (ASK_KEY+CALIBRATION_KEY)
 ASK_RIGHT_LIMIT_KEY = (ASK_KEY+RIGHT_LIMIT_KEY)
 ASK_LEFT_LIMIT_KEY = (ASK_KEY+LEFT_LIMIT_KEY)
 ASK_SOL_STATE_KEY = (ASK_KEY+SOL_SATE_KEY)
+
+ASK_STATUS_SETTINGS = ("ask_status_settings")
+
+STATUS_LED_KEY = ("status_led")
+STATUS_LED_ON = ("on")
+STATUS_LED_OFF = ("off")
 ####################################
 # LED STRIP SETTINGS
 ####################################
@@ -126,7 +140,7 @@ LED_STRIP_PIN = 10
 NUMBER_OF_LEDS = 176
 FREQUENCY = 800000
 DMA_CHANNEL = 10
-MAX_BRIGTHNESS = 150
+MAX_BRIGHTNESS = 0.8 
 PLAYER_LED_STRIP_OFFSETS = {
     1: (132, 176),
     2: (88, 132),

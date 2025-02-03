@@ -13,7 +13,12 @@ try :
   
 except Exception as e:
     print(f"Error: {e}")
+    # print also the line where the error occured
+    import traceback
+    print(traceback.format_exc())
+
     import os
+    import sys
     # restore from the backup
     import subprocess
 
@@ -31,5 +36,5 @@ except Exception as e:
         logger.write_in_log("ERROR", __name__, "main", str(e))
     except:
         pass
-    os.system(f'sleep 0.1 && python3 /home/pi/Documents/PING2/raspberry/src/main.py')
-    exit(1)
+    os.execv(sys.executable, ['python'] + sys.argv)
+    exit(0)
