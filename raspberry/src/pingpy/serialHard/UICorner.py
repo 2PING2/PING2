@@ -51,7 +51,7 @@ class UICornerSerial(SerialCom):
             logger.write_in_log("ERROR", __name__, "read", f"Error in consume_older_data: {e}")
             return
 
-        self.manageResetButton(input_ptr)
+        self.manageResetButton(input_ptr, output_ptr)
         
         if new_line is None:
             return
