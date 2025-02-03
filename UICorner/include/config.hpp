@@ -35,6 +35,8 @@
 
 #define STATUS_LED_ON "on"
 #define STATUS_LED_OFF "off"
+#define STATUS_LED_FADE_OUT "fadeOut"
+#define STATUS_LED_BLINK "blink"
 
 #define ASK_STATUS_SETTINGS "ask_status_settings"
 
