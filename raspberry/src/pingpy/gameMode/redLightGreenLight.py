@@ -1,5 +1,6 @@
 from .gameMode import GameMode
 from ..output.output import Output
+from ..input.input import Input
 import time
 from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, RED, BLUE
@@ -59,15 +60,14 @@ class RedLightGreenLight(GameMode):
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
-    def wait_for_start(self, Input, Output):
-        """_summary_
-
+    def wait_for_start(self, input : Input, output: Output)->bool:
+        """
         Args:
-            Input (_type_): 
-            Output (_type_): _description_
+            Input (_type_): refer to input/input.py
+            output (_type_): refer to output/output.py
 
         Returns:
-            _type_: _description_
+            bool : True if the game should waiting before start, False otherwise
         """
         if not self.waitForStart:
             return True
@@ -75,6 +75,7 @@ class RedLightGreenLight(GameMode):
             if player.linearActuator.currentPose is None or player.linearActuator.leftLimit is None:
                 return False
             elif player.linearActuator.currentPose < player.linearActuator.leftLimit - 1e-3:
+                # wait until all players are at the left limit
                 return False
         
         self.waitForStart = False
