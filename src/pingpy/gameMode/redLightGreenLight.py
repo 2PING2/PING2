@@ -2,7 +2,7 @@ from .gameMode import GameMode
 from ..output.output import Output
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, RED, BLUE
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT
 from random import uniform
 
 class RedLightGreenLight(GameMode):
@@ -18,7 +18,7 @@ class RedLightGreenLight(GameMode):
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
         self.color = BLUE
-        self.descriptionAudioPath = r"raspberry/src/pingpy/audio/redLightGreenLight/Intro_123SOLEIL.wav"
+        self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
 
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
@@ -85,7 +85,7 @@ class RedLightGreenLight(GameMode):
         Randomize the duration of the green and red lights.
         """
         try:
-            min_duration = Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav")+Output.speaker.duration(r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav") + 1.0
+            min_duration = Output.speaker.duration(PATH_AUDIO_123SOLEIL_123)+Output.speaker.duration(PATH_AUDIO_123SOLEIL_SOLEIL) + 0.5
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
@@ -178,7 +178,7 @@ class RedLightGreenLight(GameMode):
                 if not self.isLightGreen:
                     self.isLightGreen = True
                     # logger.write_in_log("INFO", __name__, "cycle", "Green light.")
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/123.wav"
+                    Output.speaker.audioPiste = [PATH_AUDIO_123SOLEIL_123]
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = GREEN
             elif elapsedTime < self.durationGreenLight + self.durationRedLight:
@@ -187,7 +187,7 @@ class RedLightGreenLight(GameMode):
                     # logger.write_in_log("INFO", __name__, "cycle", "Red light.")
                     for PlayerOutput in Output.player:
                         PlayerOutput.playerLedStrip.color = RED
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/redLightGreenLight/Soleil.wav"
+                    Output.speaker.audioPiste = [PATH_AUDIO_123SOLEIL_SOLEIL]
             else:
                 self.timeInit = currentTime
                 self.randomize_duration(Output)
@@ -234,15 +234,15 @@ class RedLightGreenLight(GameMode):
             if i == winnerID:
                 Output.player[i].playerLedStrip.color = GREEN
                 if i == 0:
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_jaune.wav"
+                    Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
                 elif i == 1:
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_vert.wav"
+                    Output.speaker.audioPiste = PATH_AUDIO_PLAYER_VERT
                 elif i == 2:
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_rouge.wav"
+                    Output.speaker.audioPiste = PATH_AUDIO_PLAYER_ROUGE
                 elif i == 3:
-                    Output.speaker.audioPiste = r"raspberry/src/pingpy/audio/Le_joueur_bleu.wav"
+                    Output.speaker.audioPiste = PATH_AUDIO_PLAYER_BLEU
                 Output.speaker.audioPiste = [Output.speaker.audioPiste]
-                Output.speaker.audioPiste.append(r"raspberry/src/pingpy/audio/a_gagne.wav")
+                Output.speaker.audioPiste.append(PATH_AUDIO_GAGNE)
                 
             else:
                 Output.player[i].playerLedStrip.color = RED
@@ -260,4 +260,3 @@ class RedLightGreenLight(GameMode):
         
         for i in range(4):
             output_ptr.player[i].linearActuator.stop = True
-        
