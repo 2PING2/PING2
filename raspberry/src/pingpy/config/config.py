@@ -129,6 +129,7 @@ ASK_STATUS_SETTINGS = ("ask_status_settings")
 STATUS_LED_KEY = ("status_led")
 STATUS_LED_ON = ("on")
 STATUS_LED_OFF = ("off")
+STATUS_LED_FADEOUT = ("fadeOut")
 ####################################
 # LED STRIP SETTINGS
 ####################################

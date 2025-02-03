@@ -1,7 +1,8 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
 import subprocess
-from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY, ASK_STATUS_SETTINGS, STATUS_LED_KEY, STATUS_LED_ON, STATUS_LED_OFF, MAX_BRIGHTNESS, MODE_PB_KEY
+from pingpy.hardware import ledStrip
+from pingpy.config.config import SEP_KEY, MODE_KEY, INCREMENT_KEY, DECREMENT_KEY, RESET_KEY, PUSH_KEY, RELEASE_KEY, VOLUME_KEY, LIGHT_KEY, LEVEL_KEY, MAX_VOLUME, RESET_DELAY_AFTER_BUTTON_PRESS, SHORT_PRESS_DELAY, LONG_PRESS_DELAY, ASK_STATUS_SETTINGS, STATUS_LED_KEY, STATUS_LED_ON, STATUS_LED_OFF, MAX_BRIGHTNESS, MODE_PB_KEY, STATUS_LED_FADEOUT
 import time 
 import os
 import sys
@@ -27,14 +28,20 @@ class UICornerSerial(SerialCom):
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
                 if self.modeButtonState is True:
                     logger.write_in_log("INFO", __name__, "read", "restart main.py")
-                    # os.execv(sys.executable, ['python'] + sys.argv)
-                    # exit(0)
+                    for i in range(4):
+                        if self.output.player[i].playerLedStrip.brightness is not None:
+                            self.playerLedStrip[i].set_brightness(0)
+                    ledStrip.show()
+                    os.execv(sys.executable, ['python'] + sys.argv)
+                    exit(0)
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
-                    for i in range(4): # eteindre toutes les leds
-                        pass
-                    # dire au coin config de fadeOut                
-                    # subprocess.run(["sudo", "halt"])
+                    for i in range(4):
+                        if self.output.player[i].playerLedStrip.brightness is not None:
+                            self.playerLedStrip[i].set_brightness(0)
+                    ledStrip.show()
+                    self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
+                    subprocess.run(["sudo", "halt"])
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY and not self.longPressFlag:
                 logger.write_in_log("INFO", __name__, "read", "long press")
