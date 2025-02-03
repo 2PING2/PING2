@@ -71,7 +71,7 @@ class RedLightGreenLight(GameMode):
         """
         if not self.waitForStart:
             return True
-        for player in Input.player:
+        for player in input.player:
             if player.linearActuator.currentPose is None or player.linearActuator.leftLimit is None:
                 return False
             elif player.linearActuator.currentPose < player.linearActuator.leftLimit - 1e-3:
