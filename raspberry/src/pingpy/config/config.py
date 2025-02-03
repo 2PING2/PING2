@@ -15,10 +15,8 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 
 ####################################
-# RASPBERY PI SETTINGS
+# UICorner SETTINGS
 ####################################
-MAX_VOLUME = 0.65
-
 RESET_DELAY_AFTER_BUTTON_PRESS = 10
 SHORT_PRESS_DELAY = 0.5
 LONG_PRESS_DELAY = 2
@@ -58,9 +56,6 @@ GIT_BRANCH = 'dev'  # Branch to check for updates
 ESP_FIRMWARE_PATH = "esp32/.pio/build/esp32dev/firmware.bin"
 ESP_BOOTLOADER_PATH = "esp32/.pio/build/esp32dev/bootloader.bin"
 ESP_PARTITION_PATH = "esp32/.pio/build/esp32dev/partitions.bin"
-
-
-
 
 
 FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH, ESP_BOOTLOADER_PATH, ESP_PARTITION_PATH]  # Files and folders to check for updates
@@ -167,6 +162,24 @@ AUTO_SWITCH3_PIN = 26
 AUTO_LED3_PIN = 21
 AUTO_SWITCH4_PIN = 16
 AUTO_LED4_PIN = 20
+
+
+####################################
+# AUDIO SETTINGS
+####################################
+MAX_VOLUME = 0.65
+PATH_AUDIO = ("home/pi/Documents/PING2/src/raspberry/src/pingpy/audio/")
+
+PATH_AUDIO_GAGNE = PATH_AUDIO + "a_gagne.wav"
+PATH_AUDIO_PLAYER_BLEU = PATH_AUDIO + "Le_joueur_bleu.wav"
+PATH_AUDIO_PLAYER_ROUGE = PATH_AUDIO + "Le_joueur_rouge.wav"
+PATH_AUDIO_PLAYER_JAUNE = PATH_AUDIO + "Le_joueur_jaune.wav"
+PATH_AUDIO_PLAYER_VERT = PATH_AUDIO + "Le_joueur_vert.wav"
+
+PATH_AUDIO_123SOLEIL = PATH_AUDIO + "redLightGreenLight/"
+PATH_AUDIO_123SOLEIL_INTRO = PATH_AUDIO_123SOLEIL + "Intro_123SOLEIL.wav"
+PATH_AUDIO_123SOLEIL_123 = PATH_AUDIO_123SOLEIL + "123.wav"
+PATH_AUDIO_123SOLEIL_SOLEIL = PATH_AUDIO_123SOLEIL + "Soleil.wav"
 
 
 
