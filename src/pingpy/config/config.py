@@ -17,9 +17,9 @@ For inquiries, contact us at: projet.ping2@gmail.com
 ####################################
 # UICorner SETTINGS
 ####################################
-RESET_DELAY_AFTER_BUTTON_PRESS = 10
+RESET_DELAY_AFTER_BUTTON_PRESS = 6
 SHORT_PRESS_DELAY = 0.5
-LONG_PRESS_DELAY = 2
+LONG_PRESS_DELAY = 2.5
 
 ####################################
 # SERIAL SETTINGS
@@ -74,6 +74,7 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 SEP_KEY = '/'
 RESET_KEY = 'reset'
 MODE_KEY = 'mode'
+MODE_PB_KEY = 'mode_pb'
 VOLUME_KEY = 'volume'
 LIGHT_KEY = 'light'
 LEVEL_KEY = 'level'
