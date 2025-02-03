@@ -28,16 +28,14 @@ class UICornerSerial(SerialCom):
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
                 if self.modeButtonState is True:
                     logger.write_in_log("INFO", __name__, "read", "restart main.py")
-                    for i in range(4):
-                        playerLedStrip[i].set_brightness(0)
+                    ledStrip.clear()
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     os.execv(sys.executable, ['python'] + sys.argv)
                     exit(0)
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
-                    for i in range(4):
-                        playerLedStrip[i].set_brightness(0)
+                    ledStrip.clear()
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
                     subprocess.run(["sudo", "halt"])
