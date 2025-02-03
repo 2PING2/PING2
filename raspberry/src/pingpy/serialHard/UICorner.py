@@ -23,22 +23,22 @@ class UICornerSerial(SerialCom):
         output_ptr.UICorner.statusLed = True  
               
         
-    def manageResetButton(self, input_ptr, output_ptr):
+    def manageResetButton(self, input_ptr, output_ptr, playerLedStrip):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
                 if self.modeButtonState is True:
                     logger.write_in_log("INFO", __name__, "read", "restart main.py")
                     for i in range(4):
-                        if self.output.player[i].playerLedStrip.brightness is not None:
-                            self.playerLedStrip[i].set_brightness(0)
+                        if output_ptr.player[i].playerLedStrip.brightness is not None:
+                            playerLedStrip[i].set_brightness(0)
                     ledStrip.show()
                     os.execv(sys.executable, ['python'] + sys.argv)
                     exit(0)
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
                     for i in range(4):
-                        if self.output.player[i].playerLedStrip.brightness is not None:
-                            self.playerLedStrip[i].set_brightness(0)
+                        if output_ptr.player[i].playerLedStrip.brightness is not None:
+                            playerLedStrip[i].set_brightness(0)
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
                     subprocess.run(["sudo", "halt"])
@@ -48,7 +48,7 @@ class UICornerSerial(SerialCom):
                 input_ptr.UICorner.resetLongPress = True
                 self.longPressFlag = True
         
-    def read(self, input_ptr, output_ptr):
+    def read(self, input_ptr, output_ptr, playerLedStrip):
         """Read the next data from the serial port."""
         try:
             self.read_data_task()
@@ -61,7 +61,7 @@ class UICornerSerial(SerialCom):
             logger.write_in_log("ERROR", __name__, "read", f"Error in consume_older_data: {e}")
             return
 
-        self.manageResetButton(input_ptr, output_ptr)
+        self.manageResetButton(input_ptr, output_ptr, playerLedStrip)
         
         if new_line is None:
             return
