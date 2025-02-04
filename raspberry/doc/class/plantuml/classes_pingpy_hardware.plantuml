@@ -1,0 +1,70 @@
+@startuml classes_pingpy_hardware
+set namespaceSeparator none
+class "AutoSwitch" as pingpy.hardware.autoSwitch.AutoSwitch {
+  autoLedPin
+  autoMode : bool
+  autoSwitchPin
+  ledState : bool
+  monitor_thread : NoneType, Thread
+  monitor_switch()
+  setup()
+}
+class "Color" as pingpy.hardware.rpi_ws281xMock.Color {
+  b
+  g
+  r
+}
+class "GPIO" as pingpy.hardware.gpioMock.GPIO {
+  BCM : str
+  BOARD : str
+  HIGH : bool
+  IN : str
+  LOW : bool
+  OUT : str
+  cleanup()
+  input(pin)
+  output(pin, state)
+  setmode(mode)
+  setup(pin, mode)
+  setwarnings(flag)
+}
+class "LedStrip" as pingpy.hardware.ledStrip.LedStrip {
+  strip
+  clear()
+  onLedStrip(r, g, b)
+  setLedStrip(color, OFFSET_MIN, OFFSET_MAX)
+  setup()
+  show()
+}
+class "PixelStrip" as pingpy.hardware.rpi_ws281xMock.PixelStrip {
+  brightness : int
+  dma_channel
+  freq_hz
+  invert : bool
+  num_pixels
+  pin
+  pixels
+  begin()
+  numPixels()
+  setBrightness(brightness)
+  setPixelColor(index, color)
+  show()
+}
+class "PlayerLedStrip" as pingpy.hardware.ledStrip.PlayerLedStrip {
+  brightness : float
+  ledStrip
+  len_mm
+  max
+  max_mm
+  min
+  min_mm
+  n_led
+  n_led_per_mm : float
+  clearPlayer()
+  onPlayer(color)
+  set_brightness(brightness)
+  set_led_index(area_led_index, color)
+  set_mm(area_mm, color)
+}
+pingpy.hardware.rpi_ws281xMock.PixelStrip --* pingpy.hardware.ledStrip.LedStrip : strip
+@enduml

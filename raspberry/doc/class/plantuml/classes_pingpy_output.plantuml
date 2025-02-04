@@ -1,0 +1,49 @@
+@startuml classes_pingpy_output
+set namespaceSeparator none
+class "BumperOutput" as pingpy.output.bumper.BumperOutput {
+  state : NoneType
+}
+class "LinearActuatorOutput" as pingpy.output.linearActuator.LinearActuatorOutput {
+  askForCalibration : NoneType
+  moveTo : NoneType
+  moveToLeft : NoneType
+  moveToRight : NoneType
+  preventWhenMoveEnded : NoneType
+  setMaxAccel : NoneType
+  setMaxSpeed : NoneType
+  stop : NoneType
+}
+class "Output" as pingpy.output.output.Output {
+  UICorner
+  player
+  speaker
+}
+class "PlayerLedStripOutput" as pingpy.output.playerLedStrip.PlayerLedStripOutput {
+  area : NoneType
+  brightness : NoneType
+  color : NoneType
+}
+class "PlayerOutput" as pingpy.output.player.PlayerOutput {
+  bumper
+  linearActuator
+  playerLedStrip
+}
+class "SpeakerOutput" as pingpy.output.speaker.SpeakerOutput {
+  audioPiste : NoneType
+  isBusy : bool
+  stop : bool
+  volume : NoneType
+  duration(audio_file)
+  play()
+}
+class "UICornerOutput" as pingpy.output.UICorner.UICornerOutput {
+  askForStatusSettings : bool
+  statusLed : NoneType
+}
+pingpy.output.UICorner.UICornerOutput --* pingpy.output.output.Output : UICorner
+pingpy.output.bumper.BumperOutput --* pingpy.output.player.PlayerOutput : bumper
+pingpy.output.linearActuator.LinearActuatorOutput --* pingpy.output.player.PlayerOutput : linearActuator
+pingpy.output.playerLedStrip.PlayerLedStripOutput --* pingpy.output.player.PlayerOutput : playerLedStrip
+pingpy.output.speaker.SpeakerOutput --* pingpy.output.output.Output : speaker
+pingpy.output.player.PlayerOutput --* pingpy.output.output.Output : 4 players
+@enduml
