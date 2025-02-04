@@ -221,6 +221,7 @@ class RedLightGreenLight(GameMode):
         
         if Input.UICorner.level is not None:
             self.reactionTime = MAX_REACTION_TIME*(1-(Input.UICorner.level))
+            Input.UICorner.level = None
             logger.write_in_log("INFO", __name__, f"compute, select reactionTime {self.reactionTime}s")
 
         for i in range(4):
