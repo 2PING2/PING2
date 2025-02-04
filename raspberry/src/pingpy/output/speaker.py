@@ -21,14 +21,22 @@ class SpeakerOutput:
         
         if self.stop:
             logger.write_in_log("INFO", __name__, "Stop audio")
-            pygame.mixer.music.stop()
+            try:
+                pygame.mixer.music.stop()
+            except Exception as e:
+                logger.write_in_log("ERROR", __name__, "fail to stop audio")
             self.stop = False
             
         if self.volume is not None:
             pygame.mixer.music.set_volume(self.volume)
             self.volume = None
-            
-        self.isBusy = pygame.mixer.music.get_busy()
+        
+        try :
+            self.isBusy = pygame.mixer.music.get_busy()
+        except Exception as e:
+            pass
+            # logger.write_in_log("ERROR", __name__, "fail get_busy()")
+
         if self.isBusy == True:
             return
         if self.audioPiste is None:

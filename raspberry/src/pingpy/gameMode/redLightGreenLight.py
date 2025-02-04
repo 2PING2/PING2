@@ -6,6 +6,26 @@ from pingpy.debug import logger
 from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME
 from random import uniform
 
+class AutoPlayRedLightGreenLight:
+    def __init__(self):
+        self.loosingProb = 0
+        self.minReactionTime = 0
+        self.shouldStopDelay = None
+        
+    def set_skill(self, skill, reactionTime):
+        self.loosingProb = 0.6*(1-skill) # give a random aspect
+        self.minReactionTime = 0.5 * reactionTime 
+        
+    def randomize_duration(self, redLightDuration, reactionTime):
+        t0 = redLightDuration + self.minReactionTime 
+        t1 = self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
+        self.shouldStopDelay = uniform(t0, t1)
+
+    def run(self, playerInput, playerOutput, currentTime):
+        pass
+        
+        
+
 class RedLightGreenLight(GameMode):
     """
     Game mode of Red Light Green Light. 1 2 3 soleil in French.
@@ -18,6 +38,7 @@ class RedLightGreenLight(GameMode):
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
+        self.currentDifficulty = 0
         self.color = BLUE
         self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
 
@@ -220,6 +241,7 @@ class RedLightGreenLight(GameMode):
             return
         
         if Input.UICorner.level is not None:
+            self.currentDifficulty = Input.UICorner.level
             self.reactionTime = MAX_REACTION_TIME*(1-(Input.UICorner.level))
             Input.UICorner.level = None
             logger.write_in_log("INFO", __name__, f"compute, select reactionTime {self.reactionTime}s")
