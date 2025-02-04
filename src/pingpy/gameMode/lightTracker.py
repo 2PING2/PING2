@@ -3,7 +3,7 @@ from pingpy.input.input import Input
 from pingpy.output.output import Output, PlayerOutput
 from datetime import datetime
 from gameMode import GameMode
-from config.config import YELLOW
+from config.config import YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO
 import time
 import pingpy.debug.logFile
 import random
@@ -22,6 +22,7 @@ class LightTracker(GameMode):
         self.areaLength=20 ### ceci va varier selon la dificulté du jeu
         self.count_move=0
         self.color = YELLOW
+        self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
     
 
     def setup(self, Input, Output):
