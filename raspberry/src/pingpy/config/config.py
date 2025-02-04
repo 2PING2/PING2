@@ -187,3 +187,7 @@ PATH_AUDIO_123SOLEIL_SOLEIL = PATH_AUDIO_123SOLEIL + "Soleil.wav"
 
 
 
+####################################
+# redLightGreddLight SETTINGS
+####################################
+MAX_REACTION_TIME = 1.5
