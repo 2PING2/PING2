@@ -1,0 +1,26 @@
+@startuml packages_pingpy_input
+set namespaceSeparator none
+package "pingpy.input" as pingpy.input {
+}
+package "pingpy.input.UICorner" as pingpy.input.UICorner {
+}
+package "pingpy.input.beamSwitch" as pingpy.input.beamSwitch {
+}
+package "pingpy.input.gameController" as pingpy.input.gameController {
+}
+package "pingpy.input.gameController3Button" as pingpy.input.gameController3Button {
+}
+package "pingpy.input.input" as pingpy.input.input {
+}
+package "pingpy.input.linearActuator" as pingpy.input.linearActuator {
+}
+package "pingpy.input.player" as pingpy.input.player {
+}
+pingpy.input --> pingpy.input
+pingpy.input.gameController3Button --> pingpy.input.gameController
+pingpy.input.input --> pingpy.input.UICorner
+pingpy.input.input --> pingpy.input.player
+pingpy.input.player --> pingpy.input.beamSwitch
+pingpy.input.player --> pingpy.input.gameController
+pingpy.input.player --> pingpy.input.linearActuator
+@enduml

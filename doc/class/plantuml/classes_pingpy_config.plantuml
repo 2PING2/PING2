@@ -1,0 +1,3 @@
+@startuml classes_pingpy_config
+set namespaceSeparator none
+@enduml

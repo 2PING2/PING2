@@ -1,0 +1,295 @@
+@startuml classes_pingpy
+set namespaceSeparator none
+class "AtYourCommand" as pingpy.gameMode.atYourCommand.AtYourCommand {
+}
+class "AutoSwitch" as pingpy.hardware.autoSwitch.AutoSwitch {
+  autoLedPin
+  autoMode : bool
+  autoSwitchPin
+  ledState : bool
+  monitor_thread : NoneType, Thread
+  monitor_switch()
+  setup()
+}
+class "BattleRoyale" as pingpy.gameMode.battleRoyale.BattleRoyale {
+}
+class "BeamSwitchInput" as pingpy.input.beamSwitch.BeamSwitchInput {
+  state : NoneType
+}
+class "BumperOutput" as pingpy.output.bumper.BumperOutput {
+  state : NoneType
+}
+class "Color" as pingpy.hardware.rpi_ws281xMock.Color {
+  b
+  g
+  r
+}
+class "ControllerSerial" as pingpy.serialHard.controller.ControllerSerial {
+  controllerInput
+  read(controllerInput, controllerOutput)
+  stopOnDisconnect(controllerOutput)
+}
+class "ESP32Serial" as pingpy.serialHard.ESP32.ESP32Serial {
+  key_values : list
+  process_key_values(input_ptr)
+  read(input_ptr)
+  setup(output_ptr)
+  write(output_ptr, input_ptr)
+}
+class "GPIO" as pingpy.hardware.gpioMock.GPIO {
+  BCM : str
+  BOARD : str
+  HIGH : bool
+  IN : str
+  LOW : bool
+  OUT : str
+  cleanup()
+  input(pin)
+  output(pin, state)
+  setmode(mode)
+  setup(pin, mode)
+  setwarnings(flag)
+}
+class "GameController3ButtonInput" as pingpy.input.gameController3Button.GameController3ButtonInput {
+  countButton : int
+  left : bool
+  right : bool
+  shoot : bool
+}
+class "GameControllerInput" as pingpy.input.gameController.GameControllerInput {
+  inAction : bool
+}
+class "GameMode" as pingpy.gameMode.gameMode.GameMode {
+  descriptionAudioPath : NoneType
+  inGame : bool
+  {abstract}compute(input, output)
+  {abstract}setup(output)
+  {abstract}stop(Input)
+}
+class "Hotspot" as pingpy.gitUpdate.hotspot.Hotspot {
+  should_stop : bool
+  timeout : NoneType
+  build_backup()
+  check_git_update()
+  check_wifi()
+  monitor_services()
+  setup(app)
+  start_services()
+  stop_services()
+  update_esp()
+}
+class "Input" as pingpy.input.input.Input {
+  UICorner
+  player
+}
+class "LedStrip" as pingpy.hardware.ledStrip.LedStrip {
+  strip
+  clear()
+  onLedStrip(r, g, b)
+  setLedStrip(color, OFFSET_MIN, OFFSET_MAX)
+  setup()
+  show()
+}
+class "LightTracker" as pingpy.gameMode.lightTracker.LightTracker {
+  actualRound : int
+  areaLed : int, list
+  areaLength : int
+  color
+  count_move : int
+  ledCenter : int
+  check_distance(Input)
+  check_end_move(Input)
+  check_move(PlayerInput)
+  check_victory(PlayerInput, Output)
+  modif_score(PlayerInput)
+  move(PlayerInput, PlayerOutput)
+  new_round(Input, Output)
+  run(Input, Output)
+  setup(Input, Output)
+  stop(Input, Output)
+}
+class "LinearActuatorInput" as pingpy.input.linearActuator.LinearActuatorInput {
+  currentPose : NoneType
+  leftLimit : NoneType
+  moving : bool
+  rightLimit : NoneType
+}
+class "LinearActuatorOutput" as pingpy.output.linearActuator.LinearActuatorOutput {
+  askForCalibration : NoneType
+  moveTo : NoneType
+  moveToLeft : NoneType
+  moveToRight : NoneType
+  preventWhenMoveEnded : NoneType
+  setMaxAccel : NoneType
+  setMaxSpeed : NoneType
+  stop : NoneType
+}
+class "LogFile" as pingpy.debug.logFile.LogFile {
+  logFolder : str
+  create_log_file()
+  write_in_log(status, programme, function, message)
+}
+class "MemoChain" as pingpy.gameMode.memoChain.MemoChain {
+}
+class "Output" as pingpy.output.output.Output {
+  UICorner
+  player
+  speaker
+}
+class "PingGame" as pingpy.gameMode.pingGame.PingGame {
+  {abstract}run()
+  {abstract}stop()
+}
+class "PixelStrip" as pingpy.hardware.rpi_ws281xMock.PixelStrip {
+  brightness : int
+  dma_channel
+  freq_hz
+  invert : bool
+  num_pixels
+  pin
+  pixels
+  begin()
+  numPixels()
+  setBrightness(brightness)
+  setPixelColor(index, color)
+  show()
+}
+class "PlayerInput" as pingpy.input.player.PlayerInput {
+  beamSwitch
+  gameController
+  linearActuator
+  pointCounter : int
+  usb
+}
+class "PlayerLedStrip" as pingpy.hardware.ledStrip.PlayerLedStrip {
+  brightness : float
+  ledStrip
+  len_mm
+  max
+  max_mm
+  min
+  min_mm
+  n_led
+  n_led_per_mm : float
+  clearPlayer()
+  onPlayer(color)
+  set_brightness(brightness)
+  set_led_index(area_led_index, color)
+  set_mm(area_mm, color)
+}
+class "PlayerLedStripOutput" as pingpy.output.playerLedStrip.PlayerLedStripOutput {
+  area : NoneType
+  brightness : NoneType
+  color : NoneType
+}
+class "PlayerOutput" as pingpy.output.player.PlayerOutput {
+  bumper
+  linearActuator
+  playerLedStrip
+}
+class "RedLightGreenLight" as pingpy.gameMode.redLightGreenLight.RedLightGreenLight {
+  color : tuple
+  descriptionAudioPath : str
+  durationGreenLight : NoneType
+  durationRedLight : NoneType
+  inGame : bool
+  isLightGreen : bool
+  reactionTime : float
+  standby : bool
+  timeInit : int
+  waitForStart : bool
+  can_move(currentTime)
+  check_action(playerInput, playerOutput, currentTime)
+  check_victory(playerInput, playerOutput)
+  compute(Input, Output)
+  cycle(currentTime, Output)
+  lose(playerOutput)
+  makeWin(Output, winnerID)
+  randomize_duration(Output)
+  setup(Input, Output)
+  stop(output_ptr)
+  wait_for_start(Input, Output)
+}
+class "SandBox" as pingpy.gameMode.sandBox.SandBox {
+}
+class "SerialCom" as pingpy.serialHard.serialCom.SerialCom {
+  baudrate
+  connected : bool
+  failed_attempts : int
+  port : NoneType
+  queue : list
+  ser : NoneType, Serial
+  symlink
+  timeout
+  consume_older_data()
+  read_data_task(onDisconnect, args)
+  send_data(data)
+  setup()
+  stop_reading()
+}
+class "SpeakerOutput" as pingpy.output.speaker.SpeakerOutput {
+  audioPiste : NoneType
+  isBusy : bool
+  stop : bool
+  volume : NoneType
+  duration(audio_file)
+  play()
+}
+class "UICornerInput" as pingpy.input.UICorner.UICornerInput {
+  level : NoneType
+  light : NoneType
+  modeDec : NoneType
+  modeInc : NoneType
+  modePush : NoneType
+  modeRelease : NoneType
+  resetLongPress : NoneType
+  resetPush : NoneType
+  resetRelease : NoneType
+  resetShortPress : NoneType
+  volume : NoneType
+}
+class "UICornerOutput" as pingpy.output.UICorner.UICornerOutput {
+  askForStatusSettings : bool
+  statusLed : NoneType
+}
+class "UICornerSerial" as pingpy.serialHard.UICorner.UICornerSerial {
+  lastResetPressedTime : NoneType
+  resetButtonState : NoneType, bool
+  manageResetButton(input_ptr, output_ptr)
+  read(input_ptr, output_ptr)
+  setup(output_ptr)
+  write(output_ptr, input_ptr)
+}
+class "WaitingRoom" as pingpy.gameMode.waitingRoom.WaitingRoom {
+  brightness_blink_rate : float
+  color : tuple
+  currentColor : tuple
+  currentGameMode : NoneType
+  currentLed_brightness : float
+  gameModeList
+  last_time
+  preselectedGameMode : NoneType, int
+  preselectedGameModeFlag : bool
+  compute(input, output)
+  setup(input, output)
+  {abstract}stop(output_ptr)
+}
+pingpy.gameMode.redLightGreenLight.RedLightGreenLight --|> pingpy.gameMode.gameMode.GameMode
+pingpy.gameMode.waitingRoom.WaitingRoom --|> pingpy.gameMode.gameMode.GameMode
+pingpy.input.gameController3Button.GameController3ButtonInput --|> pingpy.input.gameController.GameControllerInput
+pingpy.serialHard.ESP32.ESP32Serial --|> pingpy.serialHard.serialCom.SerialCom
+pingpy.serialHard.UICorner.UICornerSerial --|> pingpy.serialHard.serialCom.SerialCom
+pingpy.serialHard.controller.ControllerSerial --|> pingpy.serialHard.serialCom.SerialCom
+pingpy.gameMode.waitingRoom.WaitingRoom --* pingpy.gameMode.waitingRoom.WaitingRoom : currentGameMode
+pingpy.hardware.rpi_ws281xMock.PixelStrip --* pingpy.hardware.ledStrip.LedStrip : strip
+pingpy.input.UICorner.UICornerInput --* pingpy.input.input.Input : UICorner
+pingpy.input.beamSwitch.BeamSwitchInput --* pingpy.input.player.PlayerInput : beamSwitch
+pingpy.input.gameController.GameControllerInput --* pingpy.input.player.PlayerInput : gameController
+pingpy.input.linearActuator.LinearActuatorInput --* pingpy.input.player.PlayerInput : linearActuator
+pingpy.output.UICorner.UICornerOutput --* pingpy.output.output.Output : UICorner
+pingpy.output.bumper.BumperOutput --* pingpy.output.player.PlayerOutput : bumper
+pingpy.output.linearActuator.LinearActuatorOutput --* pingpy.output.player.PlayerOutput : linearActuator
+pingpy.output.playerLedStrip.PlayerLedStripOutput --* pingpy.output.player.PlayerOutput : playerLedStrip
+pingpy.output.speaker.SpeakerOutput --* pingpy.output.output.Output : speaker
+pingpy.serialHard.controller.ControllerSerial --* pingpy.input.player.PlayerInput : usb
+@enduml

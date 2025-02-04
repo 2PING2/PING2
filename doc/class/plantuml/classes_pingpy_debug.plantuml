@@ -1,0 +1,8 @@
+@startuml classes_pingpy_debug
+set namespaceSeparator none
+class "LogFile" as pingpy.debug.logFile.LogFile {
+  logFolder : str
+  create_log_file()
+  write_in_log(status, programme, function, message)
+}
+@enduml
