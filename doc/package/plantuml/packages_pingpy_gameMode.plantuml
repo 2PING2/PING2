@@ -1,0 +1,34 @@
+@startuml packages_pingpy_gameMode
+set namespaceSeparator none
+' package "pingpy.gameMode" as pingpy.gameMode {
+' }
+' package "pingpy.gameMode.atYourCommand" as pingpy.gameMode.atYourCommand {
+' }
+' package "pingpy.gameMode.battleRoyale" as pingpy.gameMode.battleRoyale {
+' }
+package "pingpy.gameMode.gameMode" as pingpy.gameMode.gameMode {
+}
+package "pingpy.gameMode.lightTracker" as pingpy.gameMode.lightTracker {
+}
+' package "pingpy.gameMode.memoChain" as pingpy.gameMode.memoChain {
+' }
+' package "pingpy.gameMode.pingGame" as pingpy.gameMode.pingGame {
+' }
+package "pingpy.gameMode.redLightGreenLight" as pingpy.gameMode.redLightGreenLight {
+}
+package "pingpy.gameMode.sandBox" as pingpy.gameMode.sandBox {
+}
+package "pingpy.gameMode.waitingRoom" as pingpy.gameMode.waitingRoom {
+}
+' pingpy.gameMode --> pingpy.gameMode.redLightGreenLight
+' pingpy.gameMode --> pingpy.gameMode.waitingRoom
+' pingpy.gameMode --> pingpy.gameMode.lightTracker
+' pingpy.gameMode.atYourCommand --> pingpy.gameMode.gameMode
+' pingpy.gameMode.battleRoyale --> pingpy.gameMode.gameMode
+pingpy.gameMode.lightTracker --> pingpy.gameMode.gameMode
+' pingpy.gameMode.memoChain --> pingpy.gameMode.gameMode
+' pingpy.gameMode.pingGame --> pingpy.gameMode.gameMode
+pingpy.gameMode.redLightGreenLight --> pingpy.gameMode.gameMode
+pingpy.gameMode.sandBox --> pingpy.gameMode.gameMode
+pingpy.gameMode.waitingRoom --> pingpy.gameMode.gameMode
+@enduml

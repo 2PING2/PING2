@@ -1,0 +1,15 @@
+@startuml classes_pingpy_gitUpdate
+set namespaceSeparator none
+class "Hotspot" as pingpy.gitUpdate.hotspot.Hotspot {
+  should_stop : bool
+  timeout : NoneType
+  build_backup()
+  check_git_update()
+  check_wifi()
+  monitor_services()
+  setup(app)
+  start_services()
+  stop_services()
+  update_esp()
+}
+@enduml
