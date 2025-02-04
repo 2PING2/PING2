@@ -3,7 +3,7 @@ from ..output.output import Output
 from ..input.input import Input
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME
 from random import uniform
 
 class RedLightGreenLight(GameMode):
@@ -220,7 +220,8 @@ class RedLightGreenLight(GameMode):
             return
         
         if Input.UICorner.level is not None:
-            self.reactionTime = 2*(1-(Input.UICorner.level))
+            self.reactionTime = MAX_REACTION_TIME*(1-(Input.UICorner.level))
+            logger.write_in_log("INFO", __name__, f"compute, select reactionTime {self.reactionTime}s")
 
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
