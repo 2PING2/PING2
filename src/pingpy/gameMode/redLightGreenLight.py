@@ -218,6 +218,9 @@ class RedLightGreenLight(GameMode):
         
         if not self.inGame:
             return
+        
+        if Input.UICorner.level is not None:
+            self.reactionTime = 2*(1-(Input.UICorner.level/1023.0))
 
         for i in range(4):
             if self.check_victory(Input.player[i], Output.player[i]):
