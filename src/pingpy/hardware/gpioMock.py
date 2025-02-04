@@ -27,7 +27,7 @@ class GPIO:
 
     @staticmethod
     def input(pin):
-        print(f"Reading pin {pin}")
+        # print(f"Reading pin {pin}")
         return GPIO.LOW  # Simule un état bas
 
     @staticmethod

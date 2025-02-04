@@ -34,6 +34,7 @@ class Ping:
         self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
+            self.input.player[i].auto.setup()
         ledStrip.setup()
         ledStrip.clear()
         logger.write_in_log("INFO", __name__, "setup")
@@ -47,6 +48,12 @@ class Ping:
                 self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
+            
+            if not self.playerController[i].connected :
+                if self.input.player[i].auto.monitor_switch():
+                    self.input.player[i].auto.buttonPushedFlag = False
+                    self.input.player[i].auto.mode = not self.input.player[i].auto.mode
+            
         self.runGameMode()
         self.refresh_output()
 
