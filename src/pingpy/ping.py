@@ -8,6 +8,7 @@ from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
+import time
 
 
 class Ping:
@@ -22,7 +23,7 @@ class Ping:
         self.currentGameMode = self.waitingRoom
         self.prevGameMode = None
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
-        
+        self.lastRunTime = time.time()
         for i in range(4):
             self.input.player[i].gameController = GameController3ButtonInput()
         
@@ -43,6 +44,9 @@ class Ping:
     def run(self):
         self.esp32.read(self.input)
         self.UICorner.read(self.input, self.output, self.playerLedStrip)
+        t = time.time()
+        timeStep = t - self.lastRunTime
+        self.lastRunTime = t
         for i in range(4):
             try:
                 self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
@@ -53,6 +57,8 @@ class Ping:
             if self.input.player[i].auto.monitor_switch():
                 self.input.player[i].auto.buttonPushedFlag = False
                 self.input.player[i].auto.mode = not self.input.player[i].auto.mode
+                
+            self.input.player[i].linearActuator.computeInterpolation(timeStep)
             
         self.runGameMode()
         self.refresh_output()

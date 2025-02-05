@@ -6,4 +6,17 @@ class LinearActuatorInput():
         self.leftLimit= None
         self.rightLimit= None
         self.currentPose= None
+        self.currentSpeed= None
+        self.currentAcceleration= None
         logger.write_in_log("INFO", __name__, "__init__")
+        
+    def computeInterpolation(self, timeStep):
+        if self.currentAcceleration is None:
+            return
+        if self.currentSpeed is None:
+            return
+        self.currentSpeed += self.currentAcceleration * timeStep
+        if self.currentPose is None:
+            return
+        self.currentPose += self.currentSpeed * timeStep
+                  
