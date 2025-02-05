@@ -1,6 +1,6 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
-from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY, CALIBRATION_KEY, SET_SOL_STATE_KEY, MOVE_TO_KEY
+from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY, CALIBRATION_KEY, SET_SOL_STATE_KEY, MOVE_TO_KEY, CURRENT_ACCELERATION_KEY
   
 class ESP32Serial(SerialCom):
     def __init__(self, port, baudrate, timeout):
@@ -70,6 +70,8 @@ class ESP32Serial(SerialCom):
         elif self.key_values[1]['key'] == CURRENT_POSITION_KEY:
             playerInput.linearActuator.currentPose = float(self.key_values[1]['param'])
             logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPose}")
+        elif self.key_values[1]['key'] == CURRENT_ACCELERATION_KEY:
+            playerInput.linearActuator.currentAcceleration = float(self.key_values[1]['param'])
         elif self.key_values[1]['key'] == RIGHT_LIMIT_KEY:
             playerInput.linearActuator.rightLimit = float(self.key_values[1]['param'])
             logger.write_in_log("INFO", __name__, "process_key_values", f"Right limit: {playerInput.linearActuator.rightLimit}")
