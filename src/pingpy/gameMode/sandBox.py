@@ -59,6 +59,7 @@ class SandBox(GameMode):
             playerInput.gameController.shoot = False 
             
         if playerInput.gameController.inAction == False:
+            playerInput.gameController.inAction = None
             playerOutput.linearActuator.stop = True
                    
         

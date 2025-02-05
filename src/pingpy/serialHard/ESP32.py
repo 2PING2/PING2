@@ -1,6 +1,6 @@
 from .serialCom import SerialCom
 from pingpy.debug import logger
-from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY, CALIBRATION_KEY
+from pingpy.config.config import PLAYER_KEY, PARAM_BEGIN_SEP, PARAM_END_SEP, KEY_SEP, MOVE_TO_LEFT_LIMIT_KEY, MOVE_TO_RIGHT_LIMIT_KEY, STOP_KEY, SET_MAX_SPEED_KEY, CURRENT_SPEED_KEY, CURRENT_POSITION_KEY, RIGHT_LIMIT_KEY, LEFT_LIMIT_KEY, CALIBRATION_KEY, SET_SOL_STATE_KEY
   
 class ESP32Serial(SerialCom):
     def __init__(self, port, baudrate, timeout):
@@ -102,3 +102,9 @@ class ESP32Serial(SerialCom):
             if playerOutput.linearActuator.askForCalibration:
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + CALIBRATION_KEY)
                 playerOutput.linearActuator.askForCalibration = None
+            if playerOutput.bumper.state is not None:
+                if playerOutput.bumper.state == True:
+                    self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_SOL_STATE_KEY + PARAM_BEGIN_SEP + "1" + PARAM_END_SEP)
+                else:
+                    self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_SOL_STATE_KEY + PARAM_BEGIN_SEP + "0" + PARAM_END_SEP)
+                playerOutput.bumper.state = None
