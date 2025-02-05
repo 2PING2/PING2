@@ -250,7 +250,7 @@ class RedLightGreenLight(GameMode):
             return
         
         if not Input.player:
-            logger.write_in_log("ERROR", "RedLightGreenLight", "compute", "No players connected.")
+            logger.write_in_log("ERROR", __name__, "compute", "No players connected...")
             return
         
         if not self.inGame:
@@ -300,7 +300,8 @@ class RedLightGreenLight(GameMode):
         Stops the game and resets the outputs.
         """
         self.inGame = False
-        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
         
         for i in range(4):
             output_ptr.player[i].linearActuator.stop = True
+            
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
