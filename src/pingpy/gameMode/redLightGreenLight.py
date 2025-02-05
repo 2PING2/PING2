@@ -11,6 +11,7 @@ class AutoPlayRedLightGreenLight:
         self.loosingProb = 0
         self.minReactionTime = 0
         self.shouldStopDelay = None
+        self.stopOrMoveSaid = None
         
     def set_skill(self, skill, reactionTime):
         self.loosingProb = 0.6*(1-skill) # give a random aspect
@@ -21,8 +22,18 @@ class AutoPlayRedLightGreenLight:
         t1 = self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
         self.shouldStopDelay = uniform(t0, t1)
 
-    def run(self, playerInput, playerOutput, currentTime):
-        pass
+    def run(self, playerInput, playerOutput, timeFromInitMatch):
+        
+        if timeFromInitMatch<self.shouldStopDelay:
+            if self.stopOrMoveSaid is not True:
+                playerOutput.linearActuator.setMaxSpeed = 10.0
+                playerOutput.linearActuator.moveToRight = True
+                self.stopOrMoveSaid = True
+        else:
+            if self.stopOrMoveSaid is not False:
+                playerOutput.linearActuator.stop = True
+                self.stopOrMoveSaid = False
+        
         
         
 
@@ -41,6 +52,7 @@ class RedLightGreenLight(GameMode):
         self.currentDifficulty = 0
         self.color = BLUE
         self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
+        self.autoPlayer = [AutoPlayRedLightGreenLight() for _ in range(4)]
 
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
@@ -102,7 +114,7 @@ class RedLightGreenLight(GameMode):
         self.waitForStart = False
         return True
     
-    def randomize_duration(self, Output=None):
+    def randomize_duration(self, Output, playerId):
         """
         Randomize the duration of the green and red lights.
         """
@@ -111,6 +123,7 @@ class RedLightGreenLight(GameMode):
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
+            self.autoPlayer[playerId].randomize_duration()
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
@@ -125,7 +138,7 @@ class RedLightGreenLight(GameMode):
         result = elapsedTime < self.durationGreenLight + self.reactionTime
         return result
 
-    def check_action(self, playerInput, playerOutput, currentTime):
+    def check_action(self, playerInput, playerOutput, currentTime, playerId):
         """
         Checks the player's action according to the current state of the light.
         """
@@ -145,6 +158,8 @@ class RedLightGreenLight(GameMode):
                 self.lose(playerOutput)
             return
         
+        if playerInput.auto.mode:
+            self.autoMode[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
         if playerInput.gameController.inAction:
             if canmove:
                 playerOutput.linearActuator.setMaxSpeed = 10.0
@@ -190,7 +205,7 @@ class RedLightGreenLight(GameMode):
         
         return False
 
-    def cycle(self, currentTime, Output):
+    def cycle(self, currentTime, Output, playerId):
         """
         Manages the alternation between green and red lights.
         """
@@ -212,7 +227,8 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = [PATH_AUDIO_123SOLEIL_SOLEIL]
             else:
                 self.timeInit = currentTime
-                self.randomize_duration(Output)
+                self.randomize_duration(Output, playerId)
+                
                 
         except Exception as e:
             logger.write_in_log("ERROR", "RedLightGreenLight", "cycle", f"Cycle error: {e}")
@@ -251,8 +267,8 @@ class RedLightGreenLight(GameMode):
                 self.makeWin(Output, i)
                 break
             else:
-                self.check_action(Input.player[i], Output.player[i], time.time())
-                self.cycle(time.time(), Output)
+                self.check_action(Input.player[i], Output.player[i], time.time(),i)
+                self.cycle(time.time(), Output, i)
 
     def makeWin(self, Output, winnerID):
         """
