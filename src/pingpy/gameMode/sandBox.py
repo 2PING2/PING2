@@ -1,4 +1,4 @@
-from gameMode import GameMode
+from .gameMode import GameMode
 from pingpy.config.config import YELLOW, PATH_AUDIO_SANDBOX_INTRO
 from ..output.output import Output
 from ..input.input import Input
