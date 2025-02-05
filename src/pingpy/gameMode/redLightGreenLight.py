@@ -114,7 +114,7 @@ class RedLightGreenLight(GameMode):
         self.waitForStart = False
         return True
     
-    def randomize_duration(self, Output, playerId):
+    def randomize_duration(self, Output):
         """
         Randomize the duration of the green and red lights.
         """
@@ -123,7 +123,7 @@ class RedLightGreenLight(GameMode):
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
-            self.autoPlayer[playerId].randomize_duration()
+            # self.autoPlayer[playerId].randomize_duration()
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
@@ -227,7 +227,7 @@ class RedLightGreenLight(GameMode):
                     Output.speaker.audioPiste = [PATH_AUDIO_123SOLEIL_SOLEIL]
             else:
                 self.timeInit = currentTime
-                self.randomize_duration(Output, playerId)
+                self.randomize_duration(Output)
                 
                 
         except Exception as e:
