@@ -1,12 +1,12 @@
 #include "Solenoid.hpp"
 #include "config.h"
 float Solenoid::maxTemp = 50.0;
-uint8_t Solenoid::instanceCount = 0;
+uint8_t Solenoid::channelCount = 1;
 
 Solenoid::Solenoid(int solenoidPin)
 {
     this->solenoidPin = solenoidPin;
-    channel = instanceCount++;
+    channel = channelCount++;
 }
 
 Solenoid::~Solenoid()
@@ -17,7 +17,7 @@ void Solenoid::setup()
 {
     // pinMode(this->solenoidPin, OUTPUT);
     ledcAttachPin(this->solenoidPin, channel);
-    ledcSetup(0, 100000, ANALOG_WRITE_RESOLUTION);
+    ledcSetup(channel, 100000, ANALOG_WRITE_RESOLUTION);
     deactivate();
 }
 

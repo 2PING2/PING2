@@ -13,7 +13,7 @@ private:
     static float maxTemp;
     float currentTemp = 0.0;
     uint64_t lastTempCheck = 0;
-    static uint8_t instanceCount;
+    static uint8_t channelCount;
     uint8_t channel;
 public:
     Solenoid(int solenoidPin),
