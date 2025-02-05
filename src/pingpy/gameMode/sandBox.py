@@ -45,12 +45,12 @@ class SandBox(GameMode):
         """        
         
         if playerInput.gameController.left == True:
-            playerOutput.linearActuator.setMaxSpeed = 80.0
+            playerOutput.linearActuator.setMaxSpeed = 100.0
             playerOutput.linearActuator.setMaxAccel = 500.0
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
         if playerInput.gameController.right == True:
-            playerOutput.linearActuator.setMaxSpeed = 80.0
+            playerOutput.linearActuator.setMaxSpeed = 100.0
             playerOutput.linearActuator.setMaxAccel = 500.0
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False            
@@ -58,7 +58,7 @@ class SandBox(GameMode):
             playerOutput.bumper.state = True
             playerInput.gameController.shoot = False 
             
-        if playerInput.gameController.inAction == False:
+        if playerInput.gameController.inAction == False and not(playerInput.gameController.leftButtonState or playerInput.gameController.rightButtonState or playerInput.gameController.shootButtonState):
             playerInput.gameController.inAction = None
             playerOutput.linearActuator.stop = True
                    
