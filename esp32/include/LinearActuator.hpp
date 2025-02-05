@@ -45,7 +45,9 @@ public:
     int run();
     float current_position() { return motor.currentPosition() / MICRO_STEPS_PER_MM; }
     float current_speed() { return motor.speed() / MICRO_STEPS_PER_MM; }
+    float current_acceleration() { return currentAcceleration; }
     float max_speed() { return motor.maxSpeed() / MICRO_STEPS_PER_MM; }
+    float max_acceleration() { return motor.acceleration() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
     float get_right_limit() { return rightLimit; }
     float get_left_limit() { return leftLimit; }
@@ -56,10 +58,16 @@ public:
     bool is_busy() { return is_calibrating(); }
     bool consume_mvt_flag() { bool tmp = mvt_flag; mvt_flag = false; return tmp; }
     bool consume_cal_flag() { bool tmp = cal_flag; cal_flag = false; return tmp; }
+    bool compute_new_acceleration(float time = esp_timer_get_time()/1e6);
+
 
 #ifndef EVERYTHING_PUBLIC
 private:
 #endif
+    float previousSpeed = 0;
+    float previousTime = 0;
+    float currentAcceleration = 0, previousAcceleration = 0;
+
     static Vector<LinearActuator *> all;
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;
     float leftLimit = LINEAR_ACTUATOR_RAILHEAD;

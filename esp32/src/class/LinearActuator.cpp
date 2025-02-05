@@ -98,6 +98,37 @@ void LinearActuator::instant_stop()
     motor.runSpeed();
 }
 
+bool LinearActuator::compute_new_acceleration(float time)
+{
+    float dt = time - previousTime;
+    if (dt < COMPUTE_ACCELERATION_PERIOD)
+        return false;
+        
+    previousTime = time;
+
+    float ds = current_speed() - previousSpeed;
+    previousSpeed = current_speed();
+
+    // acceleration in mm/s², should always work for any kind of movement
+    float accelerationApprox = ds / dt; 
+
+    // with acclesstepper, the motor can have only 3 different acceleration values
+    if (accelerationApprox > max_acceleration() * 0.5) // positive acceleration
+        currentAcceleration = max_acceleration();
+    else if (accelerationApprox < -max_acceleration() * 0.5) // negative acceleration
+        currentAcceleration = -max_acceleration();
+    else // no acceleration
+        currentAcceleration = 0;
+        
+    // if the acceleration changes, return true
+    if (currentAcceleration != previousAcceleration)
+    {
+        previousAcceleration = currentAcceleration;
+        return true;
+    }
+    return false;
+}
+
 int LinearActuator::run()
 {
     bool r = motor.run();

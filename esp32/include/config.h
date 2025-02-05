@@ -19,6 +19,7 @@
 #define LINEAR_ACTUATOR_MAX_SPEED        200.0f // mm/s
 #define LINEAR_ACTUATOR_MAX_ACCELERATION 1000.0f // mm/s²
 #define RMS_CURRENT                       100   // percent of the max current
+#define COMPUTE_ACCELERATION_PERIOD       50   // ms
 
 // Calibration Settings
 #define COARSE_CALIBRATION_SPEED           76   // mm/s
@@ -132,6 +133,7 @@
 #define MOVE_TO_KEY String("MT")
 #define CURRENT_POSITION_KEY String("CP")
 #define CURRENT_SPEED_KEY String("CS")
+#define CURRENT_ACCELERATION_KEY String("CA")
 
 #define SET_KEY String("S")
 #define MAX_SPEED_KEY String("MS")
@@ -152,6 +154,7 @@
 #define ASK_KEY String("A")
 #define ASK_CURRENT_POSITION_KEY (ASK_KEY+CURRENT_POSITION_KEY)
 #define ASK_CURRENT_SPEED_KEY (ASK_KEY+CURRENT_SPEED_KEY)
+#define ASK_CURRENT_ACCELERATION_KEY (ASK_KEY+CURRENT_ACCELERATION_KEY)
 #define ASK_MAX_SPEED_KEY (ASK_KEY+MAX_SPEED_KEY)
 #define ASK_CALIBRATED (ASK_KEY+CALIBRATION_KEY)
 #define ASK_RIGHT_LIMIT_KEY (ASK_KEY+RIGHT_LIMIT_KEY)
