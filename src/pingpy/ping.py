@@ -16,7 +16,7 @@ class Ping:
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
-        self.gameModeList = [RedLightGreenLight()]
+        self.gameModeList = [RedLightGreenLight(), SandBox()]
         self.currentGameMode = None
         self.waitingRoom = WaitingRoom(self.gameModeList, self.currentGameMode)
         self.currentGameMode = self.waitingRoom
