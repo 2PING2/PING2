@@ -29,7 +29,6 @@ class SandBox(GameMode):
                 playerOutput.linearActuator.moveTo = 0.0
                 playerOutput.linearActuator.setMaxSpeed = 200.0
                 playerOutput.linearActuator.setMaxAccel = 200.0
-                playerInput.gameController.inAction = None
                 
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
@@ -45,22 +44,20 @@ class SandBox(GameMode):
         Checks the player's action
         """        
         
-        if playerInput.gameController.inAction:
-            if playerInput.gameController3Button.left == True:
-                playerOutput.linearActuator.setMaxSpeed = 100.0
-                playerOutput.linearActuator.setMaxAccel = 100.0
-                playerOutput.linearActuator.moveToLeft = True
-                playerInput.gameController3Button.left = False
-            if playerInput.gameController3Button.right == True:
-                playerOutput.linearActuator.setMaxSpeed = 100.0
-                playerOutput.linearActuator.setMaxAccel = 100.0
-                playerOutput.linearActuator.moveToRight = True
-                playerInput.gameController3Button.right = False            
-            if playerInput.gameController3Button.shoot == True:
-                playerOutput.bumper.state = True
-                playerInput.gameController3Button.shoot = False  
+        if playerInput.gameController.left == True:
+            playerOutput.linearActuator.setMaxSpeed = 80.0
+            playerOutput.linearActuator.setMaxAccel = 500.0
+            playerOutput.linearActuator.moveToLeft = True
+            playerInput.gameController.left = False
+        if playerInput.gameController.right == True:
+            playerOutput.linearActuator.setMaxSpeed = 80.0
+            playerOutput.linearActuator.setMaxAccel = 500.0
+            playerOutput.linearActuator.moveToRight = True
+            playerInput.gameController.right = False            
+        if playerInput.gameController.shoot == True:
+            playerOutput.bumper.state = True
+            playerInput.gameController.shoot = False  
                    
-        playerInput.gameController.inAction = None
         
                 
     def compute(self, Input, Output):
