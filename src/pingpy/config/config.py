@@ -192,7 +192,7 @@ PATH_AUDIO_LIGHT_TRACKER_INTRO = PATH_AUDIO_LIGHT_TRACKER + "Intro_LightTracker.
 
 # sand box
 PATH_AUDIO_SANDBOX = PATH_AUDIO + "sandBox/"
-PATH_AUDIO_SANDBOX_INTRO = PATH_AUDIO_SANDBOX + "Intro_SandBox.wav"
+PATH_AUDIO_SANDBOX_INTRO = PATH_AUDIO_SANDBOX + "Intro_sandBox.wav"
 
 ####################################
 # redLightGreddLight SETTINGS
