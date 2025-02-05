@@ -183,12 +183,11 @@ void RaspComManagement::processKeyValues()
     {
         try
         {
-            bool state = keyValues[1]->param.toInt();
-            if (state)
-                player->solenoid.activate();
+            float state = keyValues[1]->param.toFloat();
+            if (state > 0)
+                player->solenoid.activate(state);
             else
                 player->solenoid.deactivate();
-
         }
         catch(const std::exception& e)
         {

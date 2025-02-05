@@ -1,10 +1,12 @@
 #include "Solenoid.hpp"
 #include "config.h"
 float Solenoid::maxTemp = 50.0;
+uint8_t Solenoid::instanceCount = 0;
 
 Solenoid::Solenoid(int solenoidPin)
 {
     this->solenoidPin = solenoidPin;
+    channel = instanceCount++;
 }
 
 Solenoid::~Solenoid()
@@ -14,7 +16,7 @@ Solenoid::~Solenoid()
 void Solenoid::setup()
 {
     // pinMode(this->solenoidPin, OUTPUT);
-    ledcAttachPin(this->solenoidPin, 0);
+    ledcAttachPin(this->solenoidPin, channel);
     ledcSetup(0, 100000, ANALOG_WRITE_RESOLUTION);
     deactivate();
 }
@@ -22,11 +24,11 @@ void Solenoid::setup()
 void Solenoid::activate()
 {
     state = true;
-    // digitalWrite(this->solenoidPin, HIGH);
-    int pwm = power * (1 << ANALOG_WRITE_RESOLUTION)-1;
-    Serial.println(pwm);
+    // digitalWrite(this->solenoidPin, HIGH); 
+    int pwm = (power * (1 - MIN_SOLENOID_MIN_POWER) + MIN_SOLENOID_MIN_POWER) * ((1 << ANALOG_WRITE_RESOLUTION)-1);
+    // Serial.println(pwm);
     // analogWrite(this->solenoidPin, power);
-    ledcWrite(0, pwm);
+    ledcWrite(channel, pwm);
 }
 
 void Solenoid::deactivate()
@@ -34,7 +36,7 @@ void Solenoid::deactivate()
     state = false;
     // digitalWrite(this->solenoidPin, LOW);
     // analogWrite(this->solenoidPin, 0);
-    ledcWrite(0, 0);
+    ledcWrite(channel, 0);
 }
 
 bool Solenoid::over_temp_protect(uint64_t currentTime)

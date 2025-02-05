@@ -71,6 +71,7 @@
 #define P2_SOLENOID_PIN GPIO_NUM_26
 #define P3_SOLENOID_PIN GPIO_NUM_27
 #define P4_SOLENOID_PIN GPIO_NUM_12
+#define MIN_SOLENOID_MIN_POWER 0.82
 
 ////////////////////////////////////
 // BEAM SWITCH SETTINGS
