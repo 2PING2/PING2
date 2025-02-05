@@ -180,15 +180,19 @@ PATH_AUDIO_PLAYER_ROUGE = PATH_AUDIO + "Le_joueur_rouge.wav"
 PATH_AUDIO_PLAYER_JAUNE = PATH_AUDIO + "Le_joueur_jaune.wav"
 PATH_AUDIO_PLAYER_VERT = PATH_AUDIO + "Le_joueur_vert.wav"
 
+# redLightGreenLight
 PATH_AUDIO_123SOLEIL = PATH_AUDIO + "redLightGreenLight/"
 PATH_AUDIO_123SOLEIL_INTRO = PATH_AUDIO_123SOLEIL + "Intro_123SOLEIL.wav"
 PATH_AUDIO_123SOLEIL_123 = PATH_AUDIO_123SOLEIL + "123.wav"
 PATH_AUDIO_123SOLEIL_SOLEIL = PATH_AUDIO_123SOLEIL + "Soleil.wav"
 
+# light tracker
 PATH_AUDIO_LIGHT_TRACKER = PATH_AUDIO + "lightTracker/"
 PATH_AUDIO_LIGHT_TRACKER_INTRO = PATH_AUDIO_LIGHT_TRACKER + "Intro_LightTracker.wav"
 
-
+# sand box
+PATH_AUDIO_SANDBOX = PATH_AUDIO + "sandBox/"
+PATH_AUDIO_SANDBOX_INTRO = PATH_AUDIO_SANDBOX + "sandBox/Intro_SandBox.wav"
 
 ####################################
 # redLightGreddLight SETTINGS
