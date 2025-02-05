@@ -67,8 +67,6 @@ class SandBox(GameMode):
         """
         Executes an iteration of the game mode.
         """
-        if(not self.wait_for_start(Input, Output)):
-            return
         
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
