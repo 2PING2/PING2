@@ -29,10 +29,13 @@ class AutoPlayRedLightGreenLight:
                 playerOutput.linearActuator.setMaxSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
                 self.stopOrMoveSaid = True
+                return True
         else:
             if self.stopOrMoveSaid is not False:
                 playerOutput.linearActuator.stop = True
                 self.stopOrMoveSaid = False
+                return False
+        return None
         
         
         
@@ -123,7 +126,8 @@ class RedLightGreenLight(GameMode):
             max_duration = min_duration + 3
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
-            # self.autoPlayer[playerId].randomize_duration()
+            for playerId in range(4):
+                self.autoPlayer[playerId].randomize_duration(self.durationRedLight, self.reactionTime)
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
@@ -152,15 +156,17 @@ class RedLightGreenLight(GameMode):
         except Exception as e:
             pass
         
-        canmove = self.can_move(currentTime)        
-        if playerInput.gameController.inAction is None:
+        canmove = self.can_move(currentTime)   
+        action = playerInput.gameController.inAction
+        if playerInput.auto.mode:
+            action = self.autoMode[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
+
+        if action is None:
             if not canmove and playerInput.linearActuator.moving:
                 self.lose(playerOutput)
             return
         
-        if playerInput.auto.mode:
-            self.autoMode[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
-        if playerInput.gameController.inAction:
+        if action:
             if canmove:
                 playerOutput.linearActuator.setMaxSpeed = 10.0
                 playerOutput.linearActuator.moveToRight = True
