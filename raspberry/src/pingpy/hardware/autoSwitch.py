@@ -55,6 +55,7 @@ class AutoSwitch:
         gpioStatus = GPIO.input(self.autoSwitchPin)
         if gpioStatus == GPIO.LOW: # switch pushed
             if self.buttonState != gpioStatus: # changed
+                print("button pushed")
                 self.buttonState = gpioStatus
                 self.buttonPushedFlag = True                     
         # Put the LED on or off        
