@@ -23,6 +23,7 @@ class StatusStreamer:
         return None
     
     def sendStatus(self, input, t =  time.time()):
+        print("INFO"+ __name__+"sendStatus"+ "sendStatus")
         if t - self.lastTime < 0.5:
             return
         self.lastTime = t
