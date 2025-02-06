@@ -55,7 +55,7 @@ class SandBox(GameMode):
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False            
         if playerInput.gameController.shoot == True:
-            playerOutput.bumper.state = 0.8
+            playerOutput.bumper.state = 1
             playerInput.gameController.shoot = None
         if playerInput.gameController.shoot == False:
             playerOutput.bumper.state = 0

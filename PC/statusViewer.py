@@ -1,12 +1,35 @@
 import socket
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import math
+import threading
 
 HOST = "0.0.0.0"  # Écoute sur toutes les interfaces réseau
 PORT = 5356       # Doit correspondre au port utilisé par la Raspberry Pi
 
-# Liste pour stocker les positions des joueurs (x, y)
-positions = [(0, 0)] * 4  # Initialisation avec des positions fictives (4 joueurs)
+# Liste pour stocker les positions des joueurs
+positions = [0, 0, 0, 0]  # Initialisation avec des positions fictives pour 4 joueurs
+
+# Fonction de calcul des positions 2D
+def compute2DPosition(linearActuatorPose, playerId):
+    theta = playerId * 90  # Angle de 90° par joueur
+    
+    x = linearActuatorPose
+    y = 300  # Valeur d'offset, à ajuster si nécessaire
+    
+    # Calcul des coordonnées après rotation
+    xbis = x * math.cos(math.radians(theta)) - y * math.sin(math.radians(theta))
+    ybis = x * math.sin(math.radians(theta)) + y * math.cos(math.radians(theta))
+    
+    return (xbis, ybis)
+
+# Conversion des valeurs reçues en coordonnées x, y
+def map_positions_to_coordinates():
+    player_positions = []
+    for playerId, linearActuatorPose in enumerate(positions):
+        x, y = compute2DPosition(linearActuatorPose, playerId)
+        player_positions.append((x, y))
+    return player_positions
 
 def receive_positions():
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -18,32 +41,36 @@ def receive_positions():
         positions_data = data.decode().split(";")  # Décodage des positions reçues
         positions_data = [float(p) for p in positions_data]  # Conversion en float
         
+        # print(f"🎯 Positions reçues: {positions_data}")
+        
         # Met à jour les positions
         global positions
-        positions = [(positions_data[i], positions_data[i+1]) for i in range(0, len(positions_data), 2)]
+        positions = positions_data  # On remplace les anciennes positions par les nouvelles
         
         # Mise à jour du graphique
         update_graph()
 
 def update_graph():
-    # Mise à jour de la position sur le graphique
-    x_vals, y_vals = zip(*positions)  # Séparer les positions en x et y
-    scatter.set_offsets(list(zip(x_vals, y_vals)))  # Mettre à jour les coordonnées des joueurs
+    # Conversion des positions en coordonnées x, y
+    player_positions = map_positions_to_coordinates()
+    
+    # Mise à jour des positions sur le graphique
+    print(f"🎯 Mise à jour des positions: {player_positions}")
+    scatter.set_offsets(player_positions)  # Mettre à jour les coordonnées des joueurs
 
 def animate(i):
     pass  # Cette fonction est utilisée par FuncAnimation, mais aucune action ici
 
 # Création du graphique
 fig, ax = plt.subplots()
-ax.set_xlim(-10, 10)  # Limites du graphique, ajuster selon tes données
-ax.set_ylim(-10, 10)
-scatter = ax.scatter([p[0] for p in positions], [p[1] for p in positions], c='red')
+ax.set_xlim(-400, 400)  # Limites du graphique pour un carré de 400mm
+ax.set_ylim(-400, 400)
+scatter = ax.scatter([0, 0, 0, 0], [0, 0, 0, 0], c='red')  # Initialisation avec des positions fictives
 
 # Animation pour mettre à jour le graphique en temps réel
 ani = FuncAnimation(fig, animate, interval=100)  # Rafraîchissement toutes les 100ms
 
 # Lancer le thread de réception des positions en arrière-plan
-import threading
 thread = threading.Thread(target=receive_positions)
 thread.daemon = True
 thread.start()

@@ -62,7 +62,7 @@ class ESP32Serial(SerialCom):
         playerInput = input_ptr.player[player_id]
         if self.key_values[1]['key'] == CURRENT_SPEED_KEY:
             playerInput.linearActuator.currentSpeed = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Current speed: {playerInput.linearActuator.currentSpeed}")
+            # logger.write_in_log("INFO", __name__, "process_key_values", f"Current speed: {playerInput.linearActuator.currentSpeed}")
             if playerInput.linearActuator.currentSpeed == 0:
                 playerInput.linearActuator.moving = False
             else:
@@ -70,16 +70,16 @@ class ESP32Serial(SerialCom):
                 
         elif self.key_values[1]['key'] == CURRENT_POSITION_KEY:
             playerInput.linearActuator.currentPose = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPose}")
+            # logger.write_in_log("INFO", __name__, "process_key_values", f"Current position: {playerInput.linearActuator.currentPose}")
         elif self.key_values[1]['key'] == CURRENT_ACCELERATION_KEY:
             playerInput.linearActuator.currentAcceleration = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Current acceleration: {playerInput.linearActuator.currentAcceleration}")
+            # logger.write_in_log("INFO", __name__, "process_key_values", f"Current acceleration: {playerInput.linearActuator.currentAcceleration}")
         elif self.key_values[1]['key'] == RIGHT_LIMIT_KEY:
             playerInput.linearActuator.rightLimit = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Right limit: {playerInput.linearActuator.rightLimit}")
+            # logger.write_in_log("INFO", __name__, "process_key_values", f"Right limit: {playerInput.linearActuator.rightLimit}")
         elif self.key_values[1]['key'] == LEFT_LIMIT_KEY:
             playerInput.linearActuator.leftLimit = float(self.key_values[1]['param'])
-            logger.write_in_log("INFO", __name__, "process_key_values", f"Left limit: {playerInput.linearActuator.leftLimit}")
+            # logger.write_in_log("INFO", __name__, "process_key_values", f"Left limit: {playerInput.linearActuator.leftLimit}")
             
             
         
