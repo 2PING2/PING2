@@ -123,6 +123,7 @@ bool LinearActuator::compute_new_acceleration(float time)
     // if the acceleration changes, return true
     if (currentAcceleration != previousAcceleration)
     {
+        Serial.println("new acceleration : " + String(currentAcceleration));
         previousAcceleration = currentAcceleration;
         return true;
     }
