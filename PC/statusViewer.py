@@ -55,7 +55,7 @@ def update_graph():
     player_positions = map_positions_to_coordinates()
     
     # Mise à jour des positions sur le graphique
-    print(f"🎯 Mise à jour des positions: {player_positions}")
+    # print(f"🎯 Mise à jour des positions: {player_positions}")
     scatter.set_offsets(player_positions)  # Mettre à jour les coordonnées des joueurs
 
 def animate(i):
