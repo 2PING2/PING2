@@ -15,6 +15,7 @@ class StatusStreamer:
         for line in result.splitlines():
             parts = line.split()
             if len(parts) > 4 and parts[4].startswith("("):
+                print(f"🎯 IP trouvée: {parts[4][1:-1]}")
                 return parts[4][1:-1]  # Enlève les parenthèses autour de l'IP
         return None
     
@@ -27,7 +28,6 @@ class StatusStreamer:
             return
         
         playerPosition = [input.player[i].linearActuator.currentPose for i in range(4)]
-
         # replace None by 0
         playerPosition = [0 if p is None else p for p in playerPosition]
         # Convertir en texte et envoyer
