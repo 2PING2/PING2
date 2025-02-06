@@ -18,33 +18,34 @@ class ESP32Serial(SerialCom):
     def read(self, input_ptr):
         """Read the next data from the serial port."""
         self.read_data_task()
-        new_line = self.consume_older_data()
-        
-        if new_line is None:
-            return
+        while True:
+            new_line = self.consume_older_data()
             
-        key = ""
-        param = ""
-        is_param = False
-        self.key_values = []
+            if new_line is None:
+                return
+                
+            key = ""
+            param = ""
+            is_param = False
+            self.key_values = []
 
-        for i in range(len(new_line)):
-            char = new_line[i]
-            if char == KEY_SEP or i == len(new_line) - 1:
-                # Store the key-value pair
-                self.key_values.append({"key": key, "param": param})
-                key = ""
-                param = ""
-            elif char == PARAM_BEGIN_SEP:
-                is_param = True
-            elif char == PARAM_END_SEP:
-                is_param = False
-            elif is_param:
-                param += char
-            else:
-                key += char
-            
-        self.process_key_values(input_ptr)
+            for i in range(len(new_line)):
+                char = new_line[i]
+                if char == KEY_SEP or i == len(new_line) - 1:
+                    # Store the key-value pair
+                    self.key_values.append({"key": key, "param": param})
+                    key = ""
+                    param = ""
+                elif char == PARAM_BEGIN_SEP:
+                    is_param = True
+                elif char == PARAM_END_SEP:
+                    is_param = False
+                elif is_param:
+                    param += char
+                else:
+                    key += char
+                
+            self.process_key_values(input_ptr)
 
     def process_key_values(self, input_ptr):
         """Processes the parsed key-value pairs."""
