@@ -57,7 +57,8 @@ class AutoSwitch:
             if self.buttonState != gpioStatus: # changed
                 print("button pushed")
                 self.buttonState = gpioStatus
-                self.buttonPushedFlag = True                     
+                if gpioStatus: # if pressed
+                    self.mode = not self.mode                   
         # Put the LED on or off        
         if self.ledState != self.mode:
             self.ledState = self.mode
