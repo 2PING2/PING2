@@ -37,6 +37,7 @@ class SandBox(GameMode):
                 playerOutput = Output.player[i]
                 playerInput = Input.player[i]
                 playerOutput.playerLedStrip.area = [-200, 200] 
+                playerOutput.playerLedStrip.color = self.color
                 playerOutput.linearActuator.moveTo = 0.0
                 playerOutput.linearActuator.setMaxSpeed = 200.0
                 playerOutput.linearActuator.setMaxAccel = 500.0
@@ -57,13 +58,13 @@ class SandBox(GameMode):
         # left    
         if playerInput.gameController.left == True:
             if self.maxSpeed is not None:
-                playerOutput.linearActuator.setmaxSpeed = self.maxSpeed
+                playerOutput.linearActuator.setmaxSpeed = self.speed
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
         # right
         if playerInput.gameController.right == True:
             if self.maxSpeed is not None:
-                playerOutput.linearActuator.setmaxSpeed = self.maxSpeed
+                playerOutput.linearActuator.setmaxSpeed = self.speed
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False 
         # shoot           
