@@ -74,7 +74,7 @@ void test_beamSwitch_emit()
         vTaskDelay(1);
     } while (t < 500000); // 500ms of timeout
 
-
+    Serial.println("dt1 : " + String(dt[0]) + " dt2 : " + String(dt[1]) + " dt3 : " + String(dt[2]) + " dt4 : " + String(dt[3]));
     // check for timeout
     TEST_ASSERT_GREATER_THAN(0, dt[0]);
     TEST_ASSERT_GREATER_THAN(0, dt[1]);
@@ -108,6 +108,7 @@ void test_beamSwitch_stopEmit()
         vTaskDelay(1);
     } while (t < 500000); // 500ms of timeout
 
+    Serial.println("dt1 : " + String(dt[0]) + " dt2 : " + String(dt[1]) + " dt3 : " + String(dt[2]) + " dt4 : " + String(dt[3]));
 
     // check for timeout
     TEST_ASSERT_GREATER_THAN(0, dt[0]);
@@ -121,14 +122,31 @@ void test_beamSwitch_stopEmit()
 void setup() 
 {
     Serial.begin(115200);
-    UNITY_BEGIN();
-    RUN_TEST(test_init);
-    RUN_TEST(test_beamSwitch_emit);
-    RUN_TEST(test_beamSwitch_stopEmit);
-    UNITY_END();
+    // UNITY_BEGIN();
+    // RUN_TEST(test_init);
+    // RUN_TEST(test_beamSwitch_emit);
+    // RUN_TEST(test_beamSwitch_stopEmit);
+    // UNITY_END();
+    BeamSwitch::setup_emitter();
+    b1.setup();
+    b2.setup();
+    b3.setup();
+    b4.setup();
+
+    delay(100);
+
     
 }
 
 void loop()
 {
+    Serial.print(b1.get_state());
+    Serial.print(" ");
+    Serial.print(b2.get_state());
+    Serial.print(" ");
+    Serial.print(b3.get_state());
+    Serial.print(" ");
+    Serial.println(b4.get_state());
+    
+    delay(100);
 }

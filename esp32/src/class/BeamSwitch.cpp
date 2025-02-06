@@ -41,7 +41,7 @@ void BeamSwitch::check_all_task(void *pvParameters)
 
 void BeamSwitch::setup()
 {
-    pinMode(beamSwitchRPin, INPUT);
+    pinMode(beamSwitchRPin, INPUT_PULLUP);
     all.push_back(this);
 }
 
