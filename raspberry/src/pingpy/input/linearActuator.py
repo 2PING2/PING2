@@ -10,16 +10,17 @@ class LinearActuatorInput():
         self.currentAcceleration= None
         logger.write_in_log("INFO", __name__, "__init__")
         
-    def computeInterpolation(self, timeStep):
+    def computeInterpolation(self, timeStep, i = 0):
         if self.currentAcceleration is None:
             return
-        print("current acceleration", self.currentAcceleration)
+        if i == 0:
+            print("current acceleration", self.currentAcceleration)
+            print("current speed", self.currentSpeed)
+            print("current pose", self.currentPose)
         if self.currentSpeed is None:
             return
-        print("current speed", self.currentSpeed)
         self.currentSpeed += self.currentAcceleration * timeStep
         if self.currentPose is None:
             return
-        print("current pose", self.currentPose)
         self.currentPose += self.currentSpeed * timeStep
                   
