@@ -101,8 +101,11 @@ void LinearActuator::instant_stop()
 bool LinearActuator::compute_new_acceleration(float time)
 {
     float dt = time - previousTime;
+    Serial.println("flag1");
     if (dt < COMPUTE_ACCELERATION_PERIOD)
         return false;
+
+    Serial.println("flag2");
         
     previousTime = time;
 
@@ -123,10 +126,10 @@ bool LinearActuator::compute_new_acceleration(float time)
     // if the acceleration changes, return true
     if (currentAcceleration != previousAcceleration)
     {
-        Serial.println("new acceleration : " + String(currentAcceleration));
         previousAcceleration = currentAcceleration;
         return true;
     }
+    Serial.println("flag3");
     return false;
 }
 
