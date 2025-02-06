@@ -6,7 +6,14 @@ class StatusStreamer:
     def __init__(self, delay = 0.5, host = "0.0.0.0", port = 5356):
         self.sendToIP = self.lookForSshIp()
         self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.server.bind((host, port))
+        
+        try :
+            self.server.bind((host, port))
+        except Exception as e:
+            self.server = None
+            self.sendToIP = None
+            print("🎯 Erreur lors de la liaison du serveur UDP:", e)
+            
         self.port = port
         self.lastTime = 0
     
