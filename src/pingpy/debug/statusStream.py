@@ -20,7 +20,7 @@ class StatusStreamer:
         if self.sendToIP is None:
             return
         
-        playerPosition = [input.player[i].linearActuator.position for i in range(4)]
+        playerPosition = [input.player[i].linearActuator.currentPose for i in range(4)]
         
         # Convertir en texte et envoyer
         data = ";".join([f"{p[0]},{p[1]}" for p in playerPosition])
