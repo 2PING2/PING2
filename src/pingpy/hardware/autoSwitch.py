@@ -52,6 +52,7 @@ class AutoSwitch:
         """Read the state of the switch and update the LED"""
         if GPIO.input(self.autoSwitchPin) == GPIO.LOW: # switch pushed
             if not self.buttonPushedFlag: # raising egde
+                print("Auto switch pushed")
                 self.buttonPushedFlag = True
                 if self.mode:
                     self.mode = False # disable auto mode            
