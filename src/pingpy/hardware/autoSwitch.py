@@ -30,6 +30,7 @@ class AutoSwitch:
         self.ledState = False
         self.mode = False
         self.buttonPushedFlag = False
+        self.buttonState = False
         self.buttonReleasedFlag = False
         self.autoSwitchPin = AUTO_SWITCH_PIN
         self.autoLedPin = AUTO_LED_PIN
@@ -51,18 +52,11 @@ class AutoSwitch:
             
     def monitor_switch(self):
         """Read the state of the switch and update the LED"""
-        if GPIO.input(self.autoSwitchPin) == GPIO.LOW: # switch pushed
-            if not self.buttonPushedFlag: # raising egde
-                print("Auto switch pushed")
-                self.buttonPushedFlag = True
-                self.buttonReleasedFlag = False
-                if self.mode:
-                    self.mode = False # disable auto mode    
-            elif not self.buttonReleasedFlag: # falling edge
-                print("Auto switch released")
-                self.buttonPushedFlag = False
-                self.buttonReleasedFlag = True
-                     
+        gpioStatus = GPIO.input(self.autoSwitchPin)
+        if gpioStatus == GPIO.LOW: # switch pushed
+            if self.buttonState != gpioStatus: # changed
+                self.buttonState = gpioStatus
+                self.buttonPushedFlag = True                     
         # Put the LED on or off        
         if self.ledState != self.mode:
             self.ledState = self.mode
