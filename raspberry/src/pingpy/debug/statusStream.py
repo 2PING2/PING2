@@ -19,7 +19,7 @@ class StatusStreamer:
         return None
     
     def sendStatus(self, input, t =  time.time()):
-        if t - self.lastTime < 0.5:
+        if t - self.lastTime < 0.2:
             return
         self.lastTime = t
         
