@@ -97,7 +97,7 @@
 ////////////////////////////////////
 // Default tasks use core 0 (e.g., setup and loop functions in main.cpp)
 #define TASK_BEAM_CHECK_CORE        1
-#define TASK_MOTOR_RUN_CORE   0
+#define TASK_MOTOR_RUN_CORE   1
 #define TASK_SOLENOID_OVERTEMP_CORE 1
 #define TASK_RASP_COMMUNICATION_CORE 1
 #define TASK_STALLGUARD_CORE        1
