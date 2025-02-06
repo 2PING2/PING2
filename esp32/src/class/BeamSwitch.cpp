@@ -51,7 +51,8 @@ void BeamSwitch::setup_emitter()
     pinMode(BEAM_T_PIN, OUTPUT);
     ledcSetup(IR_PWM_CHANNEL, IR_PWM_FREQUENCY, 8);
     ledcAttachPin(BEAM_T_PIN, IR_PWM_CHANNEL);
-    ledcWrite(IR_PWM_CHANNEL, 0);
+    // ledcWrite(IR_PWM_CHANNEL, 0);
+    start_emit();
 
     // for (int i = 0; i < all.size(); i++)
     //     pinMode(all[i]->beamSwitchRPin, INPUT);
