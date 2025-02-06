@@ -334,6 +334,7 @@ bool LinearActuator::c_step16()
     leftLimit = leftLimitMicroSteps / MICRO_STEPS_PER_MM;
     
     motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
+    set_acceleration(LINEAR_ACTUATOR_MAX_SPEED);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
     move_to(0);
     return true;

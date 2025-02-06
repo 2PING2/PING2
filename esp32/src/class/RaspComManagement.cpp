@@ -184,6 +184,7 @@ void RaspComManagement::processKeyValues()
         try
         {
             float state = keyValues[1]->param.toFloat();
+            Serial.println("solenoide state : " + String(state) + " for player " + String(playerId+1));
             if (state > 0)
                 player->solenoid.activate(state);
             else
