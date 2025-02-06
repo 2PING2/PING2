@@ -7,6 +7,7 @@ void setup()
 {
     Serial.begin(115200);
     PING::setup();
+    Serial.println("hello from PING esp32");
     // Serial.println("Calibrating actuators...");
     // PING::player1.actuator.calibrate();
     // PING::player2.actuator.calibrate();
