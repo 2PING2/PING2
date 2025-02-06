@@ -158,8 +158,8 @@ class RedLightGreenLight(GameMode):
         
         canmove = self.can_move(currentTime)   
         action = playerInput.gameController.inAction
-        if playerInput.auto.mode:
-            action = self.autoMode[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
+        if playerInput.auto.mode == True:
+            action = self.autoPlayer[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
 
         if action is None:
             if not canmove and playerInput.linearActuator.moving:
