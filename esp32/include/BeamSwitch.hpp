@@ -16,7 +16,7 @@ public:
     static void stop_emit();
     void setup();
     bool get_state() { return state; };
-    bool isNewState() { return state != lastState; lastState = state; };
+    bool isNewState() { bool tmp = lastState; lastState = state; return state != tmp;};
     
 
 #ifndef EVERYTHING_PUBLIC
