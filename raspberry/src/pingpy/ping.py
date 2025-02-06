@@ -61,7 +61,7 @@ class Ping:
                 
             self.input.player[i].linearActuator.computeInterpolation(timeStep, i)
             
-        statusStreamer.sendStatus(self.input)
+        statusStreamer.sendStatus(self.input, t)
             
         self.runGameMode()
         self.refresh_output()
