@@ -19,7 +19,7 @@
 #define LINEAR_ACTUATOR_MAX_SPEED        200.0f // mm/s
 #define LINEAR_ACTUATOR_MAX_ACCELERATION 1000.0f // mm/s²
 #define RMS_CURRENT                       100   // percent of the max current
-#define COMPUTE_ACCELERATION_PERIOD       50   // ms
+#define COMPUTE_ACCELERATION_PERIOD_MS       50   // ms
 
 // Calibration Settings
 #define COARSE_CALIBRATION_SPEED           76   // mm/s
