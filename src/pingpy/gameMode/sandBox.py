@@ -102,7 +102,6 @@ class SandBox(GameMode):
             self.powerBumper = self.minPowerBumper + (self.maxPowerBumper - self.minPowerBumper) * self.currentDifficulty
             self.speed = self.minSpeed + (self.maxSpeed - self.minSpeed) * self.currentDifficulty
             Input.UICorner.level = None
-            return            
             
         for i in range(4):
             self.check_action(Input.player[i], Output.player[i])
