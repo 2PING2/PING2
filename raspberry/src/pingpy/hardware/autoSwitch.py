@@ -29,9 +29,7 @@ class AutoSwitch:
         """Init states"""
         self.ledState = False
         self.mode = False
-        self.buttonPushedFlag = False
         self.buttonState = False
-        self.buttonReleasedFlag = False
         self.autoSwitchPin = AUTO_SWITCH_PIN
         self.autoLedPin = AUTO_LED_PIN
         logger.write_in_log("INFO", __name__, "__init__")
@@ -54,15 +52,15 @@ class AutoSwitch:
         """Read the state of the switch and update the LED"""
         gpioStatus = GPIO.input(self.autoSwitchPin)==GPIO.LOW
         if self.buttonState != gpioStatus: # changed
-            print("button pushed")
             self.buttonState = gpioStatus
             if gpioStatus: # if pressed
-                self.mode = not self.mode                   
+                return True     
+                        
         # Put the LED on or off        
         if self.ledState != self.mode:
             self.ledState = self.mode
             GPIO.output(self.autoLedPin, GPIO.HIGH if self.ledState else GPIO.LOW)
             
-        return self.buttonPushedFlag
+        return False
 
                 
