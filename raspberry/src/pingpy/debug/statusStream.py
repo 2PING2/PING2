@@ -32,9 +32,5 @@ class StatusStreamer:
         playerPosition = [0 if p is None else p for p in playerPosition]
         # Convertir en texte et envoyer
         data = ";".join([f"{p}" for p in playerPosition])
-        t0 = time.time()
         self.server.sendto(data.encode(), (self.sendToIP, self.port))  # Remplace par l'IP de ton PC
-        t1 = time.time()
-        print(f"🎯 Positions envoyées: ({t1 - t0:.3f}s)")
-            
 
