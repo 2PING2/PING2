@@ -134,6 +134,7 @@
 #define CURRENT_POSITION_KEY String("CP")
 #define CURRENT_SPEED_KEY String("CS")
 #define CURRENT_ACCELERATION_KEY String("CA")
+#define BEAM_STATE_KEY String("BS")
 
 #define SET_KEY String("S")
 #define MAX_SPEED_KEY String("MS")

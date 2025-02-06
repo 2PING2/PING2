@@ -16,6 +16,7 @@ public:
     static void stop_emit();
     void setup();
     bool get_state() { return state; };
+    bool isNewState() { return state != lastState; lastState = state; };
     
 
 #ifndef EVERYTHING_PUBLIC
@@ -32,6 +33,7 @@ private:
     const int beamSwitchRPin;
     int lastReceiveTime = 0;
     bool state = false;
+    bool lastState = false;
     bool check(uint64_t currentTime = esp_timer_get_time());
 
 };

@@ -230,5 +230,9 @@ void RaspComManagement::writeData()
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+RIGHT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_right_limit())+PARAM_END_SEP);
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+LEFT_LIMIT_KEY+PARAM_BEGIN_SEP+String(player->actuator.get_left_limit())+PARAM_END_SEP);
         }
+        if (player->beamSwitch.isNewState())
+        {
+            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+BEAM_STATE_KEY+PARAM_BEGIN_SEP+String(player->solenoid.get_state())+PARAM_END_SEP);
+        }
     }
 }
