@@ -1,7 +1,7 @@
 import socket
 
 HOST = "0.0.0.0"  # Écoute sur toutes les interfaces réseau
-PORT = 5050       # Doit correspondre au port utilisé par la Raspberry Pi
+PORT = 5356       # Doit correspondre au port utilisé par la Raspberry Pi
 
 def receive_positions():
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
