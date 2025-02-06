@@ -2,7 +2,7 @@ import os
 import socket
 
 class StatusStreamer:
-    def __init__(self, host = "0.0.0.0", port = 5050):
+    def __init__(self, host = "0.0.0.0", port = 5356):
         self.sendToIP = self.lookForSshIp()
         self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server.bind((host, port))
