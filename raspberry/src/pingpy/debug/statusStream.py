@@ -26,6 +26,7 @@ class StatusStreamer:
         if t - self.lastTime < 0.5:
             return
         self.lastTime = t
+        print("INFO"+ __name__+"sendStatus to IP"+ f"sendToIP: {self.sendToIP}")
         
         if self.sendToIP is None:
             return
