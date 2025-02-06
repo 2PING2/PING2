@@ -59,7 +59,7 @@ class Ping:
                 self.input.player[i].auto.buttonPushedFlag = False
                 self.input.player[i].auto.mode = not self.input.player[i].auto.mode
                 
-            self.input.player[i].linearActuator.computeInterpolation(timeStep)
+            self.input.player[i].linearActuator.computeInterpolation(timeStep, i)
             
         statusStreamer.sendStatus(self.input)
             
