@@ -55,9 +55,9 @@ class Ping:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
             
             # if not self.playerController[i].connected :
-            if self.input.player[i].auto.monitor_switch():
-                self.input.player[i].auto.buttonPushedFlag = False
-                self.input.player[i].auto.mode = not self.input.player[i].auto.mode
+            self.input.player[i].auto.monitor_switch()
+                # self.input.player[i].auto.buttonPushedFlag = False
+                # self.input.player[i].auto.mode = not self.input.player[i].auto.mode
                 
             self.input.player[i].linearActuator.computeInterpolation(timeStep, i)
             
