@@ -12,6 +12,17 @@ class SandBox(GameMode):
         self.color = YELLOW
         self.descriptionAudioPath = PATH_AUDIO_SANDBOX_INTRO
         
+        # game variables
+        self.difficulty = None
+        self.powerBumper = None
+        self.speed = None
+        
+        # parameters
+        self.maxPowerBumper = 1.0
+        self.minPowerBumper = 0.2
+        self.MaxSpeed = 300.0
+        self.MinSpeed = 100.0
+                
     def setup(self, Input, Output):
         """
         Setup the game mode.
@@ -28,7 +39,7 @@ class SandBox(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200] 
                 playerOutput.linearActuator.moveTo = 0.0
                 playerOutput.linearActuator.setMaxSpeed = 200.0
-                playerOutput.linearActuator.setMaxAccel = 200.0
+                playerOutput.linearActuator.setMaxAccel = 500.0
                 
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
@@ -42,20 +53,17 @@ class SandBox(GameMode):
     def check_action(self, playerInput, playerOutput):
         """
         Checks the player's action
-        """        
-        
+        """       
         if playerInput.gameController.left == True:
-            playerOutput.linearActuator.setMaxSpeed = 100.0
-            playerOutput.linearActuator.setMaxAccel = 500.0
+            playerOutput.linearActuator.setMaxSpeed = self.MaxSpeed
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
         if playerInput.gameController.right == True:
-            playerOutput.linearActuator.setMaxSpeed = 100.0
-            playerOutput.linearActuator.setMaxAccel = 500.0
+            playerOutput.linearActuator.setMaxSpeed = self.MaxSpeed
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False            
         if playerInput.gameController.shoot == True:
-            playerOutput.bumper.state = 1
+            playerOutput.bumper.state = self.maxPowerBumper
             playerInput.gameController.shoot = None
         if playerInput.gameController.shoot == False:
             playerOutput.bumper.state = 0
@@ -65,7 +73,6 @@ class SandBox(GameMode):
             playerInput.gameController.inAction = None
             playerOutput.linearActuator.stop = True
                    
-        
                 
     def compute(self, Input, Output):
         """
@@ -84,10 +91,15 @@ class SandBox(GameMode):
             return
             
         if Input.UICorner.level is not None:
-            pass
+            self.currentDifficulty = Input.UICorner.level
+            self.
+            Input.UICorner.level = None
+            return
+            
             
         for i in range(4):
             self.check_action(Input.player[i], Output.player[i])
+            
     
     def stop(self, output_ptr):
         """
