@@ -1,6 +1,7 @@
 import os
 import socket
 import time
+from pingpy.debug import logger
 
 class StatusStreamer:
     def __init__(self, delay = 0.5, host = "0.0.0.0", port = 5356):
@@ -26,6 +27,8 @@ class StatusStreamer:
             return
         
         playerPosition = [input.player[i].linearActuator.currentPose for i in range(4)]
+        logger.write_in_log("INFO", __name__, "sendStatus", "send new player position")
+
         # replace None by 0
         playerPosition = [0 if p is None else p for p in playerPosition]
         # Convertir en texte et envoyer
