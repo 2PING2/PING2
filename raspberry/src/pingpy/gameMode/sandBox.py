@@ -58,13 +58,13 @@ class SandBox(GameMode):
         # left    
         if playerInput.gameController.left == True:
             if self.maxSpeed is not None:
-                playerOutput.linearActuator.setmaxSpeed = self.speed
+                playerOutput.linearActuator.setMaxSpeed = self.speed
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
         # right
         if playerInput.gameController.right == True:
             if self.maxSpeed is not None:
-                playerOutput.linearActuator.setmaxSpeed = self.speed
+                playerOutput.linearActuator.setMaxSpeed = self.speed
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False 
         # shoot           
