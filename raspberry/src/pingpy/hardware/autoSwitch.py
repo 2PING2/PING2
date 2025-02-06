@@ -30,6 +30,7 @@ class AutoSwitch:
         self.ledState = False
         self.mode = False
         self.buttonPushedFlag = False
+        self.buttonReleasedFlag = False
         self.autoSwitchPin = AUTO_SWITCH_PIN
         self.autoLedPin = AUTO_LED_PIN
         logger.write_in_log("INFO", __name__, "__init__")
@@ -54,8 +55,14 @@ class AutoSwitch:
             if not self.buttonPushedFlag: # raising egde
                 print("Auto switch pushed")
                 self.buttonPushedFlag = True
+                self.buttonReleasedFlag = False
                 if self.mode:
-                    self.mode = False # disable auto mode            
+                    self.mode = False # disable auto mode    
+            elif not self.buttonReleasedFlag: # falling edge
+                print("Auto switch released")
+                self.buttonPushedFlag = False
+                self.buttonReleasedFlag = True
+                     
         # Put the LED on or off        
         if self.ledState != self.mode:
             self.ledState = self.mode
