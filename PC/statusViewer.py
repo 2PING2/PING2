@@ -43,7 +43,7 @@ def receive_positions():
         data, addr = client.recvfrom(1024)  # Attente des données (1024 octets max)
         positions_data = data.decode().split(";")  # Décodage des positions reçues
         positions_data = [float(p) for p in positions_data]  # Conversion en float
-        print(f"🎯 Positions reçues: {positions_data}")
+        # print(f"🎯 Positions reçues: {positions_data}")
         # print(f"🎯 Positions reçues: {positions_data}")
         
         # Met à jour les positions
