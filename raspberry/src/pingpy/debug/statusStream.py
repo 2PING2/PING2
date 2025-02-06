@@ -1,12 +1,14 @@
 import os
 import socket
+import time
 
 class StatusStreamer:
-    def __init__(self, host = "0.0.0.0", port = 5356):
+    def __init__(self, delay = 0.5, host = "0.0.0.0", port = 5356):
         self.sendToIP = self.lookForSshIp()
         self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server.bind((host, port))
         self.port = port
+        self.lastTime = 0
     
     def lookForSshIp(self):
         result = os.popen("who").read()  # Exécute la commande 'who'
@@ -16,7 +18,10 @@ class StatusStreamer:
                 return parts[4][1:-1]  # Enlève les parenthèses autour de l'IP
         return None
     
-    def sendStatus(self, input):
+    def sendStatus(self, input, t =  time.time()):
+        if t - self.lastTime < 0.5:
+            return
+        self.lastTime = t
         if self.sendToIP is None:
             return
         
