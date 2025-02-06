@@ -4,6 +4,7 @@ from pingpy.input import Input
 from pingpy.input.gameController3Button import GameController3ButtonInput
 from pingpy.output import Output
 from pingpy.debug import logger
+from pingpy.debug import statusStreamer
 from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
@@ -59,6 +60,8 @@ class Ping:
                 self.input.player[i].auto.mode = not self.input.player[i].auto.mode
                 
             self.input.player[i].linearActuator.computeInterpolation(timeStep)
+            
+        statusStreamer.sendStatus(self.input)
             
         self.runGameMode()
         self.refresh_output()
