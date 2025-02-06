@@ -52,6 +52,7 @@ class AutoSwitch:
         """Read the state of the switch and update the LED"""
         gpioStatus = GPIO.input(self.autoSwitchPin)==GPIO.LOW
         if self.buttonState != gpioStatus: # changed
+            logger.write_in_log("INFO", __name__, "monitor_switch", f"AutoSwitch is {gpioStatus}")
             self.buttonState = gpioStatus
             if gpioStatus: # if pressed
                 return True     
@@ -60,6 +61,7 @@ class AutoSwitch:
         if self.ledState != self.mode:
             self.ledState = self.mode
             GPIO.output(self.autoLedPin, GPIO.HIGH if self.ledState else GPIO.LOW)
+            logger.write_in_log("INFO", __name__, "monitor_switch", f"AutoLed is {self.ledState} and mode is {self.mode}")
             
         return False
 
