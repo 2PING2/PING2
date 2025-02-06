@@ -19,8 +19,12 @@ class ESP32Serial(SerialCom):
         """Read the next data from the serial port."""
         self.read_data_task()
         new_line = self.consume_older_data()
-        while new_line is not None:
-            new_line = self.consume_older_data()                
+        while True:
+            new_line = self.consume_older_data()
+            
+            if new_line is None:
+                return
+                
             key = ""
             param = ""
             is_param = False
