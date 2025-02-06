@@ -162,7 +162,7 @@ class RedLightGreenLight(GameMode):
             action = self.autoPlayer[playerId].run(playerInput, playerOutput, currentTime - self.timeInit)
 
         if action is None:
-            if not canmove and playerInput.linearActuator.moving:
+            if not canmove and playerInput.linearActuator.currentSpeed > 0.1:
                 self.lose(playerOutput)
             return
         
@@ -173,7 +173,7 @@ class RedLightGreenLight(GameMode):
             else:
                 self.lose(playerOutput)  
         else:
-            if not canmove and playerInput.linearActuator.moving:
+            if not canmove and playerInput.linearActuator.currentSpeed > 0.1:
                 self.lose(playerOutput)
             else:
                 playerOutput.linearActuator.stop = True
