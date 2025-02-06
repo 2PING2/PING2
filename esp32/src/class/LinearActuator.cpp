@@ -239,7 +239,7 @@ bool LinearActuator::c_step8()
     if (calibrationGoodSamples < FINE_CALIBRATION_SAMPLES)
         return false; // don't forget to implement counter condition in main calibration method
     leftLimit = calibrationFirstWallPosition;
-    set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
+    set_max_speed(COARSE_CALIBRATION_SPEED*3);
     move(-LINEAR_ACTUATOR_MIN_AMPLITUDE);
     return true;
 }

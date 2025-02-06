@@ -46,7 +46,7 @@ class Corner
 {
 private:
     float blinkRate = 1.0;
-    float fadeRate = 0.2;
+    float fadeRate = 1.0/15;
     unsigned long last_t = 0;
     void smooth_blink(const unsigned long dt)
     {
