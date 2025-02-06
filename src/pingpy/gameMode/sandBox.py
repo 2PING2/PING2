@@ -20,8 +20,8 @@ class SandBox(GameMode):
         # parameters
         self.maxPowerBumper = 1.0
         self.minPowerBumper = 0.2
-        self.MaxSpeed = 300.0
-        self.MinSpeed = 100.0
+        self.maxSpeed = 300.0
+        self.minSpeed = 100.0
                 
     def setup(self, Input, Output):
         """
@@ -53,24 +53,29 @@ class SandBox(GameMode):
     def check_action(self, playerInput, playerOutput):
         """
         Checks the player's action
-        """       
+        """   
+        # left    
         if playerInput.gameController.left == True:
-            playerOutput.linearActuator.setMaxSpeed = self.MaxSpeed
+            if self.maxSpeed is not None:
+                playerOutput.linearActuator.setmaxSpeed = self.maxSpeed
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
+        # right
         if playerInput.gameController.right == True:
-            if playerOutput.linearActuator.setMaxSpeed is not None:
-                playerOutput.linearActuator.setMaxSpeed = self.MaxSpeed
+            if self.maxSpeed is not None:
+                playerOutput.linearActuator.setmaxSpeed = self.maxSpeed
             playerOutput.linearActuator.moveToRight = True
-            playerInput.gameController.right = False            
+            playerInput.gameController.right = False 
+        # shoot           
         if playerInput.gameController.shoot == True:
-            if playerOutput.bumper.state is not None:
+            if self.powerBumper is not None:
                 playerOutput.bumper.state = self.powerBumper
             playerInput.gameController.shoot = None
         if playerInput.gameController.shoot == False:
             playerOutput.bumper.state = 0
             playerInput.gameController.shoot = None
-                        
+
+        # stop
         if playerInput.gameController.inAction == False and not(playerInput.gameController.leftButtonState or playerInput.gameController.rightButtonState or playerInput.gameController.shootButtonState):
             playerInput.gameController.inAction = None
             playerOutput.linearActuator.stop = True
@@ -94,10 +99,10 @@ class SandBox(GameMode):
             
         if Input.UICorner.level is not None:
             self.currentDifficulty = Input.UICorner.level
-            self.
+            self.powerBumper = self.minPowerBumper + (self.maxPowerBumper - self.minPowerBumper) * self.currentDifficulty
+            self.speed = self.minSpeed + (self.maxSpeed - self.minSpeed) * self.currentDifficulty
             Input.UICorner.level = None
-            return
-            
+            return            
             
         for i in range(4):
             self.check_action(Input.player[i], Output.player[i])
