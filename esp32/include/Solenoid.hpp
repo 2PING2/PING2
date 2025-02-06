@@ -22,7 +22,7 @@ public:
     void activate();
     void activate(float power){ set_power(power); activate();}
     void deactivate();
-    void set_power(int power){this->power = power;}
+    void set_power(float power){this->power = power;}
     float get_power(){return power;}
 
     bool get_state(){return state;}

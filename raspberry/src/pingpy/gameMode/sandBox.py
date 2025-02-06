@@ -40,7 +40,7 @@ class SandBox(GameMode):
                 playerOutput.playerLedStrip.color = self.color
                 playerOutput.linearActuator.moveTo = 0.0
                 playerOutput.linearActuator.setMaxSpeed = 200.0
-                playerOutput.linearActuator.setMaxAccel = 500.0
+                playerOutput.linearActuator.setMaxAccel = 1500.0
                 
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")

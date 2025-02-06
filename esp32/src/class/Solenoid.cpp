@@ -25,7 +25,7 @@ void Solenoid::activate()
 {
     state = true;
     // digitalWrite(this->solenoidPin, HIGH); 
-    int pwm = (power * (1 - MIN_SOLENOID_MIN_POWER) + MIN_SOLENOID_MIN_POWER) * ((1 << ANALOG_WRITE_RESOLUTION)-1);
+    int pwm = (this->power * (1 - MIN_SOLENOID_MIN_POWER) + MIN_SOLENOID_MIN_POWER) * ((1 << ANALOG_WRITE_RESOLUTION)-1);
     // Serial.println(pwm);
     // analogWrite(this->solenoidPin, power);
     ledcWrite(channel, pwm);

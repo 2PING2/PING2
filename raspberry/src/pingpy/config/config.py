@@ -167,7 +167,7 @@ PURPLE = (159, 19, 187)
 # AUTO_LED3_PIN = 21
 # AUTO_SWITCH4_PIN = 16
 # AUTO_LED4_PIN = 20
-AUTO_PIN = {"switch" : [5,23,24,16], "led" : [6,27,21,20]}
+AUTO_PIN = {"switch" : [5,25,24,16], "led" : [6,27,21,20]}
 
 
 ####################################
