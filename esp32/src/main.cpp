@@ -8,7 +8,7 @@ void setup()
 {
     Serial.begin(115200);
     PING::setup();
-    Serial.println("hello from PING");
+    // Serial.println("hello from PING");
 }
 
 void loop()
