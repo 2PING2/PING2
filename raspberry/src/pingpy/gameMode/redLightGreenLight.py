@@ -17,8 +17,8 @@ class AutoPlayRedLightGreenLight:
         self.loosingProb = 0.6*(1-skill) # give a random aspect
         self.minReactionTime = 0.5 * reactionTime 
         
-    def randomize_duration(self, redLightDuration, reactionTime):
-        t0 = redLightDuration + self.minReactionTime 
+    def randomize_duration(self, greenLightDuration, reactionTime):
+        t0 = greenLightDuration + self.minReactionTime 
         t1 = self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
         self.shouldStopDelay = uniform(t0, t1)
 
@@ -127,7 +127,7 @@ class RedLightGreenLight(GameMode):
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
             for playerId in range(4):
-                self.autoPlayer[playerId].randomize_duration(self.durationRedLight, self.reactionTime)
+                self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime)
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
@@ -205,7 +205,7 @@ class RedLightGreenLight(GameMode):
             logger.write_in_log("ERROR", __name__, "check_victory", "Right limit is not set.")
             return False
         
-        if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1e-3:
+        if playerInput.linearActuator.currentPose <= playerInput.linearActuator.rightLimit + 1:
             playerOutput.isWinner = True
             return True
         
