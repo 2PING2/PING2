@@ -21,9 +21,10 @@ class StatusStreamer:
             return
         
         playerPosition = [input.player[i].linearActuator.currentPose for i in range(4)]
-        
+        # replace None by 0
+        playerPosition = [0 if p is None else p for p in playerPosition]
         # Convertir en texte et envoyer
-        data = ";".join([f"{p[0]},{p[1]}" for p in playerPosition])
+        data = ";".join([f"{p}" for p in playerPosition])
         self.server.sendto(data.encode(), (self.sendToIP, self.port))  # Remplace par l'IP de ton PC
             
 
