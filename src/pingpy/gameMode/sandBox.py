@@ -99,9 +99,12 @@ class SandBox(GameMode):
             
         if Input.UICorner.level is not None:
             self.currentDifficulty = Input.UICorner.level
-            self.powerBumper = self.minPowerBumper + (self.maxPowerBumper - self.minPowerBumper) * self.currentDifficulty
-            self.speed = self.minSpeed + (self.maxSpeed - self.minSpeed) * self.currentDifficulty
+            self.powerBumper = self.minPowerBumper + (self.currentDifficulty * (self.maxPowerBumper - self.minPowerBumper))
+            self.speed = self.minSpeed + (self.currentDifficulty * (self.maxSpeed - self.minSpeed))
             Input.UICorner.level = None
+            logger.write_in_log("INFO", __name__, "compute", f"Difficulty set to {self.currentDifficulty}.")
+            logger.write_in_log("INFO", __name__, "compute", f"Power bumper set to {self.powerBumper}.")
+            logger.write_in_log("INFO", __name__, "compute", f"Speed set to {self.speed}.")
             
         for i in range(4):
             self.check_action(Input.player[i], Output.player[i])
