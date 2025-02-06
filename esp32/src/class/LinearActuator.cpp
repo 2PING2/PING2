@@ -120,13 +120,17 @@ bool LinearActuator::compute_new_acceleration(float time)
     else // no acceleration
         currentAcceleration = 0;
         
+    bool ret = false;
+    if (abs(ds)>1) // if the speed changes, return true
+        ret = true;
+        
     // if the acceleration changes, return true
     if (currentAcceleration != previousAcceleration)
     {
         previousAcceleration = currentAcceleration;
-        return true;
+        ret = true;
     }
-    return false;
+    return ret;
 }
 
 int LinearActuator::run()
