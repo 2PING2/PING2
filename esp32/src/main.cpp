@@ -21,7 +21,7 @@
 #include <Arduino.h>
 #include "LinearActuator.hpp"
 
-LinearActuator la1(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_INVERT_DIR);
+// LinearActuator la1(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_INVERT_DIR);
 
 void setup()
 {
