@@ -85,7 +85,7 @@ class LightTracker(GameMode):
 
     def move(self, PlayerInput, PlayerOutput):
         if self.check_move(PlayerInput):
-            PlayerInput.gameController.countMove += 1
+            PlayerInput.gameController.countMove -= 1
             if PlayerInput.gameController.left:
                 PlayerOutput.linearActuator.moveToLeft = True
                 PlayerOutput.linearActuator.moveToRight = False
