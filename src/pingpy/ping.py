@@ -59,6 +59,7 @@ class Ping:
                 self.input.player[i].linearActuator.stop = True
                 # self.input.player[i].bumper.state = False
                 self.esp32.write(self.output, self.input)
+                logger.write_in_log("WARNING", __name__, "read", "send ok")
                 self.playerController[i].connectedFlag = False     
             
             # if not self.playerController[i].connected :
