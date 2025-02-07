@@ -65,6 +65,8 @@ void LinearActuator::motor_run_task(void *pvParameters)
 void LinearActuator::setup()
 {
     motor = engine.stepperConnectToPin(stepPin);
+    if (!motor)
+        return;
     motor->setDirectionPin(dirPin, !shaft);
     
     all.push_back(this);
