@@ -16,10 +16,11 @@ void PING::solenoid_overtemp_task(void *pvParameters)
 {
     for (;;)
     {
-        PING::player1.solenoid.over_temp_protect();
-        PING::player2.solenoid.over_temp_protect();
-        PING::player3.solenoid.over_temp_protect();
-        PING::player4.solenoid.over_temp_protect();
+        uint64_t currentTime = esp_timer_get_time();
+        PING::player1.solenoid.over_temp_protect(currentTime);
+        PING::player2.solenoid.over_temp_protect(currentTime);
+        PING::player3.solenoid.over_temp_protect(currentTime);
+        PING::player4.solenoid.over_temp_protect(currentTime);
         vTaskDelay(TASK_SOLENOID_OVERTEMP_DELAY_MS / portTICK_PERIOD_MS);
     }
 }

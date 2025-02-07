@@ -11,6 +11,7 @@ void setup()
 void loop()
 {
 }
+<<<<<<< HEAD
 
 // #include <Arduino.h>
 // #define EVERYTHING_PUBLIC
@@ -77,3 +78,5 @@ void loop()
 //     delay(2000);
 
 // }
+=======
+>>>>>>> 3e71d8878621d84e676e2d1d08708b3f9acc8071

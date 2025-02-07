@@ -1,7 +1,6 @@
 #ifndef LINEAR_ACTUATOR_HPP
 #define LINEAR_ACTUATOR_HPP
-// #include <AccelStepper.h>
-#include "FastAccelStepper.h"
+#include <FastAccelStepper.h>
 #include <TMCStepper.h>
 #include "config.h"
 #include "vector.hpp"
@@ -28,9 +27,7 @@ public:
     bool get_stall_result();
     void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
     void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
-    // void invert(bool shaft) { motor->setPinsInverted(shaft); }
     void set_max_speed(float speed) { motor->setSpeedInHz(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
-    // void set_max_speed(float speed) { motor->setAbsoluteSpeedLimit(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
     void set_acceleration(float acceleration) { motor->setAcceleration(min(acceleration, LINEAR_ACTUATOR_MAX_ACCELERATION) * MICRO_STEPS_PER_MM); }
     bool move_to(float position);
     bool move(float relativePosition);
@@ -45,9 +42,9 @@ public:
         calibrating = true;
     }
     float current_position() { return motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
-    float current_speed() { return 1e6 / motor->getCurrentSpeedInUs() / MICRO_STEPS_PER_MM; }
+    float current_speed() { return 1e6 / motor->getCurrentSpeedInMilliHz() / 1000.0 / MICRO_STEPS_PER_MM; }
     float current_acceleration() { return motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
-    float max_speed() { return 1e6 / motor->getSpeedInUs() / MICRO_STEPS_PER_MM; }
+    float max_speed() { return 1e6 / motor->getMaxSpeedInHz() / MICRO_STEPS_PER_MM; }
     float max_acceleration() { return motor->getAcceleration() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
     float get_right_limit() { return rightLimit; }
