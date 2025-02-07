@@ -54,8 +54,8 @@ class ControllerSerial(SerialCom):
                 controllerInput.right = False
                 controllerInput.rightButtonState = False
             if button == SHOOT_BUTTON_KEY:
-                controllerInput.left = False
-                controllerInput.leftButtonState = False
+                controllerInput.shoot = False
+                controllerInput.shootButtonState = False
                 
         # if self.connectedFlag == False:
         #     logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
@@ -65,3 +65,4 @@ class ControllerSerial(SerialCom):
         #     controllerInput.rightButtonState = False
         #     controllerInput.left = False
         #     controllerInput.leftButtonState = False
+        #
