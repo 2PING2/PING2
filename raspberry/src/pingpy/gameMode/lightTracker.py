@@ -28,7 +28,7 @@ class LightTracker(GameMode):
         Setup the game mode.
         """
         
-        self.ledCenter = uniform(-180+self.areaLength/2 ,180 - self.areaLength/2)
+        self.ledCenter = uniform(-200+self.areaLength/2 ,200 - self.areaLength/2)
         self.areaLed = [self.ledCenter - self.areaLength/2, self.ledCenter + self.areaLength/2]
         for i in range(4):
             try:
@@ -102,12 +102,12 @@ class LightTracker(GameMode):
     def new_round(self,Input,Output):
         for i in range(4):
             Output.player[i].linearActuator.moveTo = self.ledCenter
-        newLedCenter = uniform(-180.0,180.0)
+        newLedCenter = uniform(-200.0,200.0)
         # newLedCenter = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
 
         newPositionLed = newLedCenter
         if newLedCenter == self.ledCenter:
-            newPositionLed = uniform(-180.0,180.0)
+            newPositionLed = uniform(-200.0,200.0)
             # newPositionLed = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
         self.ledCenter = newPositionLed
         self.areaLed = [self.ledCenter - self.areaLength/2, self.ledCenter + self.areaLength/2]
