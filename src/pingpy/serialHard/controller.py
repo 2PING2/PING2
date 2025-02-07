@@ -57,12 +57,12 @@ class ControllerSerial(SerialCom):
                 controllerInput.shoot = False
                 controllerInput.shootButtonState = False
                 
-        if self.connectedFlag == True:
-            logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
-            controllerInput.left = False
-            controllerInput.leftButtonState = False
-            controllerInput.right = False
-            controllerInput.rightButtonState = False
-            controllerInput.shoot = False
-            controllerInput.shootButtonState = False 
-            self.connectedFlag == False
+        # if self.connectedFlag == True:
+        #     logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
+        #     controllerInput.left = False
+        #     controllerInput.leftButtonState = False
+        #     controllerInput.right = False
+        #     controllerInput.rightButtonState = False
+        #     controllerInput.shoot = False
+        #     controllerInput.shootButtonState = False 
+        #     self.connectedFlag == False
