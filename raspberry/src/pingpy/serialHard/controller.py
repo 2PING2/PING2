@@ -38,15 +38,31 @@ class ControllerSerial(SerialCom):
             controllerInput.inAction = True
             if button == LEFT_BUTTON_KEY:
                 controllerInput.left = True
+                controllerInput.leftButtonState = True
             if button == RIGHT_BUTTON_KEY:
                 controllerInput.right = True
+                controllerInput.rightButtonState = True
             if button == SHOOT_BUTTON_KEY:
                 controllerInput.shoot = True
+                controllerInput.shootButtonState = True
         elif new_line[1] == RELEASE_KEY:
-            controllerInput.inAction = False
+            controllerInput.inAction = False 
             if button == LEFT_BUTTON_KEY:
                 controllerInput.left = False
+                controllerInput.leftButtonState = False
             if button == RIGHT_BUTTON_KEY:
                 controllerInput.right = False
+                controllerInput.rightButtonState = False
             if button == SHOOT_BUTTON_KEY:
                 controllerInput.shoot = False
+                controllerInput.shootButtonState = False
+                
+        # if self.connectedFlag == True:
+        #     logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
+        #     controllerInput.left = False
+        #     controllerInput.leftButtonState = False
+        #     controllerInput.right = False
+        #     controllerInput.rightButtonState = False
+        #     controllerInput.shoot = False
+        #     controllerInput.shootButtonState = False 
+        #     self.connectedFlag == False

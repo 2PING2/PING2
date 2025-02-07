@@ -23,7 +23,8 @@ class PixelStrip:
         self.pixels[index] = color  # Simule l'attribution de la couleur au pixel
 
     def show(self):
-        print("Simulating PixelStrip.show()")
+        pass
+        # print("Simulating PixelStrip.show()")
         # print("Current Pixel Colors:", self.pixels)
 
     def setBrightness(self, brightness):

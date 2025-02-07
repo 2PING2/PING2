@@ -15,13 +15,11 @@ For inquiries, contact us at: projet.ping2@gmail.com
 
 
 ####################################
-# RASPBERY PI SETTINGS
+# UICorner SETTINGS
 ####################################
-MAX_VOLUME = 0.65
-
-RESET_DELAY_AFTER_BUTTON_PRESS = 10
+RESET_DELAY_AFTER_BUTTON_PRESS = 6
 SHORT_PRESS_DELAY = 0.5
-LONG_PRESS_DELAY = 2
+LONG_PRESS_DELAY = 2.5
 
 ####################################
 # SERIAL SETTINGS
@@ -60,9 +58,6 @@ ESP_BOOTLOADER_PATH = "esp32/.pio/build/esp32dev/bootloader.bin"
 ESP_PARTITION_PATH = "esp32/.pio/build/esp32dev/partitions.bin"
 
 
-
-
-
 FILE_AND_FOLDER_TO_CHECK = ["raspberry/src", ESP_FIRMWARE_PATH, ESP_BOOTLOADER_PATH, ESP_PARTITION_PATH]  # Files and folders to check for updates
 
 HOTSPOT_TIMEOUT = 300  # Timeout for the hotspot setup in seconds
@@ -79,6 +74,7 @@ CSS_PATH = 'styles.css'  # Update with the correct path
 SEP_KEY = '/'
 RESET_KEY = 'reset'
 MODE_KEY = 'mode'
+MODE_PB_KEY = 'mode_pb'
 VOLUME_KEY = 'volume'
 LIGHT_KEY = 'light'
 LEVEL_KEY = 'level'
@@ -102,6 +98,7 @@ PLAYER_KEY = ("P")
 MOVE_TO_KEY = ("MT")
 CURRENT_POSITION_KEY = ("CP")
 CURRENT_SPEED_KEY = ("CS")
+CURRENT_ACCELERATION_KEY = ("CA")
 
 SET_KEY = ("S")
 MAX_SPEED_KEY = ("MS")
@@ -122,6 +119,7 @@ SET_SOL_STATE_KEY = (SET_KEY+SOL_SATE_KEY)
 ASK_KEY = ("A")
 ASK_CURRENT_POSITION_KEY = (ASK_KEY+CURRENT_POSITION_KEY)
 ASK_CURRENT_SPEED_KEY = (ASK_KEY+CURRENT_SPEED_KEY)
+ASK_CURRENT_ACCELERATION_KEY = (ASK_KEY+CURRENT_ACCELERATION_KEY)
 ASK_MAX_SPEED_KEY = (ASK_KEY+MAX_SPEED_KEY)
 ASK_CALIBRATED = (ASK_KEY+CALIBRATION_KEY)
 ASK_RIGHT_LIMIT_KEY = (ASK_KEY+RIGHT_LIMIT_KEY)
@@ -133,6 +131,8 @@ ASK_STATUS_SETTINGS = ("ask_status_settings")
 STATUS_LED_KEY = ("status_led")
 STATUS_LED_ON = ("on")
 STATUS_LED_OFF = ("off")
+STATUS_LED_BLINK = ("blink")
+STATUS_LED_FADEOUT = ("fadeOut")
 ####################################
 # LED STRIP SETTINGS
 ####################################
@@ -140,7 +140,7 @@ LED_STRIP_PIN = 10
 NUMBER_OF_LEDS = 176
 FREQUENCY = 800000
 DMA_CHANNEL = 10
-MAX_BRIGHTNESS = 0.8 
+MAX_BRIGHTNESS = 0.5
 PLAYER_LED_STRIP_OFFSETS = {
     1: (132, 176),
     2: (88, 132),
@@ -159,15 +159,36 @@ PURPLE = (159, 19, 187)
 ####################################
 # AUTO SWITCH / LED SETTINGS 
 ####################################
-AUTO_SWITCH1_PIN = 5
-AUTO_LED1_PIN = 6
-AUTO_SWITCH2_PIN = 17
-AUTO_LED2_PIN = 27
-AUTO_SWITCH3_PIN = 26
-AUTO_LED3_PIN = 21
-AUTO_SWITCH4_PIN = 16
-AUTO_LED4_PIN = 20
+AUTO_PIN = {"switch" : [5,23,24,16], "led" : [6,27,21,20]}
 
 
+####################################
+# AUDIO SETTINGS
+####################################
+MAX_VOLUME = 0.80
+PATH_AUDIO = ("raspberry/src/pingpy/audio/")
 
+PATH_AUDIO_GAGNE = PATH_AUDIO + "a_gagne.wav"
+PATH_AUDIO_PLAYER_BLEU = PATH_AUDIO + "Le_joueur_bleu.wav"
+PATH_AUDIO_PLAYER_ROUGE = PATH_AUDIO + "Le_joueur_rouge.wav"
+PATH_AUDIO_PLAYER_JAUNE = PATH_AUDIO + "Le_joueur_jaune.wav"
+PATH_AUDIO_PLAYER_VERT = PATH_AUDIO + "Le_joueur_vert.wav"
 
+# redLightGreenLight
+PATH_AUDIO_123SOLEIL = PATH_AUDIO + "redLightGreenLight/"
+PATH_AUDIO_123SOLEIL_INTRO = PATH_AUDIO_123SOLEIL + "Intro_redLightGreenLight.wav"
+PATH_AUDIO_123SOLEIL_123 = PATH_AUDIO_123SOLEIL + "123.wav"
+PATH_AUDIO_123SOLEIL_SOLEIL = PATH_AUDIO_123SOLEIL + "Soleil.wav"
+
+# light tracker
+PATH_AUDIO_LIGHT_TRACKER = PATH_AUDIO + "lightTracker/"
+PATH_AUDIO_LIGHT_TRACKER_INTRO = PATH_AUDIO_LIGHT_TRACKER + "Intro_LightTracker.wav"
+
+# sand box
+PATH_AUDIO_SANDBOX = PATH_AUDIO + "sandBox/"
+PATH_AUDIO_SANDBOX_INTRO = PATH_AUDIO_SANDBOX + "Intro_sandBox.wav"
+
+####################################
+# redLightGreddLight SETTINGS
+####################################
+MAX_REACTION_TIME = 1.5

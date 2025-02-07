@@ -4,10 +4,12 @@ from pingpy.input import Input
 from pingpy.input.gameController3Button import GameController3ButtonInput
 from pingpy.output import Output
 from pingpy.debug import logger
+from pingpy.debug import statusStreamer
 from pingpy.hardware import ledStrip
 from pingpy.hardware.ledStrip import PlayerLedStrip
 from pingpy.serialHard.controller import ControllerSerial
 from pingpy.gameMode import *
+import time
 
 
 class Ping:
@@ -16,13 +18,13 @@ class Ping:
         self.output = Output()
         self.esp32 = serialHard.ESP32Serial(ports["ESP32"], BAUD_RATE, TIMEOUT)
         self.UICorner = serialHard.UICornerSerial(ports["UICorner"], UI_CORNER_BAUD_RATE, TIMEOUT)
-        self.gameModeList = [RedLightGreenLight()]
+        self.gameModeList = [RedLightGreenLight(), SandBox()]
         self.currentGameMode = None
         self.waitingRoom = WaitingRoom(self.gameModeList, self.currentGameMode)
         self.currentGameMode = self.waitingRoom
         self.prevGameMode = None
         self.playerLedStrip = [PlayerLedStrip(ledStrip, PLAYER_LED_STRIP_OFFSETS[i+1]) for i in range(4)]
-        
+        self.lastRunTime = time.time()
         for i in range(4):
             self.input.player[i].gameController = GameController3ButtonInput()
         
@@ -34,6 +36,7 @@ class Ping:
         self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
+            self.input.player[i].auto.setup()
         ledStrip.setup()
         ledStrip.clear()
         logger.write_in_log("INFO", __name__, "setup")
@@ -41,12 +44,24 @@ class Ping:
     
     def run(self):
         self.esp32.read(self.input)
-        self.UICorner.read(self.input, self.output)
+        self.UICorner.read(self.input, self.output, self.playerLedStrip)
+        t = time.time()
+        timeStep = t - self.lastRunTime
+        self.lastRunTime = t
         for i in range(4):
             try:
                 self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
+            
+            # if not self.playerController[i].connected :
+            if self.input.player[i].auto.monitor_switch():
+                self.input.player[i].auto.mode = not self.input.player[i].auto.mode
+                
+            self.input.player[i].linearActuator.computeInterpolation(timeStep, i)
+            
+        statusStreamer.sendStatus(self.input, t)
+            
         self.runGameMode()
         self.refresh_output()
 

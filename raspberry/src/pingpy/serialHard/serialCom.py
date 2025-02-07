@@ -31,6 +31,7 @@ class SerialCom:
         self.timeout = TIMEOUT
         self.ser = None
         self.connected = False
+        self.connectedFlag = False
         self.queue = []
         self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
@@ -64,11 +65,12 @@ class SerialCom:
         if os.path.exists(self.symlink):
             try:
                 self.connected = True
-                if self.ser.in_waiting == 0:
-                    return
-                new = self.ser.readline().decode('utf-8', errors='ignore').strip()
-                logger.write_in_log("INFO", __name__, "read_data_task", f"Data received from {self.symlink}: {new}")
-                self.queue.append(new)
+                while True:
+                    if self.ser.in_waiting == 0:
+                        return
+                    new = self.ser.readline().decode('utf-8', errors='ignore').strip()
+                    logger.write_in_log("INFO", __name__, "read_data_task", f"Data received from {self.symlink}: {new}")
+                    self.queue.append(new)
             except Exception as _:
                 self.ser=None
                 self.setup()
@@ -76,11 +78,10 @@ class SerialCom:
             self.ser=None
             if self.connected:
                 self.connected = False
-                # if callable(onDisconnect):  # Vérification si onDisconnect est une fonction
-                #     try:
-                #         onDisconnect()
-                #     except Exception as e:
-                #         logger.write_in_log("ERROR", __name__, "read_data_task", f"Error in onDisconnect callback: {e}")
+                self.connectedFlag = True
+                
+                # manette déconnecté
+                             
                 logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")
                 
             

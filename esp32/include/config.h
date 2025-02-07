@@ -16,15 +16,16 @@
 #define PULLEY_TEETH                       25   // teeth of the pulley
 #define BELT_PITCH                          2   // mm
 #define MICROSTEP_POWER_OF_2                0   // 2^5 = 32 microsteps
-#define LINEAR_ACTUATOR_MAX_SPEED        200.0f // mm/s
-#define LINEAR_ACTUATOR_MAX_ACCELERATION 1000.0f // mm/s²
+#define LINEAR_ACTUATOR_MAX_SPEED        700.0f // mm/s
+#define LINEAR_ACTUATOR_MAX_ACCELERATION 5000.0f // mm/s²
 #define RMS_CURRENT                       100   // percent of the max current
+#define COMPUTE_ACCELERATION_PERIOD_MS       20   // ms
 
 // Calibration Settings
 #define COARSE_CALIBRATION_SPEED           76   // mm/s
-#define COARSE_CALIBRATION_STALL_VALUE     200
+#define COARSE_CALIBRATION_STALL_VALUE     220
 #define FINE_CALIBRATION_SPEED             44   // mm/s
-#define FINE_CALIBRATION_STALL_VALUE       180
+#define FINE_CALIBRATION_STALL_VALUE       200
 #define FINE_CALIBRATION_SAMPLES            2   // good samples needed
 #define FINE_CALIBRATION_ERROR_THRESHOLD    3   // mm
 #define FINE_CALIBRATION_WITHDRAWAL_DISTANCE 20  // mm
@@ -71,6 +72,7 @@
 #define P2_SOLENOID_PIN GPIO_NUM_26
 #define P3_SOLENOID_PIN GPIO_NUM_27
 #define P4_SOLENOID_PIN GPIO_NUM_12
+#define MIN_SOLENOID_MIN_POWER 0.82
 
 ////////////////////////////////////
 // BEAM SWITCH SETTINGS
@@ -94,11 +96,11 @@
 // TASK CORE ASSIGNMENT
 ////////////////////////////////////
 // Default tasks use core 0 (e.g., setup and loop functions in main.cpp)
-#define TASK_BEAM_CHECK_CORE        1
+#define TASK_BEAM_CHECK_CORE        0
 #define TASK_MOTOR_RUN_CORE   0
-#define TASK_SOLENOID_OVERTEMP_CORE 1
-#define TASK_RASP_COMMUNICATION_CORE 1
-#define TASK_STALLGUARD_CORE        1
+#define TASK_SOLENOID_OVERTEMP_CORE 0
+#define TASK_RASP_COMMUNICATION_CORE 0
+#define TASK_STALLGUARD_CORE        0
 
 ////////////////////////////////////
 // TASK PRIORITY ASSIGNMENT
@@ -131,6 +133,8 @@
 #define MOVE_TO_KEY String("MT")
 #define CURRENT_POSITION_KEY String("CP")
 #define CURRENT_SPEED_KEY String("CS")
+#define CURRENT_ACCELERATION_KEY String("CA")
+#define BEAM_STATE_KEY String("BS")
 
 #define SET_KEY String("S")
 #define MAX_SPEED_KEY String("MS")
@@ -151,6 +155,7 @@
 #define ASK_KEY String("A")
 #define ASK_CURRENT_POSITION_KEY (ASK_KEY+CURRENT_POSITION_KEY)
 #define ASK_CURRENT_SPEED_KEY (ASK_KEY+CURRENT_SPEED_KEY)
+#define ASK_CURRENT_ACCELERATION_KEY (ASK_KEY+CURRENT_ACCELERATION_KEY)
 #define ASK_MAX_SPEED_KEY (ASK_KEY+MAX_SPEED_KEY)
 #define ASK_CALIBRATED (ASK_KEY+CALIBRATION_KEY)
 #define ASK_RIGHT_LIMIT_KEY (ASK_KEY+RIGHT_LIMIT_KEY)

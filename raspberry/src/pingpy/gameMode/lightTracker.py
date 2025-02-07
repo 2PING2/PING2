@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from pingpy.input.input import Input
-from pingpy.output.output import Output, PlayerOutput
-from datetime import datetime
-from gameMode import GameMode
-from config.config import YELLOW
+from ..input.input import Input
+from ..output.output import Output
+from .gameMode import GameMode
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO
 import time
-import pingpy.debug.logFile
-import random
+from pingpy.debug import logger
+from random import uniform
 
-#Creation du logfile
 
 
 class LightTracker(GameMode):
@@ -20,84 +18,106 @@ class LightTracker(GameMode):
         self.ledCenter=0
         self.actualRound=0
         self.areaLength=20 ### ceci va varier selon la dificulté du jeu
-        self.count_move=0
-        self.color = YELLOW
-    
+        self.color = BLUE
+        self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
+
+        logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
     def setup(self, Input, Output):
         """
         Setup the game mode.
         """
-        for playerInput in Input.ListPlayerInput:
-            Output.ListPlayerOutput[playerInput.idPlayer].LinearActuatorOutput.move_to = 0
-        self.ledCenter = random.uniform(Output.ListPlayerOutput[0].playerLedStrip.rightLimit, Output.ListPlayerOutput[0].playerLedStrip.leftLimit)
+        
+        self.ledCenter = uniform(-200+self.areaLength/2 ,200 - self.areaLength/2)
         self.areaLed = [self.ledCenter - self.areaLength/2, self.ledCenter + self.areaLength/2]
-        Output.ListPlayerOutput[0].PlayerLedStrip.onPlayer(YELLOW, self.areaLed)
+        for i in range(4):
+            try:
+                playerOutput = Output.player[i]
+                playerInput = Input.player[i]
+                playerOutput.linearActuator.moveTo = 0
+                playerOutput.playerLedStrip.area = self.areaLed
+            except IndexError:
+                logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
+
         self.actualRound += 1
         pass
     
-    def run(self, Input, Output):
+    def compute(self, Input, Output):
         """
         Run the game mode.
         """
         if self.actualRound == 0:
             self.setup(Input, Output)
-        for playerInput in Input.ListPlayerInput:
-            if self.check_victory(playerInput, Output):
+        for i in range(4):
+            if self.check_victory(Input.player[i], Output):
                 self.stop(Input, Output)
                 return
             if not self.check_end_move(Input):
-                self.move(playerInput, Output.ListPlayerOutput[playerInput.idPlayer])
+                self.move(Input.player[i], Output.player[i])    
             else:
                 winnerId = self.check_distance(Input)
                 for winner in winnerId:
-                    self.modif_score(Input.ListPlayerInput[winner])
+                    self.modif_score(Input.player[winner])
         self.new_round(Input, Output)
 
     def stop(self, Input, Output):
-        for playerInput in Input.ListPlayerInput:
-            playerInput.GameController3ButtonInput.countMove = 0
-            Output.ListPlayerOutput[playerInput.idPlayer].LinearActuatorOutput.move_to = 0
-            Output.ListPlayerOutput[playerInput.idPlayer].PlayerLedStrip.clear()
+        logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
+        
+        for i in range(4):
+            Output.player[i].linearActuator.stop = True
 
     def check_distance(self,Input):
         winnerId = []
         distance = float('inf')
-        for playerInput in Input.ListPlayerInput:
-            new_distance = abs(playerInput.linearActuator.currentPose - self.ledCenter)
+        for i in range(4):
+            new_distance = abs(Input.player[i].linearActuator.currentPose - self.ledCenter)
             if new_distance <= distance:
                 distance = new_distance
-                winnerId = winnerId.append(playerInput.idPlayer)
+                winnerId.append(i)
         return winnerId 
-        pass 
+        
 
     def check_move(self, PlayerInput):
         return (
-            PlayerInput.GameController3ButtonInput.countMove == 0 and
-            (PlayerInput.GameController3ButtonInput.left or PlayerInput.GameController3ButtonInput.right)
+            PlayerInput.gameController.countMove == 0 and
+            (PlayerInput.gameController.left or PlayerInput.gameController.right)
         )
 
     def move(self, PlayerInput, PlayerOutput):
         if self.check_move(PlayerInput):
-            PlayerInput.GameController3ButtonInput.countMove += 1
-            if PlayerInput.GameController3ButtonInput.left:
+            PlayerInput.gameController.countMove -= 1
+            if PlayerInput.gameController.left:
                 PlayerOutput.linearActuator.moveToLeft = True
                 PlayerOutput.linearActuator.moveToRight = False
-            elif PlayerInput.GameController3ButtonInput.right:
+            elif PlayerInput.gameController.right:
                 PlayerOutput.linearActuator.moveToLeft = False
                 PlayerOutput.linearActuator.moveToRight = True
+        else:
+            PlayerOutput.linearActuator.moveToLeft = False
+            PlayerOutput.linearActuator.moveToRight = False
         
     def check_end_move(self, Input):
-        return all(not self.check_move(playerInput) for playerInput in Input.ListPlayerInput)
+        return all(not self.check_move(Input.player[i]) for i in range(4))
 
     def new_round(self,Input,Output):
-        Output.PlayerOutput.LinearActuatorOutput.move_to = self.ledCenter
-        newLedCenter = random.uniform(Input.PlayerInput.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
+        for i in range(4):
+            Output.player[i].linearActuator.moveTo = self.ledCenter
+        newLedCenter = uniform(-200.0,200.0)
+        # newLedCenter = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
+
+        newPositionLed = newLedCenter
         if newLedCenter == self.ledCenter:
-            newPositionLed = random.uniform(Input.PlayerInput.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
+            newPositionLed = uniform(-200.0,200.0)
+            # newPositionLed = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
         self.ledCenter = newPositionLed
         self.areaLed = [self.ledCenter - self.areaLength/2, self.ledCenter + self.areaLength/2]
         self.actualRound += 1 
+        for i in range(4):
+            Output.player[i].playerLedStrip.area = self.areaLed
+            Output.player[i].linearActuator.stop = False
+            Output.player[i].linearActuator.moveToLeft = False
+            Output.player[i].linearActuator.moveToRight = False
+        # Output.PlayerOutput.LinearActuatorOutput.move_to = self.ledCenter # changer avec linearActuator ?
     
         pass
 
@@ -106,9 +126,9 @@ class LightTracker(GameMode):
         pass
 
 
-    def check_victory(self,PlayerInput, Output):
-        if PlayerInput.pointCounter == 5:
-            Output.ListPlayerOutput[PlayerInput.idPlayer].PlayerLedStrip.onPlayer(YELLOW)
-            return True
+    def check_victory(self,Input, Output):
+        # for i in range(4):
+            # if Input.player[i].pointCounter == 3:
+            #     self.winnerID = i
+            #     return True
         return False
-        pass

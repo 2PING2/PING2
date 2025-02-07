@@ -1,0 +1,7 @@
+@startuml packages_pingpy_config
+set namespaceSeparator none
+package "pingpy.config" as pingpy.config {
+}
+package "pingpy.config.config" as pingpy.config.config {
+}
+@enduml

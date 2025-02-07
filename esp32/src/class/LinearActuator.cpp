@@ -1,9 +1,11 @@
 #include "LinearActuator.hpp"
 
 Vector<LinearActuator *> LinearActuator::all;
+FastAccelStepperEngine LinearActuator::engine = FastAccelStepperEngine();
 
 void LinearActuator::setup_all()
 {
+    engine.init();
     TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
     xTaskCreatePinnedToCore(
         stall_guard_task,
@@ -62,10 +64,14 @@ void LinearActuator::motor_run_task(void *pvParameters)
 }
 void LinearActuator::setup()
 {
+    motor = engine.stepperConnectToPin(stepPin);
+    if (!motor)
+        return;
+    motor->setDirectionPin(dirPin, shaft);
+    
     all.push_back(this);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);           // set max speed
     set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION); // set acceleration
-    motor.enableOutputs();                              // enable motor outputs
     driver.begin();
     driver.senddelay(8); // not sure about this
     driver.toff(4);
@@ -94,40 +100,40 @@ bool LinearActuator::get_stall_result()
 
 void LinearActuator::instant_stop()
 {
-    motor.setSpeed(0);
-    motor.runSpeed();
+    motor->forceStop();
 }
 
-int LinearActuator::run()
+bool LinearActuator::is_new_acceleration()
 {
-    bool r = motor.run();
-    if (begin_mvt_flag && !r)
+
+    if (current_acceleration()!=previousAcceleration)
     {
-        begin_mvt_flag = false;
-        mvt_flag = true;
+        previousAcceleration = currentAcceleration;
+        return true;
     }
-    return r;
+    return false;
 }
+
 
 bool LinearActuator::move_to(float position)
 {
     begin_mvt_flag = true;
-    motor.moveTo(position * MICRO_STEPS_PER_MM);
-    return motor.distanceToGo() == 0;
+    motor->moveTo(position * MICRO_STEPS_PER_MM);
+    return motor->isRunning() == 0;
 }
 
 bool LinearActuator::move(float relativePosition)
 {
     begin_mvt_flag = true;
-    motor.move(relativePosition * MICRO_STEPS_PER_MM);
-    return motor.distanceToGo() == 0;
+    motor->move(relativePosition * MICRO_STEPS_PER_MM);
+    return motor->isRunning() == 0;
 }
 
 bool LinearActuator::c_step1()
 {
     if (!true)
         return false;
-    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION/2.0);
+    set_acceleration(LINEAR_ACTUATOR_MAX_SPEED);
     set_max_speed(COARSE_CALIBRATION_SPEED);
     move_left();
     return true;
@@ -138,7 +144,6 @@ bool LinearActuator::c_step2(int64_t time)
     if (!(COARSE_CALIBRATION_SPEED - abs(current_speed()) < 1e-1))
         return false;
     chrono = time;
-    set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION);
     updateSgTh = COARSE_CALIBRATION_STALL_VALUE;
     return true;
 }
@@ -166,7 +171,7 @@ bool LinearActuator::c_step4()
 
 bool LinearActuator::c_step5()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(FINE_CALIBRATION_SPEED);
     move_left();
@@ -204,14 +209,14 @@ bool LinearActuator::c_step8()
     if (calibrationGoodSamples < FINE_CALIBRATION_SAMPLES)
         return false; // don't forget to implement counter condition in main calibration method
     leftLimit = calibrationFirstWallPosition;
-    set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
+    set_max_speed(COARSE_CALIBRATION_SPEED*3);
     move(-LINEAR_ACTUATOR_MIN_AMPLITUDE);
     return true;
 }
 
 bool LinearActuator::c_step9()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(COARSE_CALIBRATION_SPEED);
     move_right();
@@ -249,7 +254,7 @@ bool LinearActuator::c_step12()
 
 bool LinearActuator::c_step13()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(FINE_CALIBRATION_SPEED);
     move_right();
@@ -298,7 +303,7 @@ bool LinearActuator::c_step16()
     rightLimit = rightLimitMicroSteps / MICRO_STEPS_PER_MM;
     leftLimit = leftLimitMicroSteps / MICRO_STEPS_PER_MM;
     
-    motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
+    motor->setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
     move_to(0);
     return true;

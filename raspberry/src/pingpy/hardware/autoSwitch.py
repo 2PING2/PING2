@@ -19,7 +19,7 @@ except ImportError:
     from .gpioMock import GPIO  # Sur PC ou autre environnement
     
 import threading
-import pingpy.debug.logFile
+from pingpy.debug import logger
 
 
 
@@ -28,11 +28,12 @@ class AutoSwitch:
     def __init__(self, AUTO_SWITCH_PIN, AUTO_LED_PIN):
         """Init states"""
         self.ledState = False
-        self.autoMode = False
+        self.mode = False
+        self.buttonState = False
         self.autoSwitchPin = AUTO_SWITCH_PIN
         self.autoLedPin = AUTO_LED_PIN
-        self.monitor_thread = None 
-
+        logger.write_in_log("INFO", __name__, "__init__")
+            
     def setup(self):
         """Config GPIO"""
         GPIO.setmode(GPIO.BCM)
@@ -47,22 +48,21 @@ class AutoSwitch:
         
         logger.write_in_log("INFO", "autoSwitch", "setup", "Autoswitch and Autoled is initalized")
             
-        # start monitor_switch in a thread
-        self.monitor_thread = threading.Thread(target=self.monitor_switch(self.autoSwitchPin, self.autoLedPin), daemon=True)
-        self.monitor_thread.start()
-
     def monitor_switch(self):
         """Read the state of the switch and update the LED"""
-        buttonStates = False         
-        if GPIO.input(self.autoSwitchPin) == GPIO.LOW: # switch pushed
-            if not buttonStates: # if the button is not already pushed
-                self.ledState = not self.ledState
-                self.autoMode = self.ledState
+        gpioStatus = GPIO.input(self.autoSwitchPin)==GPIO.LOW
+        if self.buttonState != gpioStatus: # changed
+            logger.write_in_log("INFO", __name__, "monitor_switch", f"AutoSwitch is {gpioStatus}")
+            self.buttonState = gpioStatus
+            if gpioStatus: # if pressed
+                return True     
+                        
+        # Put the LED on or off        
+        if self.ledState != self.mode:
+            self.ledState = self.mode
+            GPIO.output(self.autoLedPin, GPIO.HIGH if self.ledState else GPIO.LOW)
+            logger.write_in_log("INFO", __name__, "monitor_switch", f"AutoLed is {self.ledState} and mode is {self.mode}")
+            
+        return False
 
-                # Put the LED on or off
-                GPIO.output(self.autoLedPin, GPIO.HIGH if self.ledState else GPIO.LOW)
-
-                buttonStates = True # record the button state
-        else:
-            buttonStates = False # switch released
                 

@@ -9,6 +9,7 @@ class GPIO:
     BOARD = "BOARD"
     OUT = "OUT"
     IN = "IN"
+    PUD_UP = "PUD_UP"
     HIGH = True
     LOW = False
 
@@ -17,7 +18,7 @@ class GPIO:
         print(f"Setting GPIO mode to {mode}")
 
     @staticmethod
-    def setup(pin, mode):
+    def setup(pin, mode, pull_up_down= None):
         print(f"Setting up pin {pin} as {mode}")
 
     @staticmethod
@@ -26,7 +27,7 @@ class GPIO:
 
     @staticmethod
     def input(pin):
-        print(f"Reading pin {pin}")
+        # print(f"Reading pin {pin}")
         return GPIO.LOW  # Simule un état bas
 
     @staticmethod
