@@ -56,15 +56,8 @@ class Ping:
                 
             if self.playerController[i].connectedFlag == True:
                 logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
-                self.input.player[i].linearActuator.stop = True
-                self.input.player[i].controllerInput.left = False
-                self.input.player[i].controllerInput.leftButtonState = False
-                self.input.player[i].controllerInput.right = False
-                self.input.player[i].controllerInput.rightButtonState = False
-                self.input.player[i].controllerInput.shoot = False
-                self.input.player[i].controllerInput.shootButtonState = False      
-                logger.write_in_log("WARNING", __name__, f"{self.input.player[i].linearActuator.stop} / {self.input.player[i].controllerInput.left} / {self.input.player[i].controllerInput.leftButtonState} / {self.input.player[i].controllerInput.right} / {self.input.player[i].controllerInput.rightButtonState} / {self.input.player[i].controllerInput.shoot} / {self.input.player[i].controllerInput.shootButtonState}")  
-                
+                # self.input.player[i].linearActuator.stop = True
+                # bumper a faire                
                 self.playerController[i].connectedFlag = False     
             
             # if not self.playerController[i].connected :
