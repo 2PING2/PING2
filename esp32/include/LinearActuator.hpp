@@ -22,7 +22,10 @@ public:
     static void motor_run_task(void *pvParameters);
     static FastAccelStepperEngine engine;
 
-    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : motor(engine.stepperConnectToPin(stepPin)), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) { motor->setDirectionPin(dirPin, !shaft);}
+    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) { 
+        motor = engine.stepperConnectToPin(stepPin);
+        motor->setDirectionPin(dirPin, !shaft);
+        }
     ~LinearActuator() {};
     void setup();
     bool get_stall_result();
@@ -73,7 +76,7 @@ private:
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;
     float leftLimit = LINEAR_ACTUATOR_RAILHEAD;
     TMC2209Stepper driver;
-    FastAccelStepper *motor;
+    FastAccelStepper *motor = NULL;
     void set_current_position(float position) { motor->setCurrentPosition(position * MICRO_STEPS_PER_MM); }
     int64_t chrono = 0;
     bool shaft;

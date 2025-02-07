@@ -18,47 +18,48 @@
 // }
 
 #include <Arduino.h>
-#include "config.h"
-#include <FastAccelStepper.h>
+#define EVERYTHING_PUBLIC
+#include "LinearActuator.hpp"
+// #include <FastAccelStepper.h>
 
-FastAccelStepperEngine engine = FastAccelStepperEngine();
-FastAccelStepper *stepper = NULL;
+// FastAccelStepperEngine engine = FastAccelStepperEngine();
+// FastAccelStepper *stepper = NULL;
+LinearActuator la1 = LinearActuator(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_INVERT_DIR);
 
-#define dirPinStepper    P1_DIR_PIN
-#define stepPinStepper   P1_STEP_PIN
 
 void setup() {
-    engine.init();
-    stepper = engine.stepperConnectToPin(stepPinStepper);
-    
-    if (stepper) {
-        stepper->setDirectionPin(dirPinStepper, P1_INVERT_DIR);
+    LinearActuator::setup_all();
+    la1.setup();
+    Serial.begin(115200);
+    if (!la1.motor)
+    {
+        Serial.println("motor is null");
+        while (1)
+            ;
     }
+        
 }
 
 void loop() {
-    Serial.begin(115200);
     static int speed = 500;       // Vitesse initiale en Hz
     static int acceleration = 100; // Accélération initiale
     static int stepDistance = 300; // Distance du mouvement
     static int increment = 500;    // Incrément de vitesse et d'accélération
 
-    if (stepper) {
-        stepper->setSpeedInHz(speed);
-        stepper->setAcceleration(acceleration);
-        
-        // Mouvement aller-retour
-        stepper->moveTo(stepDistance, true);
-        Serial.println("Moving to " + String(stepDistance) + " steps");
-        stepper->moveTo(0, true);
-        Serial.println("Moving to 0 steps");
-        
-        // Augmenter la vitesse et l'accélération progressivement
-        speed = 1000;
-        acceleration += increment;
+    la1.motor->setSpeedInHz(speed);
+    la1.motor->setAcceleration(acceleration);
+    
+    // Mouvement aller-retour
+    la1.motor->moveTo(stepDistance, true);
+    Serial.println("Moving to " + String(stepDistance) + " steps");
+    la1.motor->moveTo(0, true);
+    Serial.println("Moving to 0 steps");
+    
+    // Augmenter la vitesse et l'accélération progressivement
+    speed = 1000;
+    acceleration += increment;
 
-        // Attente pour éviter une augmentation trop brutale
-    }
+    // Attente pour éviter une augmentation trop brutale
     delay(1000);
 
 }
