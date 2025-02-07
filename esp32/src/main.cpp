@@ -29,19 +29,21 @@ LinearActuator la1 = LinearActuator(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_IN
 
 void setup() {
     Serial.begin(115200);
-    Serial.println("Setup done");
+    Serial.println("Setup done1");
     delay(1000);
-    Serial.println("Setup done");
+    Serial.println("Setup done2");
     delay(1000);
-    Serial.println("Setup done");
+    Serial.println("Setup done3");
     delay(1000);
-    Serial.println("Setup done");
+    Serial.println("Setup done4");
     delay(1000);
-    Serial.println("Setup done");
+    Serial.println("Setup done5");
     delay(1000);
 
     LinearActuator::setup_all();
+    Serial.println("Setup done6");
     la1.setup();
+    Serial.println("Setup done7");
 
     if (!la1.motor)
     {
