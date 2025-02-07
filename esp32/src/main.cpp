@@ -41,7 +41,7 @@ void loop() {
     static int speed = 500;       // Vitesse initiale en Hz
     static int acceleration = 100; // Accélération initiale
     static int stepDistance = 100; // Distance du mouvement
-    static int increment = 100;    // Incrément de vitesse et d'accélération
+    static int increment = 500;    // Incrément de vitesse et d'accélération
 
     if (stepper) {
         stepper->setSpeedInHz(speed);
@@ -54,10 +54,9 @@ void loop() {
         Serial.println("Moving to 0 steps");
         
         // Augmenter la vitesse et l'accélération progressivement
-        speed += increment;
+        speed = 1000;
         acceleration += increment;
 
         // Attente pour éviter une augmentation trop brutale
-        delay(500);
     }
 }
