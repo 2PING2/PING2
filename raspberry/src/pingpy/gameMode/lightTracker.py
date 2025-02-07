@@ -123,8 +123,8 @@ class LightTracker(GameMode):
 
 
     def check_victory(self,Input, Output):
-        for i in range(4):
-            if Input.player[i].pointCounter == 3:
-                self.winnerID = i
-                return True
+        # for i in range(4):
+            # if Input.player[i].pointCounter == 3:
+            #     self.winnerID = i
+            #     return True
         return False
