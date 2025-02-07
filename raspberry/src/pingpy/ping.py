@@ -62,7 +62,8 @@ class Ping:
                 self.input.player[i].controllerInput.right = False
                 self.input.player[i].controllerInput.rightButtonState = False
                 self.input.player[i].controllerInput.shoot = False
-                self.input.player[i].controllerInput.shootButtonState = False              
+                self.input.player[i].controllerInput.shootButtonState = False      
+                logger.write_in_log("WARNING", __name__, f"{self.input.player[i].linearActuator.stop} / {self.input.player[i].controllerInput.left} / {self.input.player[i].controllerInput.leftButtonState} / {self.input.player[i].controllerInput.right} / {self.input.player[i].controllerInput.rightButtonState} / {self.input.player[i].controllerInput.shoot} / {self.input.player[i].controllerInput.shootButtonState}")  
                 
                 self.playerController[i].connectedFlag = False     
             
