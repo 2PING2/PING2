@@ -56,14 +56,9 @@ class Ping:
                 
             if self.playerController[i].connectedFlag == True:
                 logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
-                self.input.player[i].gameController.left = False
-                self.input.player[i].gameController.leftButtonState = False
-                self.input.player[i].gameController.right = False
-                self.input.player[i].gameController.rightButtonState = False
-                self.input.player[i].gameController.left = False
-                self.input.player[i].gameController.leftButtonState = False
-                self.playerController[i].connectedFlag = False 
-                self.esp32.write(self.output, self.input)           
+                self.input.player[i].linearActuator.stop = True
+                self.input.player[i].bumper.state = False
+                self.playerController[i].connectedFlag = False     
             
             # if not self.playerController[i].connected :
             if self.input.player[i].auto.monitor_switch():
