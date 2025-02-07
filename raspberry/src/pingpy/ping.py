@@ -54,7 +54,7 @@ class Ping:
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
             
-            if self.connected == False:
+            if self.playerController[i].connected == False:
                 logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
                 self.input.player[i].gameController.left = False
                 self.input.player[i].gameController.leftButtonState = False
