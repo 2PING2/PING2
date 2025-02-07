@@ -1,7 +1,6 @@
 #ifndef LINEAR_ACTUATOR_HPP
 #define LINEAR_ACTUATOR_HPP
-// #include <AccelStepper.h>
-#include "FastAccelStepper.h"
+#include <AccelStepper.h>
 #include <TMCStepper.h>
 #include "config.h"
 #include "vector.hpp"
@@ -20,23 +19,22 @@ public:
     static void setup_all();
     static void stall_guard_task(void *pvParameters);
     static void motor_run_task(void *pvParameters);
-    static FastAccelStepperEngine engine;
 
-    LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(engine.stepperConnectToPin(stepPin)), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) { motor->setDirectionPin(dirPin, !shaft);}
+    LinearActuator(int stepPin, int dirPin, uint8_t addresss, bool shaftt = false) : motor(AccelStepper::DRIVER, stepPin, dirPin), driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
     bool get_stall_result();
     void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
     void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
-    // void invert(bool shaft) { motor->setPinsInverted(shaft); }
-    void set_max_speed(float speed) { motor->setSpeedInHz(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
-    // void set_max_speed(float speed) { motor->setAbsoluteSpeedLimit(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
-    void set_acceleration(float acceleration) { motor->setAcceleration(min(acceleration, LINEAR_ACTUATOR_MAX_ACCELERATION) * MICRO_STEPS_PER_MM); }
+    void invert(bool shaft) { motor.setPinsInverted(shaft); }
+    void set_speed(float speed) { motor.setSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
+    void set_max_speed(float speed) { motor.setMaxSpeed(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
+    void set_acceleration(float acceleration) { motor.setAcceleration(min(acceleration, LINEAR_ACTUATOR_MAX_ACCELERATION) * MICRO_STEPS_PER_MM); }
     bool move_to(float position);
     bool move(float relativePosition);
     void move_right() { move_to(rightLimit); }
     void move_left() { move_to(leftLimit); }
-    void stop() { begin_mvt_flag = true; motor->stopMove(); }
+    void stop() { begin_mvt_flag = true; motor.stop(); }
     void instant_stop();
     void calibrate()
     {
@@ -44,11 +42,12 @@ public:
         reset_left_limit();
         calibrating = true;
     }
-    float current_position() { return motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
-    float current_speed() { return 1e6 / motor->getCurrentSpeedInUs() / MICRO_STEPS_PER_MM; }
-    float current_acceleration() { return motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
-    float max_speed() { return 1e6 / motor->getSpeedInUs() / MICRO_STEPS_PER_MM; }
-    float max_acceleration() { return motor->getAcceleration() / MICRO_STEPS_PER_MM; }
+    int run();
+    float current_position() { return motor.currentPosition() / MICRO_STEPS_PER_MM; }
+    float current_speed() { return motor.speed() / MICRO_STEPS_PER_MM; }
+    float current_acceleration() { return currentAcceleration; }
+    float max_speed() { return motor.maxSpeed() / MICRO_STEPS_PER_MM; }
+    float max_acceleration() { return motor.acceleration() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
     float get_right_limit() { return rightLimit; }
     float get_left_limit() { return leftLimit; }
@@ -59,7 +58,7 @@ public:
     bool is_busy() { return is_calibrating(); }
     bool consume_mvt_flag() { bool tmp = mvt_flag; mvt_flag = false; return tmp; }
     bool consume_cal_flag() { bool tmp = cal_flag; cal_flag = false; return tmp; }
-    bool is_new_acceleration();
+    bool compute_new_acceleration(float time = esp_timer_get_time()/1e6);
 
 
 #ifndef EVERYTHING_PUBLIC
@@ -73,8 +72,8 @@ private:
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;
     float leftLimit = LINEAR_ACTUATOR_RAILHEAD;
     TMC2209Stepper driver;
-    FastAccelStepper *motor;
-    void set_current_position(float position) { motor->setCurrentPosition(position * MICRO_STEPS_PER_MM); }
+    AccelStepper motor;
+    void set_current_position(float position) { motor.setCurrentPosition(position * MICRO_STEPS_PER_MM); }
     int64_t chrono = 0;
     bool shaft;
     bool running = false;
