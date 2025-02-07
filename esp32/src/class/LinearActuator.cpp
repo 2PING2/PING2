@@ -6,25 +6,25 @@ FastAccelStepperEngine LinearActuator::engine = FastAccelStepperEngine();
 void LinearActuator::setup_all()
 {
     engine.init();
-    // TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
-    // xTaskCreatePinnedToCore(
-    //     stall_guard_task,
-    //     "stall_guard_task",
-    //     10000,
-    //     NULL,
-    //     TASK_STALLGUARD_PRIORITY,
-    //     NULL,
-    //     TASK_STALLGUARD_CORE);
+    TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
+    xTaskCreatePinnedToCore(
+        stall_guard_task,
+        "stall_guard_task",
+        10000,
+        NULL,
+        TASK_STALLGUARD_PRIORITY,
+        NULL,
+        TASK_STALLGUARD_CORE);
 
 
-    // xTaskCreatePinnedToCore(
-    //     motor_run_task,
-    //     "motor_run_task",
-    //     10000,
-    //     NULL,
-    //     TASK_MOTOR_RUN_PRIORITY,
-    //     NULL,
-    //     TASK_MOTOR_RUN_CORE);
+    xTaskCreatePinnedToCore(
+        motor_run_task,
+        "motor_run_task",
+        10000,
+        NULL,
+        TASK_MOTOR_RUN_PRIORITY,
+        NULL,
+        TASK_MOTOR_RUN_CORE);
 }
 
 void LinearActuator::stall_guard_task(void *pvParameters)
@@ -67,7 +67,7 @@ void LinearActuator::setup()
     motor = engine.stepperConnectToPin(stepPin);
     if (!motor)
         return;
-    motor->setDirectionPin(dirPin, !shaft);
+    motor->setDirectionPin(dirPin, shaft);
     
     all.push_back(this);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);           // set max speed

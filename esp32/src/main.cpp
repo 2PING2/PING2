@@ -68,9 +68,9 @@ void loop() {
     la1.motor->setAcceleration(acceleration);
     
     // Mouvement aller-retour
-    la1.motor->moveTo(stepDistance, true);
+    la1.motor->moveTo(stepDistance);
     Serial.println("Moving to " + String(stepDistance) + " steps");
-    la1.motor->moveTo(0, true);
+    la1.motor->moveTo(0);
     Serial.println("Moving to 0 steps");
     
     // Augmenter la vitesse et l'accélération progressivement
@@ -78,6 +78,6 @@ void loop() {
     acceleration += increment;
 
     // Attente pour éviter une augmentation trop brutale
-    delay(1000);
+    delay(2000);
 
 }
