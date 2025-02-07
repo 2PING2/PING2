@@ -1,9 +1,11 @@
 #include "LinearActuator.hpp"
 
 Vector<LinearActuator *> LinearActuator::all;
+FastAccelStepperEngine LinearActuator::engine = FastAccelStepperEngine();
 
 void LinearActuator::setup_all()
 {
+    engine.init();
     TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
     xTaskCreatePinnedToCore(
         stall_guard_task,
@@ -65,7 +67,7 @@ void LinearActuator::setup()
     all.push_back(this);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);           // set max speed
     set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION); // set acceleration
-    motor.enableOutputs();                              // enable motor outputs
+    motor->enableOutputs();                              // enable motor outputs
     driver.begin();
     driver.senddelay(8); // not sure about this
     driver.toff(4);
@@ -94,68 +96,33 @@ bool LinearActuator::get_stall_result()
 
 void LinearActuator::instant_stop()
 {
-    motor.setSpeed(0);
-    motor.runSpeed();
+    motor->forceStop();
 }
 
-bool LinearActuator::compute_new_acceleration(float time)
+bool LinearActuator::is_new_acceleration()
 {
-    float dt = time - previousTime;
-    if (dt < COMPUTE_ACCELERATION_PERIOD_MS/1000.0)
-        return false;
-        
-    previousTime = time;
 
-    float ds = current_speed() - previousSpeed;
-    previousSpeed = current_speed();
-
-    // acceleration in mm/s², should always work for any kind of movement
-    float accelerationApprox = ds / dt; 
-
-    // with acclesstepper, the motor can have only 3 different acceleration values
-    if (accelerationApprox > max_acceleration() * 0.5) // positive acceleration
-        currentAcceleration = max_acceleration();
-    else if (accelerationApprox < -max_acceleration() * 0.5) // negative acceleration
-        currentAcceleration = -max_acceleration();
-    else // no acceleration
-        currentAcceleration = 0;
-        
-    bool ret = false;
-    // if (abs(ds)>1) // if the speed changes, return true
-    //     ret = true;
-
-    // if the acceleration changes, return true
-    if (currentAcceleration != previousAcceleration)
+    if (current_acceleration()!=previousAcceleration)
     {
         previousAcceleration = currentAcceleration;
-        ret = true;
+        return true;
     }
-    return ret;
+    return false;
 }
 
-int LinearActuator::run()
-{
-    bool r = motor.run();
-    if (begin_mvt_flag && !r)
-    {
-        begin_mvt_flag = false;
-        mvt_flag = true;
-    }
-    return r;
-}
 
 bool LinearActuator::move_to(float position)
 {
     begin_mvt_flag = true;
-    motor.moveTo(position * MICRO_STEPS_PER_MM);
-    return motor.distanceToGo() == 0;
+    motor->moveTo(position * MICRO_STEPS_PER_MM);
+    return motor->isRunning() == 0;
 }
 
 bool LinearActuator::move(float relativePosition)
 {
     begin_mvt_flag = true;
-    motor.move(relativePosition * MICRO_STEPS_PER_MM);
-    return motor.distanceToGo() == 0;
+    motor->move(relativePosition * MICRO_STEPS_PER_MM);
+    return motor->isRunning() == 0;
 }
 
 bool LinearActuator::c_step1()
@@ -200,7 +167,7 @@ bool LinearActuator::c_step4()
 
 bool LinearActuator::c_step5()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(FINE_CALIBRATION_SPEED);
     move_left();
@@ -245,7 +212,7 @@ bool LinearActuator::c_step8()
 
 bool LinearActuator::c_step9()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(COARSE_CALIBRATION_SPEED);
     move_right();
@@ -283,7 +250,7 @@ bool LinearActuator::c_step12()
 
 bool LinearActuator::c_step13()
 {
-    if (!motor.distanceToGo() == 0)
+    if (!motor->isRunning() == 0)
         return false;
     set_max_speed(FINE_CALIBRATION_SPEED);
     move_right();
@@ -332,7 +299,7 @@ bool LinearActuator::c_step16()
     rightLimit = rightLimitMicroSteps / MICRO_STEPS_PER_MM;
     leftLimit = leftLimitMicroSteps / MICRO_STEPS_PER_MM;
     
-    motor.setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
+    motor->setCurrentPosition(-amplitude * MICRO_STEPS_PER_MM / 2);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);
     move_to(0);
     return true;
