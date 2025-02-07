@@ -62,7 +62,8 @@ class Ping:
                 self.input.player[i].gameController.rightButtonState = False
                 self.input.player[i].gameController.left = False
                 self.input.player[i].gameController.leftButtonState = False
-                self.playerController[i].connectedFlag = False            
+                self.playerController[i].connectedFlag = False 
+                self.esp32.write(self.output, self.input)           
             
             # if not self.playerController[i].connected :
             if self.input.player[i].auto.monitor_switch():
