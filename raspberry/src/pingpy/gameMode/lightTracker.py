@@ -116,7 +116,7 @@ class LightTracker(GameMode):
             Output.player[i].linearActuator.stop = False
             Output.player[i].linearActuator.moveToLeft = False
             Output.player[i].linearActuator.moveToRight = False
-        Output.PlayerOutput.LinearActuatorOutput.move_to = self.ledCenter
+        Output.PlayerOutput.linearActuator.move_to = self.ledCenter
     
         pass
 
