@@ -49,4 +49,14 @@ void PING::setup()
         &PING::solenoidOvertempTaskHandle, /* Task handle. */
         TASK_SOLENOID_OVERTEMP_CORE           /* Core where the task should run */
     );
+
+    // Serial.println("beamswitch_1");
+    // Serial.println(analogRead(GPIO_NUM_14));
+    // Serial.println("beamswitch_2");
+    // Serial.println(analogRead(GPIO_NUM_15));
+    Serial.print("beamswitch_3 : ");
+    Serial.println(analogRead(GPIO_NUM_34));
+    // Serial.println("beamswitch_4");
+    // Serial.println(analogRead(GPIO_NUM_13));
+
 }
