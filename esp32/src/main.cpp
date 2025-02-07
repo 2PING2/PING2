@@ -42,6 +42,7 @@ void setup() {
 }
 
 void loop() {
+    Serial.println("Motor setup done");
     static int speed = 500;       // Vitesse initiale en Hz
     static int acceleration = 100; // Accélération initiale
     static int stepDistance = 300; // Distance du mouvement
