@@ -105,6 +105,7 @@ class LightTracker(GameMode):
         newLedCenter = uniform(-200.0,200.0)
         # newLedCenter = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
 
+        newPositionLed = newLedCenter
         if newLedCenter == self.ledCenter:
             newPositionLed = uniform(-200.0,200.0)
             # newPositionLed = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
@@ -116,7 +117,7 @@ class LightTracker(GameMode):
             Output.player[i].linearActuator.stop = False
             Output.player[i].linearActuator.moveToLeft = False
             Output.player[i].linearActuator.moveToRight = False
-        Output.PlayerOutput.LinearActuatorOutput.move_to = self.ledCenter
+        # Output.PlayerOutput.LinearActuatorOutput.move_to = self.ledCenter # changer avec linearActuator ?
     
         pass
 
