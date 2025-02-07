@@ -57,7 +57,7 @@ class Ping:
             if self.playerController[i].connectedFlag == True:
                 logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
                 self.input.player[i].linearActuator.stop = True
-                self.input.player[i].bumper.state = False
+                # self.input.player[i].bumper.state = False
                 self.playerController[i].connectedFlag = False     
             
             # if not self.playerController[i].connected :
