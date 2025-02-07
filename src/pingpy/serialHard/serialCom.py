@@ -31,6 +31,7 @@ class SerialCom:
         self.timeout = TIMEOUT
         self.ser = None
         self.connected = False
+        self.connectedFlag = False
         self.queue = []
         self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
@@ -77,7 +78,7 @@ class SerialCom:
             self.ser=None
             if self.connected:
                 self.connected = False
-                logger.write_in_log("WARNING", __name__, "read_data_task", f" self.connected : {self.connected}")
+                self.connectedFlag = False
                 
                 # manette déconnecté
                              
