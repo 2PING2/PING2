@@ -5,6 +5,7 @@ FastAccelStepperEngine LinearActuator::engine = FastAccelStepperEngine();
 
 void LinearActuator::setup_all()
 {
+    engine.init();
     TMC_SERIAL_PORT.begin(TMC_SERIAL_BAUD_RATE);
     xTaskCreatePinnedToCore(
         stall_guard_task,
