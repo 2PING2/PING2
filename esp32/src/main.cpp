@@ -33,9 +33,11 @@ void setup() {
     Serial.begin(115200);
     if (!la1.motor)
     {
-        Serial.println("motor is null");
         while (1)
-            ;
+            {
+                Serial.println("motor is null");
+                delay(1000);
+            }
     }
     Serial.println("Motor setup done");
         
