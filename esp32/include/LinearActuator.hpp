@@ -22,7 +22,7 @@ public:
     static void motor_run_task(void *pvParameters);
     static FastAccelStepperEngine engine;
 
-    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
+    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt), stepPin(stepPin), dirPin(dirPin) {}
     ~LinearActuator() {};
     void setup();
     bool get_stall_result();
