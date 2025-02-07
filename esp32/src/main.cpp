@@ -37,6 +37,7 @@ void setup() {
         while (1)
             ;
     }
+    Serial.println("Motor setup done");
         
 }
 
