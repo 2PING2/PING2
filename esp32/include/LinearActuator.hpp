@@ -22,10 +22,7 @@ public:
     static void motor_run_task(void *pvParameters);
     static FastAccelStepperEngine engine;
 
-    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) { 
-        motor = engine.stepperConnectToPin(stepPin);
-        motor->setDirectionPin(dirPin, !shaft);
-        }
+    LinearActuator(uint8_t stepPin, uint8_t dirPin, uint8_t addresss, bool shaftt = false) : driver(&TMC_SERIAL_PORT, TMC_R_SENSE, addresss), shaft(shaftt) {}
     ~LinearActuator() {};
     void setup();
     bool get_stall_result();
@@ -68,6 +65,7 @@ public:
 #ifndef EVERYTHING_PUBLIC
 private:
 #endif
+    uint8_t stepPin, dirPin;
     float previousSpeed = 0;
     float previousTime = 0;
     float currentAcceleration = 0, previousAcceleration = 0;
