@@ -73,7 +73,7 @@ class LightTracker(GameMode):
             new_distance = abs(Input.player[i].linearActuator.currentPose - self.ledCenter)
             if new_distance <= distance:
                 distance = new_distance
-                winnerId = winnerId.append(i)
+                winnerId.append(i)
         return winnerId 
         
 
