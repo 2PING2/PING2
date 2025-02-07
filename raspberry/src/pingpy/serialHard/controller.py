@@ -56,7 +56,7 @@ class ControllerSerial(SerialCom):
             if button == SHOOT_BUTTON_KEY:
                 controllerInput.left = False
                 controllerInput.leftButtonState = False
-                
+        logger.write_in_log(" IIIIICCCIIIII")
         if self.connected == False:
             logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
             controllerInput.left = False
