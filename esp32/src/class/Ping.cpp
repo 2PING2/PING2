@@ -28,7 +28,7 @@ void PING::solenoid_overtemp_task(void *pvParameters)
 void PING::setup()
 {
     analogWriteResolution(ANALOG_WRITE_RESOLUTION);
-    BeamSwitch::setup_emitter();
+    //BeamSwitch::setup_emitter();
     PING::players[0] = &PING::player1;
     PING::players[1] = &PING::player2;
     PING::players[2] = &PING::player3;
