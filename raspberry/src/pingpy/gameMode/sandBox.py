@@ -24,7 +24,7 @@ class SandBox(GameMode):
         self.maxSpeed = 700.0
         self.minSpeed = 100.0
         self.minAcceleration = 600.0
-        self.maxAcceleration = 2500.0
+        self.maxAcceleration = 3500.0
                 
     def setup(self, Input, Output):
         """
