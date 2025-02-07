@@ -69,6 +69,7 @@ void loop() {
     
     // Mouvement aller-retour
     la1.motor->moveTo(stepDistance);
+    delay(1000);
     Serial.println("Moving to " + String(stepDistance) + " steps");
     la1.motor->moveTo(0);
     Serial.println("Moving to 0 steps");
