@@ -40,7 +40,7 @@ void loop() {
     Serial.begin(115200);
     static int speed = 500;       // Vitesse initiale en Hz
     static int acceleration = 100; // Accélération initiale
-    static int stepDistance = 100; // Distance du mouvement
+    static int stepDistance = 300; // Distance du mouvement
     static int increment = 500;    // Incrément de vitesse et d'accélération
 
     if (stepper) {
@@ -59,4 +59,6 @@ void loop() {
 
         // Attente pour éviter une augmentation trop brutale
     }
+    delay(1000);
+
 }
