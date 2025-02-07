@@ -22,9 +22,9 @@ class ESP32Serial(SerialCom):
         while any(player.linearActuator.askForCalibration for player in output_ptr.player if player in [0, 2]):
             pass
 
-        for i, playerOutput in enumerate(output_ptr.player):
-            if i in [1, 3]:  # Player 2 and 4 (0-based index)
-                playerOutput.linearActuator.askForCalibration = True
+        # for i, playerOutput in enumerate(output_ptr.player):
+        #     if i in [1, 3]:  # Player 2 and 4 (0-based index)
+        #         playerOutput.linearActuator.askForCalibration = True
 
         
     def read(self, input_ptr):
