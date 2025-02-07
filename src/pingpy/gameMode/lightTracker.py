@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..input.input import Input
 from ..output.output import Output
 from .gameMode import GameMode
-from config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO
 import time
 from pingpy.debug import logger
 from random import uniform
