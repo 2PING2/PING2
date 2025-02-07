@@ -21,8 +21,10 @@ class SandBox(GameMode):
         # parameters
         self.maxPowerBumper = 1.0
         self.minPowerBumper = 0.2
-        self.maxSpeed = 450.0
+        self.maxSpeed = 700.0
         self.minSpeed = 100.0
+        self.minAcceleration = 600.0
+        self.maxAcceleration = 2500.0
                 
     def setup(self, Input, Output):
         """
@@ -105,7 +107,7 @@ class SandBox(GameMode):
             self.currentDifficulty = Input.UICorner.level
             self.powerBumper = self.minPowerBumper + (self.currentDifficulty * (self.maxPowerBumper - self.minPowerBumper))
             self.speed = self.minSpeed + (self.currentDifficulty * (self.maxSpeed - self.minSpeed))
-            self.acceleration = 500.0 + (self.currentDifficulty * (3000.0 - 500.0))
+            self.acceleration = self.minAcceleration + (self.currentDifficulty * (self.maxAcceleration - self.minAcceleration))
             Input.UICorner.level = None
             
         for i in range(4):
