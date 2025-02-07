@@ -17,24 +17,47 @@
 //         la->run();
 // }
 
-#define EVERYTHING_PUBLIC
 #include <Arduino.h>
-#include "LinearActuator.hpp"
+#include "config.h"
+#include <FastAccelStepper.h>
 
-LinearActuator la1(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_INVERT_DIR);
+FastAccelStepperEngine engine = FastAccelStepperEngine();
+FastAccelStepper *stepper = NULL;
 
-void setup()
-{
-    Serial.begin(115200);
-    // LinearActuator::setup_all();
-    // la1.setup();
-    Serial.println("hello from LinearActuator");
-    // la1.move_to(100);
-    // Serial.println("moved to 100");
-    // la1.move_to(0);
-    // Serial.println("moved to 0");
+#define dirPinStepper    P1_DIR_PIN
+#define stepPinStepper   P1_STEP_PIN
+
+void setup() {
+    engine.init();
+    stepper = engine.stepperConnectToPin(stepPinStepper);
+    
+    if (stepper) {
+        stepper->setDirectionPin(dirPinStepper, P1_INVERT_DIR);
+    }
 }
 
-void loop()
-{
+void loop() {
+    Serial.begin(115200);
+    static int speed = 500;       // Vitesse initiale en Hz
+    static int acceleration = 100; // Accélération initiale
+    static int stepDistance = 100; // Distance du mouvement
+    static int increment = 100;    // Incrément de vitesse et d'accélération
+
+    if (stepper) {
+        stepper->setSpeedInHz(speed);
+        stepper->setAcceleration(acceleration);
+        
+        // Mouvement aller-retour
+        stepper->moveTo(stepDistance, true);
+        Serial.println("Moving to " + String(stepDistance) + " steps");
+        stepper->moveTo(0, true);
+        Serial.println("Moving to 0 steps");
+        
+        // Augmenter la vitesse et l'accélération progressivement
+        speed += increment;
+        acceleration += increment;
+
+        // Attente pour éviter une augmentation trop brutale
+        delay(500);
+    }
 }
