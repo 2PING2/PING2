@@ -13,13 +13,16 @@ private:
     static float maxTemp;
     float currentTemp = 0.0;
     uint64_t lastTempCheck = 0;
+    static uint8_t channelCount;
+    uint8_t channel;
 public:
     Solenoid(int solenoidPin),
     ~Solenoid();
     void setup();
     void activate();
+    void activate(float power){ set_power(power); activate();}
     void deactivate();
-    void set_power(int power){this->power = power;}
+    void set_power(float power){this->power = power;}
     float get_power(){return power;}
 
     bool get_state(){return state;}
