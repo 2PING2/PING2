@@ -31,7 +31,7 @@ class SerialCom:
         self.timeout = TIMEOUT
         self.ser = None
         self.connected = False
-        self.connectedFlag = None
+        self.connectedFlag = False
         self.queue = []
         self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
