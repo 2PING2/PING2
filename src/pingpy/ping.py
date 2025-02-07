@@ -53,7 +53,8 @@ class Ping:
                 self.playerController[i].read(self.input.player[i].gameController, self.output.player[i])
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
-            
+                
+            logger.write_in_log("INFO", __name__, "run", f"playerController[{i}].connectedFlag: {self.playerController[i].connectedFlag}")
             if self.playerController[i].connectedFlag == True:
                 logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
                 self.input.player[i].gameController.left = False
@@ -62,8 +63,9 @@ class Ping:
                 self.input.player[i].gameController.rightButtonState = False
                 self.input.player[i].gameController.left = False
                 self.input.player[i].gameController.leftButtonState = False
-                self.playerController[i].connectedFlag = False
-                
+                self.playerController[i].connectedFlag = False            
+            logger.write_in_log("INFO", __name__, "run", f"playerController[{i}].connectedFlag: {self.playerController[i].connectedFlag}")
+            
             # if not self.playerController[i].connected :
             if self.input.player[i].auto.monitor_switch():
                 self.input.player[i].auto.mode = not self.input.player[i].auto.mode

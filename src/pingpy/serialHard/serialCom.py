@@ -78,7 +78,7 @@ class SerialCom:
             self.ser=None
             if self.connected:
                 self.connected = False
-                self.connectedFlag = False
+                self.connectedFlag = True
                 
                 # manette déconnecté
                              
