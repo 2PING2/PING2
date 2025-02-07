@@ -77,6 +77,7 @@ class SerialCom:
             self.ser=None
             if self.connected:
                 self.connected = False
+                logger.write_in_log("WARNING", __name__, "read_data_task", f" self.connected : {self.connected}")
                 
                 # manette déconnecté
                              
