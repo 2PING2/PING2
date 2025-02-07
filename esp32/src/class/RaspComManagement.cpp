@@ -184,7 +184,6 @@ void RaspComManagement::processKeyValues()
         try
         {
             float state = keyValues[1]->param.toFloat();
-            Serial.println("solenoide state : " + String(state) + " for player " + String(playerId+1));
             if (state > 0)
                 player->solenoid.activate(state);
             else
@@ -222,8 +221,8 @@ void RaspComManagement::writeData()
         if (player->actuator.consume_mvt_flag())
         {
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
-            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_speed())+PARAM_END_SEP);
-            Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_ACCELERATION_KEY+PARAM_BEGIN_SEP+String(0.0)+PARAM_END_SEP);
+            //Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_speed())+PARAM_END_SEP);
+            //Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_ACCELERATION_KEY+PARAM_BEGIN_SEP+String(0.0)+PARAM_END_SEP);
         }
         if (player->actuator.consume_cal_flag())
         {
