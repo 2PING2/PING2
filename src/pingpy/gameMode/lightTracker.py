@@ -106,7 +106,8 @@ class LightTracker(GameMode):
         # newLedCenter = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
 
         if newLedCenter == self.ledCenter:
-            newPositionLed = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
+            newPositionLed = uniform(-200.0,200.0)
+            # newPositionLed = uniform(Input.player.playerLedStrip.rightLimit, Input.PlayerInput.playerLedStrip.leftLimit)
         self.ledCenter = newPositionLed
         self.areaLed = [self.ledCenter - self.areaLength/2, self.ledCenter + self.areaLength/2]
         self.actualRound += 1 
