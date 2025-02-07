@@ -54,5 +54,13 @@ class ControllerSerial(SerialCom):
                 controllerInput.right = False
                 controllerInput.rightButtonState = False
             if button == SHOOT_BUTTON_KEY:
-                controllerInput.shoot = False
-                controllerInput.shootButtonState = False
+                controllerInput.left = False
+                controllerInput.leftButtonState = False
+                
+        if self.connected == False:
+            controllerInput.left = False
+            controllerInput.leftButtonState = False
+            controllerInput.right = False
+            controllerInput.rightButtonState = False
+            controllerInput.left = False
+            controllerInput.leftButtonState = False

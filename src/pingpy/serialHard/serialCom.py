@@ -77,11 +77,9 @@ class SerialCom:
             self.ser=None
             if self.connected:
                 self.connected = False
-                # if callable(onDisconnect):  # Vérification si onDisconnect est une fonction
-                #     try:
-                #         onDisconnect()
-                #     except Exception as e:
-                #         logger.write_in_log("ERROR", __name__, "read_data_task", f"Error in onDisconnect callback: {e}")
+                
+                # manette déconnecté
+                             
                 logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")
                 
             
