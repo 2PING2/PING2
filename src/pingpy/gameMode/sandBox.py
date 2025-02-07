@@ -16,11 +16,12 @@ class SandBox(GameMode):
         self.difficulty = None
         self.powerBumper = None
         self.speed = None
+        self.acceleration = None
         
         # parameters
         self.maxPowerBumper = 1.0
         self.minPowerBumper = 0.2
-        self.maxSpeed = 250.0
+        self.maxSpeed = 450.0
         self.minSpeed = 100.0
                 
     def setup(self, Input, Output):
@@ -59,12 +60,14 @@ class SandBox(GameMode):
         if playerInput.gameController.left == True:
             if self.maxSpeed is not None:
                 playerOutput.linearActuator.setMaxSpeed = self.speed
+                playerOutput.linearActuator.setMaxAccel = self.acceleration
             playerOutput.linearActuator.moveToLeft = True
             playerInput.gameController.left = False
         # right
         if playerInput.gameController.right == True:
             if self.maxSpeed is not None:
                 playerOutput.linearActuator.setMaxSpeed = self.speed
+                playerOutput.linearActuator.setMaxAccel = self.acceleration
             playerOutput.linearActuator.moveToRight = True
             playerInput.gameController.right = False 
         # shoot           
@@ -102,6 +105,7 @@ class SandBox(GameMode):
             self.currentDifficulty = Input.UICorner.level
             self.powerBumper = self.minPowerBumper + (self.currentDifficulty * (self.maxPowerBumper - self.minPowerBumper))
             self.speed = self.minSpeed + (self.currentDifficulty * (self.maxSpeed - self.minSpeed))
+            self.acceleration = 500.0 + (self.currentDifficulty * (3000.0 - 500.0))
             Input.UICorner.level = None
             
         for i in range(4):
