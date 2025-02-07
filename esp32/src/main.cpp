@@ -26,13 +26,13 @@ LinearActuator la1(P1_STEP_PIN, P1_DIR_PIN, TMC1_ADDRESS, P1_INVERT_DIR);
 void setup()
 {
     Serial.begin(115200);
-    LinearActuator::setup_all();
-    la1.setup();
+    // LinearActuator::setup_all();
+    // la1.setup();
     Serial.println("hello from LinearActuator");
-    la1.move_to(100);
-    Serial.println("moved to 100");
-    la1.move_to(0);
-    Serial.println("moved to 0");
+    // la1.move_to(100);
+    // Serial.println("moved to 100");
+    // la1.move_to(0);
+    // Serial.println("moved to 0");
 }
 
 void loop()
