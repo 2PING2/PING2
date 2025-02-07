@@ -54,11 +54,11 @@ class Ping:
             except Exception as e:
                 logger.write_in_log("ERROR", __name__, "run", f"Error in playerController[{i}].read: {e}")
                 
-            if self.playerController[i].connectedFlag == True:
-                logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
-                # self.input.player[i].linearActuator.stop = True
-                # bumper a faire                
-                self.playerController[i].connectedFlag = False     
+            # if self.playerController[i].connectedFlag == True:
+            #     logger.write_in_log("WARNING", __name__, "read", "All buttons are released")
+            #     # self.input.player[i].linearActuator.stop = True
+            #     # bumper a faire                
+            #     self.playerController[i].connectedFlag = False     
             
             # if not self.playerController[i].connected :
             if self.input.player[i].auto.monitor_switch():
