@@ -44,11 +44,11 @@ public:
         reset_left_limit();
         calibrating = true;
     }
-    float current_position() { return motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
+    float current_position() { return (float)motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
     float current_speed() { return 1e6 / motor->getCurrentSpeedInUs() / MICRO_STEPS_PER_MM; }
-    float current_acceleration() { return motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
+    float current_acceleration() { return (float)motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
     float max_speed() { return 1e6 / motor->getSpeedInUs() / MICRO_STEPS_PER_MM; }
-    float max_acceleration() { return motor->getAcceleration() / MICRO_STEPS_PER_MM; }
+    float max_acceleration() { return (float)motor->getAcceleration() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
     float get_right_limit() { return rightLimit; }
     float get_left_limit() { return leftLimit; }
