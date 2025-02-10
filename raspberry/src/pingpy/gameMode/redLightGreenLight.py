@@ -14,12 +14,12 @@ class AutoPlayRedLightGreenLight:
         self.stopOrMoveSaid = None
         
     def set_skill(self, skill, reactionTime):
-        self.loosingProb = 0.6*(1-skill) # give a random aspect
+        self.loosingProb = 0.4*(1-skill) # give a random aspect
         self.minReactionTime = 0.5 * reactionTime 
         
     def randomize_duration(self, greenLightDuration, reactionTime):
         t0 = greenLightDuration + self.minReactionTime 
-        t1 = self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
+        t1 = t0 + self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
         self.shouldStopDelay = uniform(t0, t1)
 
     def run(self, playerInput, playerOutput, timeFromInitMatch):
@@ -128,6 +128,7 @@ class RedLightGreenLight(GameMode):
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
             for playerId in range(4):
                 self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime)
+                self.autoPlayer[playerId].set_skill(self.currentDifficulty, self.reactionTime)
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
