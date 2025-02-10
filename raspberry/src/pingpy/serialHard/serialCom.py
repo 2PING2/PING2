@@ -79,9 +79,6 @@ class SerialCom:
             if self.connected:
                 self.connected = False
                 self.connectedFlag = True
-                
-                # manette déconnecté
-                             
                 logger.write_in_log("WARNING", __name__, "read_data_task", f"symlink {self.symlink} does not exist.")
                 
             
