@@ -218,7 +218,9 @@ void RaspComManagement::writeData()
         //     Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_speed())+PARAM_END_SEP);
         //     Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_ACCELERATION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_acceleration())+PARAM_END_SEP);
         // }
-        if (player->actuator.is_new_ramp_state())
+        bool mvf = player->actuator.consume_mvt_flag();
+        Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP + String(mvf));
+        if (player->actuator.consume_mvt_flag())
         {
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_POSITION_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_position())+PARAM_END_SEP);
             Serial.println(PLAYER_KEY+PARAM_BEGIN_SEP+String(i+1)+PARAM_END_SEP+KEY_SEP+CURRENT_SPEED_KEY+PARAM_BEGIN_SEP+String(player->actuator.current_speed())+PARAM_END_SEP);
