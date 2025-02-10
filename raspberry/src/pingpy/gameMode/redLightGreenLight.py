@@ -17,9 +17,9 @@ class AutoPlayRedLightGreenLight:
         self.loosingProb = 0.4*(1-skill) # give a random aspect
         self.minReactionTime = 0.5 * reactionTime 
         
-    def randomize_duration(self, greenLightDuration, reactionTime):
+    def randomize_duration(self, greenLightDuration, reactionTime, maxSpeed, accel):
         t0 = greenLightDuration + self.minReactionTime 
-        t1 = t0 + self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
+        t1 = (t0*self.loosingProb - greenLightDuration - reactionTime)/(self.loosingProb-1)  - maxSpeed/accel - 0.05 # 0.05s is transmission latency, in average
         self.shouldStopDelay = uniform(t0, t1)
 
     def run(self, playerInput, playerOutput, timeFromInitMatch):
@@ -56,6 +56,8 @@ class RedLightGreenLight(GameMode):
         self.color = BLUE
         self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
         self.autoPlayer = [AutoPlayRedLightGreenLight() for _ in range(4)]
+        self.playingSpeed = 10.0
+        self.playingAccel = 200.0
 
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
@@ -80,7 +82,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200] 
                 playerOutput.linearActuator.moveToLeft = True
                 playerOutput.linearActuator.setMaxSpeed = 200.0
-                playerOutput.linearActuator.setMaxAccel = 200.0
+                playerOutput.linearActuator.setMaxAccel = self.playingAccel
                 playerInput.gameController.inAction = None
         
             except IndexError:
@@ -169,7 +171,7 @@ class RedLightGreenLight(GameMode):
         
         if action:
             if canmove:
-                playerOutput.linearActuator.setMaxSpeed = 10.0
+                playerOutput.linearActuator.setMaxSpeed = self.playingSpeed
                 playerOutput.linearActuator.moveToRight = True
             else:
                 self.lose(playerOutput)  
@@ -188,7 +190,7 @@ class RedLightGreenLight(GameMode):
         Handles the player's loss by moving them back to the left at speed 200.
         """
         playerOutput.linearActuator.moveToLeft = True
-        playerOutput.linearActuator.setMaxSpeed = 200.0
+        playerOutput.linearActuator.setMaxSpeed = self.playingAccel
         playerOutput.playerRunningRedLightAt = time.time()
         playerOutput.playerLedStrip.color = ORANGE
 
