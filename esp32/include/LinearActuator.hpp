@@ -60,6 +60,11 @@ public:
     bool consume_mvt_flag() { bool tmp = mvt_flag; mvt_flag = false; return tmp; }
     bool consume_cal_flag() { bool tmp = cal_flag; cal_flag = false; return tmp; }
     bool is_new_acceleration();
+    bool is_new_ramp_state() {
+        bool tmp = motor->rampState() != previousRampState;
+        previousRampState = motor->rampState();
+        
+    }
 
 
 #ifndef EVERYTHING_PUBLIC
@@ -69,6 +74,7 @@ private:
     float previousSpeed = 0;
     float previousTime = 0;
     float currentAcceleration = 0, previousAcceleration = 0;
+    uint8_t previousRampState = RAMP_STATE_IDLE;
 
     static Vector<LinearActuator *> all;
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;
