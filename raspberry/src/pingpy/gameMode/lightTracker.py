@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..input.input import Input
 from ..output.output import Output
 from .gameMode import GameMode
-from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE
 import time
 from pingpy.debug import logger
 from random import uniform
@@ -18,7 +18,7 @@ class LightTracker(GameMode):
         self.ledCenter=0
         self.actualRound=0
         self.areaLength=20 ### ceci va varier selon la dificulté du jeu
-        self.color = BLUE
+        self.color = WHITE
         self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
 
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
