@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..input.input import Input
 from ..output.output import Output
 from .gameMode import GameMode
-from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT
 import time
 from pingpy.debug import logger
 from random import uniform
@@ -132,3 +132,134 @@ class LightTracker(GameMode):
             #     self.winnerID = i
             #     return True
         return False
+    
+    
+class LightTrackerBis(GameMode):
+    def __init__(self):
+        self.color = BLUE
+        self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
+        self.currentState = "setup"
+        self.playerRemaningMoves = [None for _ in range(4)] # None is non_playing, if integer, it is the number of moves left, 0 is no more moves
+        self.beginRoundTime = 0
+        self.roundTimeOut = 5
+        self.endRoundTempo = 2 # Time before the end of the round, to show the result
+        self.evaluateTime = 0
+        self.winningRound = 3
+        self.playerScores = [0 for _ in range(4)]   
+        self.playerError = [None for _ in range(4)]
+        self.target = None    
+        self.minNewTargetDistance = 50 
+        self.targetRange = [-100, 100]
+        self.lightWith = 20
+        self.playingSpeed = 100
+        self.playingAcceleration = 300
+        
+    def setup(self, Input, Output):
+        self.playerScores = [0 for _ in range(4)]  
+        self.currentState = "setupIDLE"
+        for i in range(4):
+            Output.player[i].linearActuator.moveTo = 0
+
+    
+
+    
+    def compute(self, input, output):
+        if self.currentState == "setup":
+            self.setup(input, output)
+            self.currentState = "setupIDLE"
+            return
+        if self.currentState == "setupIDLE":
+            for i in range(4):
+                if input.player[i].linearActuator.moving == True:
+                    return
+            self.currentState = "newRound"
+            return
+        if self.currentState == "newRound":
+            self.newRound(input, output)
+            self.currentState = "newRoundIDLE"
+            return
+        if self.currentState == "newRoundIDLE":
+            self.handlePlayerMove(input, output)
+            if all([i == 0 for i in self.playerRemaningMoves]) or time.time() - self.beginRoundTime > self.roundTimeOut:
+                self.currentState = "evaluate"
+            return
+        if self.currentState == "evaluate":
+            self.evaluate(input, output)
+            self.currentState = "evaluateIDLE"
+            return
+        if self.currentState == "evaluateIDLE":
+            if time.time() - self.evaluateTime > self.endRoundTempo:
+                self.currentState = "endRound"
+            return
+        if self.currentState == "endRound":
+            self.endRound(input, output)
+            self.currentState = "endRoundIDLE"
+            return
+        if self.currentState == "endRoundIDLE":
+            for i in range(4):
+                if input.player[i].linearActuator.moving == True:
+                    return
+            if output.speaker.isPlaying == False: # wait for the end of the sound
+                if all([i >= self.winningRound for i in self.playerScores]):
+                    self.currentState = "endGame"
+                else:
+                    self.currentState = "newRound"
+            return
+
+        if self.currentState == "endGame":
+            self.endGame(input, output)
+            self.currentState = "endGameIDLE"
+
+    
+    def newRound(self, Input, Output):
+        self.beginRoundTime = time.time()
+        for i in range(4):
+            if Input.player[i].usb.connectedFlag:
+                self.playerRemaningMoves[i] = 1
+                
+        lastTarget = self.target
+        while abs(self.target - lastTarget) < self.minNewTargetDistance:
+            self.target = uniform(self.targetRange[0], self.targetRange[1])
+        
+        for i in range(4):
+            Output.player[i].playerLedStrip.area = [self.target - self.lightWith/2, self.target + self.lightWith/2]        
+        
+    
+    def handlePlayerMove(self, Input, Output):
+        for i in range(4):
+            if self.playerRemaningMoves[i] == 0:
+                continue
+            if Input.player[i].gameController.left:
+                Output.player[i].linearActuator.moveToLeft = True
+            elif Input.player[i].gameController.right:
+                Output.player[i].linearActuator.moveToRight = True
+            elif Input.player[i].gameController.stop:
+                Output.player[i].linearActuator.stop = True
+                self.playerRemaningMoves[i] -= 1
+    
+    def evaluate(self, Input, Output):
+        self.evaluateTime = time.time()
+        for i in range(4):
+            self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
+            Output.player[i].linearActuator.stop = True
+
+        
+    
+    def endRound(self, Input, Output):
+        for i in range(4):
+            Output.player[i].linearActuator.moveTo = self.target
+        # should play audio to announce the winner of the round
+            
+    def endGame(self, Input, Output):
+        i = self.playerScores.index(max(self.playerScores))
+        if i == 0:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
+        elif i == 1:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_VERT
+        elif i == 2:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_ROUGE
+        elif i == 3:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_BLEU
+        Output.speaker.audioPiste = [Output.speaker.audioPiste]
+        Output.speaker.audioPiste.append(PATH_AUDIO_GAGNE)
+    

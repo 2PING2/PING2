@@ -3,7 +3,7 @@ from ..output.output import Output
 from ..input.input import Input
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME, WHITE
 from random import uniform
 
 class AutoPlayRedLightGreenLight:
@@ -54,7 +54,7 @@ class RedLightGreenLight(GameMode):
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
         self.currentDifficulty = 0
-        self.color = BLUE
+        self.color = WHITE
         self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
         self.autoPlayer = [AutoPlayRedLightGreenLight() for _ in range(4)]
         self.playingSpeed = 10.0
