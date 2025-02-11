@@ -50,6 +50,7 @@ class RedLightGreenLight(GameMode):
         self.isLightGreen = False
         self.timeInit = 0
         self.waitForStart = False
+        self.waitForAudioEnd = False
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
@@ -119,6 +120,7 @@ class RedLightGreenLight(GameMode):
         
         self.waitForStart = False
         output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME
+        self.waitForAudioEnd = True
         return True
     
     def randomize_duration(self, Output):
@@ -251,9 +253,11 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
-        if Output.speaker.isBusy == True:
-            return
-        
+        if self.waitForAudioEnd:
+            if Output.speaker.isBusy:
+                return
+            self.waitForAudioEnd = False
+            
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
             self.setup(Input, Output)
