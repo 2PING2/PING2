@@ -218,7 +218,7 @@ class LightTracker(GameMode):
     def newRound(self, Input, Output):
         self.beginRoundTime = time.time()
         for i in range(4):
-            if Input.player[i].usb.connectedFlag:
+            if not Input.player[i].usb.connectedFlag:
                 self.playerRemaningMoves[i] = 1
                 
         if self.target is None:
