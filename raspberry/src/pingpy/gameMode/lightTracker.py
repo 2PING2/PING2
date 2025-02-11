@@ -312,7 +312,6 @@ class LightTracker(GameMode):
         self.inGame = False
         
         for i in range(4):
-            if output_ptr.player[i].linearActuator.moving:
-                output_ptr.player[i].linearActuator.stop = True
+            output_ptr.player[i].linearActuator.stop = True
             
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
