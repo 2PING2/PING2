@@ -246,7 +246,13 @@ class LightTracker(GameMode):
         
         for i in range(4):
             Output.player[i].playerLedStrip.area = [self.target - self.lightWith/2, self.target + self.lightWith/2] 
-            Output.player[i].playerLedStrip.color = self.color     
+            Output.player[i].playerLedStrip.color = self.color 
+        
+        # flush the game controller
+        if Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
+            Input.player[i].gameController.left = None
+            Input.player[i].gameController.right = None
+    
         
     
     def handlePlayerMove(self, Input, Output):
