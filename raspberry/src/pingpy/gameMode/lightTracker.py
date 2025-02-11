@@ -145,7 +145,7 @@ class LightTracker(GameMode):
         self.endRoundTempo = 2 # Time before the end of the round, to show the result
         self.evaluateTime = 0
         self.winningRound = 3
-        self.playerScores = [0 for _ in range(4)]   
+        self.playerScores = [None for _ in range(4)]   
         self.playerError = [None for _ in range(4)]
         self.target = None    
         self.minNewTargetDistance = 50 
@@ -167,7 +167,11 @@ class LightTracker(GameMode):
                 Input.player[i].gameController.right = None
                 if Input.player[i].linearActuator.moving:
                     Output.player[i].linearActuator.stop = True
-
+                    
+            if Input.player[i].usb.connected:
+                self.playerScores[i] = 0
+            else:
+                self.playerScores[i] = None
 
 
 
@@ -250,6 +254,9 @@ class LightTracker(GameMode):
         for i in range(4):
             Output.player[i].playerLedStrip.area = [self.target - self.lightWith/2, self.target + self.lightWith/2] 
             Output.player[i].playerLedStrip.color = self.color 
+            if not Input.player[i].usb.connected:
+               Output.player[i].playerLedStrip.color = (0, 0, 0)
+
         
         # flush the game controller
         Input.player[i].gameController.left = None
@@ -259,7 +266,7 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
-            if self.playerRemaningMoves[i] is None:
+            if self.playerRemaningMoves[i] is None or not Input.player[i].usb.connected:
                 continue
             if self.playerRemaningMoves[i] <= 0 :
                 continue
@@ -293,12 +300,23 @@ class LightTracker(GameMode):
     def endRound(self, Input, Output):
         logger.write_in_log("INFO", __name__, "endRound", "End of the round")
         for i in range(4):
+            if not Input.player[i].usb.connected:
+               continue
             Output.player[i].linearActuator.setMaxSpeed = 100
             Output.player[i].linearActuator.setMaxAccel = 300
             Output.player[i].linearActuator.moveTo = self.target
             
-        i = self.playerError.index(min(self.playerError))
-        self.playerScores[i] += 1
+        # i = self.playerError.index(min(self.playerError)) # ok but ignore not connected players
+        i = -1
+        minScore = float('inf')
+        for j in range(4):
+            if self.playerError[j] is not None and self.playerError[j] < minScore:
+                minScore = self.playerError[j]
+                i = j
+        if i == -1:
+            logger.write_in_log("INFO", __name__, "endRound", "No player connected")
+        if self.playerScores[i] is not None:
+            self.playerScores[i] += 1
         # should play audio to announce the winner of the round
         
         i = self.playerScores.index(max(self.playerScores))
