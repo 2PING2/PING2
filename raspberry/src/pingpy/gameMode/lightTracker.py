@@ -340,7 +340,16 @@ class LightTracker(GameMode):
 
             
     def endGame(self, Input, Output):
-        i = self.playerScores.index(max(self.playerScores))
+        # i = self.playerScores.index(max(self.playerScores))
+        i = -1
+        maxScore = -1
+        for j in range(4):
+            if self.playerScores[j] is None:
+                continue
+            if self.playerScores[j] > maxScore:
+                maxScore = self.playerScores[j]
+                i = j
+        
         if i == 0:
             Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
         elif i == 1:
