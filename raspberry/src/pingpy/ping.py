@@ -63,6 +63,7 @@ class Ping:
         statusStreamer.sendStatus(self.input, t)
         self.runGameMode()
         self.refresh_output()
+        print(self.input.player[2].usb.connected, self.input.player[2].usb.connectedFlag)
 
     def runGameMode(self):
         if self.prevGameMode!=self.currentGameMode:
