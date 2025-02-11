@@ -73,6 +73,7 @@ class SerialCom:
                     self.queue.append(new)
             except Exception as _:
                 self.ser=None
+                self.connected = False
                 self.setup()
         else:
             self.ser=None
