@@ -165,7 +165,7 @@ class LightTracker(GameMode):
             if Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
                 Input.player[i].gameController.left = None
                 Input.player[i].gameController.right = None
-                if Output.player[i].linearActuator.moving:
+                if Input.player[i].linearActuator.moving:
                     Output.player[i].linearActuator.stop = True
 
 
