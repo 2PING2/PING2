@@ -1,5 +1,5 @@
 from .gameMode import GameMode
-from pingpy.config.config import YELLOW, PATH_AUDIO_SANDBOX_INTRO
+from pingpy.config.config import YELLOW, PATH_AUDIO_SANDBOX_INTRO, PATH_AUDIO_BEGIN_GAME
 from ..output.output import Output
 from ..input.input import Input
 from pingpy.debug import logger
@@ -48,8 +48,8 @@ class SandBox(GameMode):
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
-        Output.speaker.audioPiste = None 
         Output.speaker.stop = True
+        Output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
         self.inGame = True
         
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")

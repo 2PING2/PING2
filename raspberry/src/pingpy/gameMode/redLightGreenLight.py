@@ -3,7 +3,7 @@ from ..output.output import Output
 from ..input.input import Input
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME, WHITE
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME, WHITE, PATH_AUDIO_BEGIN_GAME
 from random import uniform
 
 class AutoPlayRedLightGreenLight:
@@ -118,6 +118,7 @@ class RedLightGreenLight(GameMode):
                 return False
         
         self.waitForStart = False
+        output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME
         return True
     
     def randomize_duration(self, Output):
@@ -250,6 +251,8 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
+        if Output.speaker.isBusy:
+            return
         
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
