@@ -111,6 +111,7 @@ class ESP32Serial(SerialCom):
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + CALIBRATION_KEY)
                 playerOutput.linearActuator.askForCalibration = None
             if playerOutput.linearActuator.moveTo is not None:
+                playerInput.linearActuator.moving = True
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.moveTo) + PARAM_END_SEP)
                 playerOutput.linearActuator.moveTo = None
             if playerOutput.bumper.state is not None:
