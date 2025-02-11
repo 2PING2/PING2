@@ -21,10 +21,10 @@ class SandBox(GameMode):
         # parameters
         self.maxPowerBumper = 1.0
         self.minPowerBumper = 0.2
-        self.maxSpeed = 2000.0
+        self.maxSpeed = 400.0
         self.minSpeed = 100.0
         self.minAcceleration = 600.0
-        self.maxAcceleration = 10000.0
+        self.maxAcceleration = 3000.0
                 
     def setup(self, Input, Output):
         """

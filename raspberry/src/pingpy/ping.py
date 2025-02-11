@@ -92,6 +92,7 @@ class Ping:
             if self.output.player[i].playerLedStrip.brightness is not None:
                 self.playerLedStrip[i].set_brightness(self.output.player[i].playerLedStrip.brightness)
             if self.output.player[i].playerLedStrip.area is not None and self.output.player[i].playerLedStrip.color is not None:
+                self.playerLedStrip[i].set_mm([-200, 200], (0,0,0))
                 self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
 
         ledStrip.show()

@@ -154,13 +154,17 @@ class LightTracker(GameMode):
         self.playingSpeed = 100
         self.playingAcceleration = 300
         
+        
     def setup(self, Input, Output):
         self.playerScores = [0 for _ in range(4)]  
         self.currentState = "setupIDLE"
         for i in range(4):
             Output.player[i].linearActuator.moveTo = 0
+            Output.player[i].playerLedStrip.area = [-200, 200] 
+            Output.player[i].playerLedStrip.color = (0, 0, 0)
 
-    
+
+
 
     
     def compute(self, input, output):
