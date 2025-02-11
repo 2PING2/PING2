@@ -235,7 +235,7 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
-            if self.playerRemaningMoves[i] == 0 or self.playerRemaningMoves[i] is None:
+            if self.playerRemaningMoves[i] <= 0 or self.playerRemaningMoves[i] is None:
                 continue
             if Input.player[i].gameController.left == True:
                 Input.player[i].gameController.left = None
@@ -250,6 +250,7 @@ class LightTracker(GameMode):
                 self.playerRemaningMoves[i] -= 1
     
     def evaluate(self, Input, Output):
+        logger.write_in_log("INFO", __name__, "evaluate", "Evaluate the round")
         self.evaluateTime = time.time()
         for i in range(4):
             self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
@@ -258,6 +259,7 @@ class LightTracker(GameMode):
         
     
     def endRound(self, Input, Output):
+        logger.write_in_log("INFO", __name__, "endRound", "End of the round")
         for i in range(4):
             Output.player[i].linearActuator.moveTo = self.target
         # should play audio to announce the winner of the round
