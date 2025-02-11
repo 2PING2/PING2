@@ -170,6 +170,7 @@ class LightTracker(GameMode):
                     
             if Input.player[i].usb.connected:
                 self.playerScores[i] = 0
+                self.playerError[i] = None
             else:
                 self.playerScores[i] = None
 
@@ -295,7 +296,8 @@ class LightTracker(GameMode):
         logger.write_in_log("INFO", __name__, "evaluate", "Evaluate the round")
         self.evaluateTime = time.time()
         for i in range(4):
-            self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
+            if self.playerScores[i] is not None:
+                self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
             # Output.player[i].linearActuator.stop = True
 
         
@@ -311,10 +313,12 @@ class LightTracker(GameMode):
             
         # i = self.playerError.index(min(self.playerError)) # ok but ignore not connected players
         i = -1
-        minScore = float('inf')
+        minError = float('inf')
         for j in range(4):
-            if self.playerError[j] is not None and self.playerError[j] < minScore:
-                minScore = self.playerError[j]
+            if self.playerError[j] is None :
+                continue
+            if self.playerError[j] < minError:
+                minError = self.playerError[j]
                 i = j
         if i == -1:
             logger.write_in_log("INFO", __name__, "endRound", "No player connected")
