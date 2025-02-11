@@ -249,9 +249,8 @@ class LightTracker(GameMode):
             Output.player[i].playerLedStrip.color = self.color 
         
         # flush the game controller
-        if Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
-            Input.player[i].gameController.left = None
-            Input.player[i].gameController.right = None
+        Input.player[i].gameController.left = None
+        Input.player[i].gameController.right = None
     
         
     
