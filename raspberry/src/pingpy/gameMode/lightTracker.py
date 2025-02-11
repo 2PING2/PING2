@@ -259,9 +259,13 @@ class LightTracker(GameMode):
             if self.playerRemaningMoves[i] <= 0 or self.playerRemaningMoves[i] is None:
                 continue
             if Input.player[i].gameController.left == True:
+                Output.player[i].linearActuator.setMaxSpeed = self.playingSpeed
+                Output.player[i].linearActuator.setMaxAccel = self.playingAcceleration
                 Input.player[i].gameController.left = None
                 Output.player[i].linearActuator.moveToLeft = True
             elif Input.player[i].gameController.right == True:
+                Output.player[i].linearActuator.setMaxSpeed = self.playingSpeed
+                Output.player[i].linearActuator.setMaxAccel = self.playingAcceleration
                 Input.player[i].gameController.right = None
                 Output.player[i].linearActuator.moveToRight = True
             elif Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
@@ -283,6 +287,8 @@ class LightTracker(GameMode):
     def endRound(self, Input, Output):
         logger.write_in_log("INFO", __name__, "endRound", "End of the round")
         for i in range(4):
+            Output.player[i].linearActuator.setMaxSpeed = 100
+            Output.player[i].linearActuator.setMaxAccel = 300
             Output.player[i].linearActuator.moveTo = self.target
         # should play audio to announce the winner of the round
             
