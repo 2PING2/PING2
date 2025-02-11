@@ -64,7 +64,6 @@ class Ping:
         statusStreamer.sendStatus(self.input, t)
         self.runGameMode()
         self.refresh_output()
-        print(self.playerController[2].connected, self.playerController[2].connectedFlag)
 
     def runGameMode(self):
         if self.prevGameMode!=self.currentGameMode:
