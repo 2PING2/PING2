@@ -234,7 +234,7 @@ class LightTracker(GameMode):
         logger.write_in_log("INFO", __name__, "newRound", "New round")
         self.beginRoundTime = time.time()
         for i in range(4):
-            if not Input.player[i].usb.connectedFlag:
+            if Input.player[i].usb.connected:
                 logger.write_in_log("INFO", __name__, "newRound", f"Player {i} is connected")
                 self.playerRemaningMoves[i] = 1
                 
