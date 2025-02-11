@@ -80,6 +80,10 @@ class Ping:
             self.input.UICorner.modeInc = None
             self.input.UICorner.modeDec = None
             self.currentGameMode = self.waitingRoom
+        elif Input.UICorner.resetShortPress:
+            Input.UICorner.resetShortPress = None
+            self.currentGameMode.setup(self.input, self.output)
+
             
             
     def refresh_output(self):
