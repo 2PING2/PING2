@@ -217,7 +217,10 @@ class LightTracker(GameMode):
             if Input.player[i].usb.connectedFlag:
                 self.playerRemaningMoves[i] = 1
                 
-        lastTarget = self.target
+        if self.target is None:
+            self.target = uniform(self.targetRange[0], self.targetRange[1])
+        
+        lastTarget = self.target 
         while abs(self.target - lastTarget) < self.minNewTargetDistance:
             self.target = uniform(self.targetRange[0], self.targetRange[1])
         
