@@ -257,7 +257,9 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
-            if self.playerRemaningMoves[i] <= 0 or self.playerRemaningMoves[i] is None:
+            if self.playerRemaningMoves[i] is None:
+                continue
+            if self.playerRemaningMoves[i] <= 0 :
                 continue
             if Input.player[i].gameController.left == True:
                 Output.player[i].linearActuator.setMaxSpeed = self.playingSpeed
