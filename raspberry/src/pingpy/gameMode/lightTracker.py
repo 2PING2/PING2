@@ -271,5 +271,13 @@ class LightTracker(GameMode):
         Output.speaker.audioPiste = [Output.speaker.audioPiste]
         Output.speaker.audioPiste.append(PATH_AUDIO_GAGNE)
     
-    def stop(self):
+    def stop(self, output_ptr):
+        """
+        Stops the game and resets the outputs.
+        """
+        self.inGame = False
+        
+        for i in range(4):
+            output_ptr.player[i].linearActuator.stop = True
+            
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
