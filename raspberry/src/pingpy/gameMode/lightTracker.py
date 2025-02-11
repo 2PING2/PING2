@@ -232,11 +232,11 @@ class LightTracker(GameMode):
         for i in range(4):
             if self.playerRemaningMoves[i] == 0:
                 continue
-            if Input.player[i].gameController.left:
+            if Input.player[i].gameController.left == True:
                 Output.player[i].linearActuator.moveToLeft = True
-            elif Input.player[i].gameController.right:
+            elif Input.player[i].gameController.right == True:
                 Output.player[i].linearActuator.moveToRight = True
-            elif Input.player[i].gameController.stop:
+            elif Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
                 Output.player[i].linearActuator.stop = True
                 self.playerRemaningMoves[i] -= 1
     
