@@ -54,7 +54,6 @@ class SerialCom:
             # make sure the Serial is closed at the beginning
             if not self.ser.is_open:
                 self.ser.open()
-            self.connected = True
             logger.write_in_log("INFO", __name__, "setup", f"Connected to symlink {self.symlink} at {self.baudrate} baud")   
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "setup", f"Error opening port {self.symlink}: {e}")
@@ -74,7 +73,6 @@ class SerialCom:
                     self.queue.append(new)
             except Exception as _:
                 self.ser=None
-                self.connected = False
                 self.setup()
         else:
             self.ser=None
