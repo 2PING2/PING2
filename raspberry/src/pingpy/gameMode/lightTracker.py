@@ -262,7 +262,6 @@ class LightTracker(GameMode):
             if self.playerRemaningMoves[i] is None:
                 continue
             if self.playerRemaningMoves[i] <= 0 :
-                print("player ", i, " has no more moves")
                 continue
             
             if Input.player[i].gameController.left == True:
@@ -297,7 +296,23 @@ class LightTracker(GameMode):
             Output.player[i].linearActuator.setMaxSpeed = 100
             Output.player[i].linearActuator.setMaxAccel = 300
             Output.player[i].linearActuator.moveTo = self.target
+            
+        i = self.playerError.index(min(self.playerError))
+        self.playerScores[i] += 1
         # should play audio to announce the winner of the round
+        
+        i = self.playerScores.index(max(self.playerScores))
+        if i == 0:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
+        elif i == 1:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_VERT
+        elif i == 2:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_ROUGE
+        elif i == 3:
+            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_BLEU
+        Output.speaker.audioPiste = [Output.speaker.audioPiste]
+        Output.speaker.audioPiste.append(PATH_AUDIO_GAGNE)
+
             
     def endGame(self, Input, Output):
         i = self.playerScores.index(max(self.playerScores))
