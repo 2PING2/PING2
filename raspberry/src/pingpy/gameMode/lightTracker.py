@@ -230,7 +230,7 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
-            if self.playerRemaningMoves[i] == 0:
+            if self.playerRemaningMoves[i] == 0 or self.playerRemaningMoves[i] is None:
                 continue
             if Input.player[i].gameController.left == True:
                 Output.player[i].linearActuator.moveToLeft = True
