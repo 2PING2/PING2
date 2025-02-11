@@ -48,8 +48,8 @@ class SandBox(GameMode):
             except IndexError:
                 logger.write_in_log("ERROR", __name__, "setup", f"No output found for player ID {Input.playerInput[i]}.")
 
-        Output.speaker.stop = True
-        Output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
+        # Output.speaker.stop = True
+        # Output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
         self.inGame = True
         
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")

@@ -2,7 +2,7 @@ from .gameMode import GameMode
 from ..output.output import Output
 import time
 from pingpy.debug import logger
-from pingpy.config.config import PURPLE
+from pingpy.config.config import PURPLE, PATH_AUDIO_BEGIN_GAME
 import time
 
 class WaitingRoom(GameMode):
@@ -78,6 +78,8 @@ class WaitingRoom(GameMode):
             if input.UICorner.resetShortPress:
                 self.currentGameMode = self.gameModeList[self.preselectedGameMode]
                 output.speaker.stop = True
+                output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
+
                 self.preselectedGameMode = None
                 input.UICorner.resetShortPress = None
                 self.preselectedGameModeFlag = False

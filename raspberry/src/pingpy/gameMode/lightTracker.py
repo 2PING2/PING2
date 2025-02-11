@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..input.input import Input
 from ..output.output import Output
 from .gameMode import GameMode
-from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_RED_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_BLUE_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_YELLOW_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_GREEN_PLAYER_WIN_ROUND
 import time
 from pingpy.debug import logger
 from random import uniform    
@@ -58,6 +58,8 @@ class LightTracker(GameMode):
             self.currentState = "setupIDLE"
             return
         if self.currentState == "setupIDLE":
+            if output.speaker.isBusy == True:
+                return
             for i in range(4):
                 if input.player[i].linearActuator.moving == True:
                     return
@@ -201,15 +203,13 @@ class LightTracker(GameMode):
 
         
         if i == 0:
-            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
+            Output.speaker.audioPiste = PATH_AUDIO_LIGHT_TRACKER_YELLOW_PLAYER_WIN_ROUND
         elif i == 1:
-            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_VERT
+            Output.speaker.audioPiste = PATH_AUDIO_LIGHT_TRACKER_GREEN_PLAYER_WIN_ROUND
         elif i == 2:
-            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_ROUGE
+            Output.speaker.audioPiste = PATH_AUDIO_LIGHT_TRACKER_RED_PLAYER_WIN_ROUND
         elif i == 3:
-            Output.speaker.audioPiste = PATH_AUDIO_PLAYER_BLEU
-        Output.speaker.audioPiste = [Output.speaker.audioPiste]
-        Output.speaker.audioPiste.append(PATH_AUDIO_GAGNE)
+            Output.speaker.audioPiste = PATH_AUDIO_LIGHT_TRACKER_BLUE_PLAYER_WIN_ROUND
 
             
     def endGame(self, Input, Output):
