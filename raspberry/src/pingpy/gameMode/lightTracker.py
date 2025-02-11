@@ -235,8 +235,10 @@ class LightTracker(GameMode):
         self.beginRoundTime = time.time()
         for i in range(4):
             if Input.player[i].usb.connected:
-                logger.write_in_log("INFO", __name__, "newRound", f"Player {i} is connected")
                 self.playerRemaningMoves[i] = 1
+                # flush
+                Input.player[i].gameController.left = None
+                Input.player[i].gameController.right = None
                 
         if self.target is None:
             self.target = uniform(self.targetRange[0], self.targetRange[1])
@@ -260,7 +262,9 @@ class LightTracker(GameMode):
             if self.playerRemaningMoves[i] is None:
                 continue
             if self.playerRemaningMoves[i] <= 0 :
+                print("player ", i, " has no more moves")
                 continue
+            
             if Input.player[i].gameController.left == True:
                 Output.player[i].linearActuator.setMaxSpeed = self.playingSpeed
                 Output.player[i].linearActuator.setMaxAccel = self.playingAcceleration
