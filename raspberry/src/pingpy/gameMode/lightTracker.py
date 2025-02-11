@@ -229,7 +229,8 @@ class LightTracker(GameMode):
             self.target = uniform(self.targetRange[0], self.targetRange[1])
         
         for i in range(4):
-            Output.player[i].playerLedStrip.area = [self.target - self.lightWith/2, self.target + self.lightWith/2]        
+            Output.player[i].playerLedStrip.area = [self.target - self.lightWith/2, self.target + self.lightWith/2] 
+            Output.player[i].playerLedStrip.color = self.color     
         
     
     def handlePlayerMove(self, Input, Output):
