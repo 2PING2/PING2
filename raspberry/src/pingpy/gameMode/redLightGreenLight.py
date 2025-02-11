@@ -23,7 +23,8 @@ class AutoPlayRedLightGreenLight:
         self.shouldStopDelay = uniform(t0, t1)
 
     def run(self, playerInput, playerOutput, timeFromInitMatch):
-        
+        if self.shouldStopDelay is None :
+            return None
         if timeFromInitMatch<self.shouldStopDelay:
             if self.stopOrMoveSaid is not True:
                 playerOutput.linearActuator.setMaxSpeed = 10.0
