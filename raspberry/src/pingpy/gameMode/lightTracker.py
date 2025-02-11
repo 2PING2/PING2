@@ -242,9 +242,8 @@ class LightTracker(GameMode):
         logger.write_in_log("INFO", __name__, "newRound", "New round")
         self.beginRoundTime = time.time()
         for i in range(4):
-            if Input.player[i].usb.connected:
+            if self.playerScores[i] is not None:
                 self.playerRemaningMoves[i] = 1
-                # flush
                 Input.player[i].gameController.left = None
                 Input.player[i].gameController.right = None
                 
