@@ -36,6 +36,7 @@ class Ping:
         self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
+            self.input.player[i].usb = self.playerController[i]
             self.input.player[i].auto.setup()
         ledStrip.setup()
         ledStrip.clear()
@@ -63,7 +64,7 @@ class Ping:
         statusStreamer.sendStatus(self.input, t)
         self.runGameMode()
         self.refresh_output()
-        print(self.input.player[2].usb.connected, self.input.player[2].usb.connectedFlag)
+        print(self.playerController[2].connected, self.playerController[2].connectedFlag)
 
     def runGameMode(self):
         if self.prevGameMode!=self.currentGameMode:

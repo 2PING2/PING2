@@ -30,6 +30,7 @@ class ControllerSerial(SerialCom):
             controllerOutput.linearActuator.stop = True
             controllerOutput.bumper.state = 0
             controllerInput.shootButtonState = False 
+            self.connected = False
             self.connectedFlag = False
             
         if new_line is None:
