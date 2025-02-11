@@ -238,10 +238,14 @@ class LightTracker(GameMode):
             if self.playerRemaningMoves[i] == 0 or self.playerRemaningMoves[i] is None:
                 continue
             if Input.player[i].gameController.left == True:
+                Input.player[i].gameController.left = None
                 Output.player[i].linearActuator.moveToLeft = True
             elif Input.player[i].gameController.right == True:
+                Input.player[i].gameController.right = None
                 Output.player[i].linearActuator.moveToRight = True
             elif Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
+                Input.player[i].gameController.left = None
+                Input.player[i].gameController.right = None
                 Output.player[i].linearActuator.stop = True
                 self.playerRemaningMoves[i] -= 1
     
