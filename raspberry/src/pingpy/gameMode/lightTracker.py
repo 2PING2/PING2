@@ -199,7 +199,7 @@ class LightTracker(GameMode):
             for i in range(4):
                 if input.player[i].linearActuator.moving == True:
                     return
-            if output.speaker.isPlaying == False: # wait for the end of the sound
+            if output.speaker.isBusy == False: # wait for the end of the sound
                 if all([i >= self.winningRound for i in self.playerScores]):
                     self.currentState = "endGame"
                 else:
