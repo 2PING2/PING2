@@ -162,6 +162,11 @@ class LightTracker(GameMode):
             Output.player[i].linearActuator.moveTo = 0
             Output.player[i].playerLedStrip.area = [-200, 200] 
             Output.player[i].playerLedStrip.color = (0, 0, 0)
+            if Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
+                Input.player[i].gameController.left = None
+                Input.player[i].gameController.right = None
+                Output.player[i].linearActuator.stop = True
+
 
 
 
