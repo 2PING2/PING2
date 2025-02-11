@@ -191,14 +191,14 @@ class LightTracker(GameMode):
             return
         if self.currentState == "newRoundIDLE":
             self.handlePlayerMove(input, output)
-            if all([i == 0 for i in self.playerRemaningMoves]):
+            if all([i is None or i == 0 for i in self.playerRemaningMoves]):
                 logger.write_in_log("INFO", __name__, "compute", "All players have played")
                 self.currentState = "evaluate"
+                return
             if  time.time() - self.beginRoundTime > self.roundTimeOut:
                 logger.write_in_log("INFO", __name__, "compute", "Timed out")
                 self.currentState = "evaluate"
-
-            return
+                return
         if self.currentState == "evaluate":
             self.evaluate(input, output)
             self.currentState = "evaluateIDLE"
