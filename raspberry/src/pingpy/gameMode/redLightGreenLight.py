@@ -130,7 +130,7 @@ class RedLightGreenLight(GameMode):
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
             for playerId in range(4):
-                self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime)
+                self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime, self.playingSpeed, self.playingAccel)
                 self.autoPlayer[playerId].set_skill(self.currentDifficulty, self.reactionTime)
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
