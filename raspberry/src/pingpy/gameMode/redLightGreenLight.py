@@ -251,7 +251,7 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
-        if Output.speaker.isBusy:
+        if Output.speaker.isBusy == True:
             return
         
         if Input.UICorner.resetShortPress:
