@@ -19,7 +19,7 @@ class AutoPlayRedLightGreenLight:
         
     def randomize_duration(self, greenLightDuration, reactionTime, maxSpeed, accel):
         t0 = greenLightDuration + self.minReactionTime 
-        t1 = (t0*self.loosingProb - greenLightDuration - reactionTime)/(self.loosingProb-1)  - maxSpeed/accel - 0.15 # 0.05s is transmission latency, in average
+        t1 = (t0*self.loosingProb - greenLightDuration - reactionTime)/(self.loosingProb-1)  - maxSpeed/accel - 0.05 # 0.05s is transmission latency, in average
         self.shouldStopDelay = uniform(t0, t1)
 
     def run(self, playerInput, playerOutput, timeFromInitMatch):
