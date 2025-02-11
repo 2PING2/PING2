@@ -318,8 +318,8 @@ class LightTracker(GameMode):
         if self.playerScores[i] is not None:
             self.playerScores[i] += 1
         # should play audio to announce the winner of the round
+
         
-        i = self.playerScores.index(max(self.playerScores))
         if i == 0:
             Output.speaker.audioPiste = PATH_AUDIO_PLAYER_JAUNE
         elif i == 1:
