@@ -250,6 +250,7 @@ class LightTracker(GameMode):
                 Input.player[i].gameController.right = None
                 Output.player[i].linearActuator.moveToRight = True
             elif Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
+                logger.write_in_log("INFO", __name__, "handlePlayerMove", "Stop the player")
                 Input.player[i].gameController.left = None
                 Input.player[i].gameController.right = None
                 Output.player[i].linearActuator.stop = True
