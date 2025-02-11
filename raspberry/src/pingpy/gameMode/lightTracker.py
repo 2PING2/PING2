@@ -165,7 +165,9 @@ class LightTracker(GameMode):
             if Input.player[i].gameController.left == False or Input.player[i].gameController.right == False:
                 Input.player[i].gameController.left = None
                 Input.player[i].gameController.right = None
-                Output.player[i].linearActuator.stop = True
+                if Output.player[i].linearActuator.moving:
+                    Output.player[i].linearActuator.stop = True
+
 
 
 
@@ -269,7 +271,7 @@ class LightTracker(GameMode):
         self.evaluateTime = time.time()
         for i in range(4):
             self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
-            Output.player[i].linearActuator.stop = True
+            # Output.player[i].linearActuator.stop = True
 
         
     
@@ -299,6 +301,7 @@ class LightTracker(GameMode):
         self.inGame = False
         
         for i in range(4):
-            output_ptr.player[i].linearActuator.stop = True
+            if output_ptr.player[i].linearActuator.moving:
+                output_ptr.player[i].linearActuator.stop = True
             
         logger.write_in_log("INFO", __name__, "stop", "Game stopped.")
