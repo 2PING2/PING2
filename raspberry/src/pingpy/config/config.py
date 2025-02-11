@@ -168,7 +168,7 @@ AUTO_PIN = {"switch" : [5,23,24,16], "led" : [6,27,21,20]}
 MAX_VOLUME = 0.80
 PATH_AUDIO = ("raspberry/src/pingpy/audio/")
 
-PATH_AUDIO_BEGIN_GAME = PATH_AUDIO + "C'est_partie.wav"
+PATH_AUDIO_BEGIN_GAME = PATH_AUDIO + "C_est_partie.wav"
 PATH_AUDIO_GAGNE = PATH_AUDIO + "a_gagne.wav"
 PATH_AUDIO_PLAYER_BLEU = PATH_AUDIO + "Le_joueur_bleu.wav"
 PATH_AUDIO_PLAYER_ROUGE = PATH_AUDIO + "Le_joueur_rouge.wav"
