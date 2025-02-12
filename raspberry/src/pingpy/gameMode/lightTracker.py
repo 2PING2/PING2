@@ -9,7 +9,7 @@ from random import uniform
     
 class LightTracker(GameMode):
     def __init__(self):
-        self.color = RED
+        self.color = BLUE
         self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
         self.currentState = "setup"
         self.playerRemaningMoves = [None for _ in range(4)] # None is non_playing, if integer, it is the number of moves left, 0 is no more moves
@@ -22,7 +22,7 @@ class LightTracker(GameMode):
         self.playerError = [None for _ in range(4)]
         self.target = None    
         self.minNewTargetDistance = 50 
-        self.targetRange = [-100, 100]
+        self.targetRange = [-120, 120]
         self.lightWith = 10
         self.minLightWith = 5
         self.maxLightWith = 40
@@ -141,7 +141,7 @@ class LightTracker(GameMode):
                 Input.player[i].gameController.right = None
                 
         if self.target is None:
-            self.target = uniform(self.targetRange[0], self.targetRange[1])
+            self.target = uniform(self.targetRange[0]+self.lightWith, self.targetRange[1]-self.lightWith)
         Output.speaker.audioPiste = PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND
 
         lastTarget = self.target 
@@ -153,6 +153,8 @@ class LightTracker(GameMode):
             Output.player[i].playerLedStrip.color = self.color 
             if not Input.player[i].usb.connected:
                Output.player[i].playerLedStrip.color = (0, 0, 0)
+            else :
+                Output.player[i].playerLedStrip.color = RED
 
         
         # flush the game controller
