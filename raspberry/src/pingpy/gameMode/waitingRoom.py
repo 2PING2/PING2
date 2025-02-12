@@ -44,10 +44,11 @@ class WaitingRoom(GameMode):
         elif self.currentLed_brightness < 0.0:
             self.currentLed_brightness = 0.0
             self.brightness_blink_rate *= -1
-            
+        
+        brightnessFactor = MAX_BRIGHTNESS*(3*255)/(self.currentColor[0]+self.currentColor[1]+self.currentColor[2])
         for i in range(4):
             output.player[i].playerLedStrip.area = [-200, 200]
-            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness*MAX_BRIGHTNESS) for x in self.currentColor)
+            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness*brightnessFactor) for x in self.currentColor)
         ####### end of blinking effect
             
         
