@@ -46,7 +46,7 @@ class LedStrip:
             return
         try:
             
-            for i in range(OFFSET_MIN, OFFSET_MAX):
+            for i in range(OFFSET_MIN, OFFSET_MAX+1):
                 self.strip.setPixelColor(i, color)
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
