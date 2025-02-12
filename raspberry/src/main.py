@@ -36,7 +36,5 @@ except Exception as e:
         logger.write_in_log("ERROR", __name__, "main", str(e))
     except:
         pass
-    # os.execv(sys.executable, ['python'] + sys.argv)
-    subprocess.Popen([sys.executable, sys.argv[0]])
-    time.sleep(1)
+    os.execv(sys.executable, ['python'] + sys.argv)
     exit(0)
