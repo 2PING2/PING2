@@ -6,7 +6,7 @@ import platform
 import concurrent.futures
 
 # Configuration
-base_ip = "192.168.250."
+base_ip = "192.168.24."
 username = "pi"  # Change selon ton setup
 password = "raspberry"  # Remplace par ton mot de passe
 timeout = 0.3  # Timeout du ping (en secondes)

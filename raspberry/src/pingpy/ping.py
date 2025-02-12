@@ -1,5 +1,5 @@
 from pingpy import *
-from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE
+from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE, PATH_AUDIO_BEGIN_GAME
 from pingpy.input import Input
 from pingpy.input.gameController3Button import GameController3ButtonInput
 from pingpy.output import Output
@@ -36,6 +36,7 @@ class Ping:
         self.UICorner.setup(self.output)
         for i in range(4):
             self.playerController[i].setup()
+            self.input.player[i].usb = self.playerController[i]
             self.input.player[i].auto.setup()
         ledStrip.setup()
         ledStrip.clear()
@@ -61,7 +62,6 @@ class Ping:
             self.input.player[i].linearActuator.computeInterpolation(timeStep, i)
             
         statusStreamer.sendStatus(self.input, t)
-            
         self.runGameMode()
         self.refresh_output()
 
@@ -70,6 +70,7 @@ class Ping:
             if self.prevGameMode is not None:
                 self.prevGameMode.stop(self.output)
             self.currentGameMode.setup(self.input, self.output)
+            self.output.UICorner.askForStatusSettings = True
             self.prevGameMode = self.currentGameMode
         self.waitingRoom.currentGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)
@@ -80,6 +81,13 @@ class Ping:
             self.input.UICorner.modeInc = None
             self.input.UICorner.modeDec = None
             self.currentGameMode = self.waitingRoom
+        elif self.input.UICorner.resetShortPress:
+            self.input.UICorner.resetShortPress = None
+            self.output.speaker.stop = True
+            self.output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
+
+            self.currentGameMode.setup(self.input, self.output)
+
             
             
     def refresh_output(self):
@@ -93,6 +101,7 @@ class Ping:
             if self.output.player[i].playerLedStrip.brightness is not None:
                 self.playerLedStrip[i].set_brightness(self.output.player[i].playerLedStrip.brightness)
             if self.output.player[i].playerLedStrip.area is not None and self.output.player[i].playerLedStrip.color is not None:
+                self.playerLedStrip[i].set_mm([-200, 200], (0,0,0))
                 self.playerLedStrip[i].set_mm(self.output.player[i].playerLedStrip.area, self.output.player[i].playerLedStrip.color)
 
         ledStrip.show()

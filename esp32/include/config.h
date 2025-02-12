@@ -16,8 +16,8 @@
 #define PULLEY_TEETH                       25   // teeth of the pulley
 #define BELT_PITCH                          2   // mm
 #define MICROSTEP_POWER_OF_2                0   // 2^5 = 32 microsteps
-#define LINEAR_ACTUATOR_MAX_SPEED        700.0f // mm/s
-#define LINEAR_ACTUATOR_MAX_ACCELERATION 5000.0f // mm/s²
+#define LINEAR_ACTUATOR_MAX_SPEED        1600.0f // mm/s
+#define LINEAR_ACTUATOR_MAX_ACCELERATION 10000.0f // mm/s²
 #define RMS_CURRENT                       100   // percent of the max current
 #define COMPUTE_ACCELERATION_PERIOD_MS       20   // ms
 

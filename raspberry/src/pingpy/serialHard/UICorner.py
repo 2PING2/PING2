@@ -33,6 +33,7 @@ class UICornerSerial(SerialCom):
                     ledStrip.show()
                     os.execv(sys.executable, ['python'] + sys.argv)
                     exit(0)
+                    
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
                     ledStrip.clear()
@@ -104,7 +105,7 @@ class UICornerSerial(SerialCom):
             
         # light
         if new_line[0] == LIGHT_KEY:
-            input_ptr.UICorner.light = int(new_line[1])/1023.0*MAX_BRIGHTNESS     
+            input_ptr.UICorner.light = int(new_line[1])/1023.0     
             for playerOutput in output_ptr.player:
                 playerOutput.playerLedStrip.brightness = input_ptr.UICorner.light     
     

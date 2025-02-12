@@ -4,10 +4,10 @@ from pingpy.debug import logger
 class GameController3ButtonInput(GameControllerInput):
     def __init__(self):
         super().__init__()
-        self.left=False
+        self.left=False # True is pushed event, False is released event, None is nothing
         self.right=False
         self.shoot=False
-        self.leftButtonState=False
+        self.leftButtonState=False 
         self.rightButtonState=False
         self.shootButtonState=False
         self.countMove = 1
