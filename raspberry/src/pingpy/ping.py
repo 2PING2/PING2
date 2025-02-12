@@ -70,6 +70,7 @@ class Ping:
             if self.prevGameMode is not None:
                 self.prevGameMode.stop(self.output)
             self.currentGameMode.setup(self.input, self.output)
+            self.output.UICorner.askForStatusSettings = True
             self.prevGameMode = self.currentGameMode
         self.waitingRoom.currentGameMode = self.currentGameMode
         self.currentGameMode.compute(self.input, self.output)

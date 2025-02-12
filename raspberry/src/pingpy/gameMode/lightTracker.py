@@ -5,7 +5,23 @@ from .gameMode import GameMode
 from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_RED_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_BLUE_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_YELLOW_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_GREEN_PLAYER_WIN_ROUND, RED
 import time
 from pingpy.debug import logger
-from random import uniform    
+from random import uniform 
+
+class AutoPlayerLightTracker:
+    def __init__(self):
+        self.minStd = 0
+        self.maxStd = 50
+        self.std = None
+        self.target = None
+                
+    def set_skill(self, skill):
+        self.std = self.maxStd + (self.skill * (self.minStd - self.maxStd))
+        
+    def randomize_target(self, target):
+        self.target = uniform(-self.std, self.std)+target
+
+    def run(self, playerInput, playerOutput):
+        playerOutput.linearActuator.moveTo = self.target
     
 class LightTracker(GameMode):
     def __init__(self):
@@ -32,6 +48,7 @@ class LightTracker(GameMode):
         self.maxPlayingAcceleration = self.maxPlayingSpeed * 0.1
         self.playingSpeed = self.minPlayingSpeed
         self.playingAcceleration = self.minPlayingAcceleration
+        self.autoplayer = [AutoPlayerLightTracker() for _ in range(4)]
 
         
     def updateDifficulty(self, Input):
@@ -39,6 +56,8 @@ class LightTracker(GameMode):
             self.playingSpeed = self.minPlayingSpeed + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingSpeed))
             self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingAcceleration - self.minPlayingAcceleration))
             self.lightWith = self.minLightWith + (Input.UICorner.level * (self.maxLightWith - self.minLightWith))
+            for i in range(4):
+                self.autoplayer[i].set_skill(Input.UICorner.level)
             Input.UICorner.level = None
             
 
@@ -162,6 +181,10 @@ class LightTracker(GameMode):
                Output.player[i].playerLedStrip.color = (0, 0, 0)
             else :
                 Output.player[i].playerLedStrip.color = RED
+                
+            if Input.player[i].auto.mode == True:
+                self.autoplayer[i].run(Output.player[i], self.target)
+
 
         
         # flush the game controller
@@ -172,6 +195,8 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
+            if Input.player[i].auto.mode == True:
+                continue
             if self.playerRemaningMoves[i] is None or not Input.player[i].usb.connected:
                 continue
             if self.playerRemaningMoves[i] <= 0 :
