@@ -41,7 +41,7 @@ class LedStrip:
                          
     def setLedStrip(self, color, OFFSET_MIN, OFFSET_MAX):
         """Set the LED strip between OFFSET_MIN and OFFSET_MAX to a color."""
-        if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
+        if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN > OFFSET_MAX:
             logger.write_in_log("ERROR", __name__, f"Invalid offset : {OFFSET_MIN, OFFSET_MAX}")
             return
         try:
