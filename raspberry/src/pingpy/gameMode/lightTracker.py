@@ -24,8 +24,21 @@ class LightTracker(GameMode):
         self.minNewTargetDistance = 50 
         self.targetRange = [-100, 100]
         self.lightWith = 20
-        self.playingSpeed = 100
-        self.playingAcceleration = 300
+        self.minPlayingSpeed = 50
+        self.maxPlayingSpeed = 500
+        self.minPlayingAcceleration = self.minPlayingSpeed * 5
+        self.maxPlayingSpeed = self.maxPlayingSpeed * 3
+        self.playingSpeed = self.minPlayingSpeed
+        self.playingAcceleration = self.minPlayingAcceleration
+
+        
+    def updateDifficulty(self, Input):
+        if Input.UICorner.level is not None:
+            self.playingSpeed = self.minPlayingSpeed + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingSpeed))
+            self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingAcceleration))
+            Input.UICorner.level = None
+            
+
         
         
     def setup(self, Input, Output):
@@ -43,6 +56,7 @@ class LightTracker(GameMode):
                     
             if Input.player[i].usb.connected:
                 self.playerScores[i] = 0
+                print(f"Player {i} is playing light tracker")
                 self.playerError[i] = None
             else:
                 self.playerScores[i] = None
