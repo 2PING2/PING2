@@ -92,11 +92,11 @@ class RedLightGreenLight(GameMode):
 
         self.timeInit = time.time()
         self.randomize_duration(Output)
-        Output.speaker.audioPiste = None 
+        # Output.speaker.audioPiste = None 
         self.inGame = True
         self.waitForStart = True
         self.standby = False
-        Output.speaker.stop = True
+        # Output.speaker.stop = True
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
