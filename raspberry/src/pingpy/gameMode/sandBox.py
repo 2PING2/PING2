@@ -92,10 +92,10 @@ class SandBox(GameMode):
         Executes an iteration of the game mode.
         """
         
-        if Input.UICorner.resetShortPress:
-            Input.UICorner.resetShortPress = None
-            self.setup(Input, Output)
-            return
+        # if Input.UICorner.resetShortPress:
+        #     Input.UICorner.resetShortPress = None
+        #     self.setup(Input, Output)
+        #     return
                 
         if not Input.player:
             logger.write_in_log("ERROR", __name__, "compute", "No players connected...")
