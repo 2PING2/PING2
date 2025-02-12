@@ -15,7 +15,7 @@ class AutoPlayerLightTracker:
         self.target = None
                 
     def set_skill(self, skill):
-        self.std = self.maxStd + (self.skill * (self.minStd - self.maxStd))
+        self.std = self.maxStd + (skill * (self.minStd - self.maxStd))
         
     def randomize_target(self, target):
         self.target = uniform(-self.std, self.std)+target
