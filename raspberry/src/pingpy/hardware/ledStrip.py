@@ -63,7 +63,11 @@ class LedStrip:
             coeff = self.maxCurrent / current
             for i in range(self.n):
                 color = self.strip.getPixelColor(i)
-                self.strip.setPixelColor(i, Color(int(color.r*coeff), int(color.g*coeff), int(color.b*coeff)))
+                red = (color >> 16) & 0xFF
+                green = (color >> 8) & 0xFF
+                blue = color & 0xFF
+
+                self.strip.setPixelColor(i, Color(int(red*coeff), int(green*coeff), int(blue*coeff)))
         self.strip.show()
                    
     # def setBrightness(self, input_ptr):
