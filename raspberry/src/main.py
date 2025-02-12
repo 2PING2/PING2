@@ -36,5 +36,5 @@ except Exception as e:
         logger.write_in_log("ERROR", __name__, "main", str(e))
     except:
         pass
-    os.execv(sys.executable, ['python'] + sys.argv)
+    os.execv(sys.executable, [sys.executable] + sys.argv)
     exit(0)

@@ -185,7 +185,7 @@ class LightTracker(GameMode):
                 Output.player[i].playerLedStrip.color = RED
                 
             if Input.player[i].auto.mode == True:
-                self.autoplayer[i].run(Input.player[i], Output.player[i], self.target, self.playingSpeed, self.playingAcceleration)
+                self.autoplayer[i].run(Input.player[i], Output.player[i], self.playingSpeed, self.playingAcceleration)
 
 
         
