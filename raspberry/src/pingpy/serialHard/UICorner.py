@@ -33,6 +33,7 @@ class UICornerSerial(SerialCom):
                     ledStrip.show()
                     os.execv(sys.executable, [sys.executable] + sys.argv)
                     exit(0)
+                    
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
                     ledStrip.clear()
