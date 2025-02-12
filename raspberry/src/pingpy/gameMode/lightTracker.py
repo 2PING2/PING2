@@ -98,6 +98,9 @@ class LightTracker(GameMode):
                 self.currentState = "evaluate"
                 return
         if self.currentState == "evaluate":
+            for i in range(4):
+                if input.player[i].linearActuator.moving == True:
+                    return
             self.evaluate(input, output)
             self.currentState = "evaluateIDLE"
             return
