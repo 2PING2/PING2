@@ -193,6 +193,7 @@ class LightTracker(GameMode):
         for i in range(4):
             if self.playerScores[i] is not None:
                 self.playerError[i] = abs(Input.player[i].linearActuator.currentPose - self.target)
+                print(f"Player {i} error: {self.playerError[i]}")
             if Input.player[i].linearActuator.moving:
                 Output.player[i].linearActuator.stop = True
 
