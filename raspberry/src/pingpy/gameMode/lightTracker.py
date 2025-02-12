@@ -24,10 +24,10 @@ class LightTracker(GameMode):
         self.minNewTargetDistance = 50 
         self.targetRange = [-100, 100]
         self.lightWith = 20
-        self.minPlayingSpeed = 50
+        self.minPlayingSpeed = 30
         self.maxPlayingSpeed = 500
-        self.minPlayingAcceleration = self.minPlayingSpeed * 5
-        self.maxPlayingSpeed = self.maxPlayingSpeed * 3
+        self.minPlayingAcceleration = self.minPlayingSpeed * 10
+        self.maxPlayingSpeed = self.maxPlayingSpeed * 0.5
         self.playingSpeed = self.minPlayingSpeed
         self.playingAcceleration = self.minPlayingAcceleration
 
