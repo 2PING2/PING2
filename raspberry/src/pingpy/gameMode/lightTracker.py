@@ -96,7 +96,7 @@ class LightTracker(GameMode):
             if  time.time() - self.beginRoundTime > self.roundTimeOut:
                 logger.write_in_log("INFO", __name__, "compute", "Timed out")
                 for i in range(4):
-                    if input.player[i].actuator.moving == True:
+                    if input.player[i].linearActuator.moving == True:
                         output.player[i].linearActuator.stop = True
                 self.currentState = "evaluate"
                 return
