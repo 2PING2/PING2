@@ -1,5 +1,5 @@
 from pingpy import *
-from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE
+from pingpy.config.config import BAUD_RATE, TIMEOUT, ports, PLAYER_LED_STRIP_OFFSETS, UI_CORNER_BAUD_RATE, GREEN, ORANGE, YELLOW, RED, BLUE, PATH_AUDIO_BEGIN_GAME
 from pingpy.input import Input
 from pingpy.input.gameController3Button import GameController3ButtonInput
 from pingpy.output import Output
@@ -82,6 +82,9 @@ class Ping:
             self.currentGameMode = self.waitingRoom
         elif self.input.UICorner.resetShortPress:
             self.input.UICorner.resetShortPress = None
+            self.output.speaker.stop = True
+            self.output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME 
+
             self.currentGameMode.setup(self.input, self.output)
 
             
