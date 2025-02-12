@@ -26,6 +26,7 @@ class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS):
         """Init the LED strip.""" 
         self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=255)
+        self.n = NUMBER_OF_LEDS
         self.maxCurrent = 3*255 * NUMBER_OF_LEDS * BRIGHTNESS
         logger.write_in_log("INFO", __name__, "__init__", "LED strip created")
      
@@ -52,13 +53,13 @@ class LedStrip:
     def show(self):
         # compute the current needed
         current = 0
-        for i in range(self.strip.numPixels()):
-            color = self.strip.pixels[i]
+        for i in range(self.n):
+            color = self.strip.getPixelColor(i)
             current += color.r + color.g + color.b
         if current > self.maxCurrent:
             coeff = self.maxCurrent / current
-            for i in range(self.strip.numPixels()):
-                color = self.strip.pixels[i]
+            for i in range(self.n):
+                color = self.strip.getPixelColor(i)
                 self.strip.setPixelColor(i, Color(int(color.r*coeff), int(color.g*coeff), int(color.b*coeff)))
         self.strip.show()
                    
