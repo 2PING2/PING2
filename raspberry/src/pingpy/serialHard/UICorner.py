@@ -31,7 +31,7 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
-                    os.execv(sys.executable, [sys.executable] + sys.argv)
+                    os.execv(sys.executable, ['python'] + sys.argv)
                     exit(0)
                     
                 else:

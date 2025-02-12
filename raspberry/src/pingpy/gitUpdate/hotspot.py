@@ -71,11 +71,11 @@ class Hotspot:
             return
         if espFlashNeeded:
             self.update_esp()
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            os.execv(sys.executable, ['python'] + sys.argv)
             exit(0)
         elif restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            os.execv(sys.executable, ['python'] + sys.argv)
             exit(0)
 
     def build_backup(self):
