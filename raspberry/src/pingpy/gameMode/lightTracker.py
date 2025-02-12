@@ -58,8 +58,8 @@ class LightTracker(GameMode):
             self.playingSpeed = self.minPlayingSpeed + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingSpeed))
             self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingAcceleration - self.minPlayingAcceleration))
             self.lightWith = self.minLightWith + (Input.UICorner.level * (self.maxLightWith - self.minLightWith))
-            for i in range(4):
-                self.autoplayer[i].set_skill(Input.UICorner.level)
+            # for i in range(4):
+            #     self.autoplayer[i].set_skill(Input.UICorner.level)
             Input.UICorner.level = None
             
 
@@ -184,8 +184,8 @@ class LightTracker(GameMode):
             else :
                 Output.player[i].playerLedStrip.color = RED
                 
-            if Input.player[i].auto.mode == True:
-                self.autoplayer[i].run(Input.player[i], Output.player[i], self.playingSpeed, self.playingAcceleration)
+            # if Input.player[i].auto.mode == True:
+            #     self.autoplayer[i].run(Input.player[i], Output.player[i], self.playingSpeed, self.playingAcceleration)
 
 
         
@@ -197,8 +197,8 @@ class LightTracker(GameMode):
     
     def handlePlayerMove(self, Input, Output):
         for i in range(4):
-            if Input.player[i].auto.mode == True:
-                continue
+            # if Input.player[i].auto.mode == True:
+            #     continue
             if self.playerRemaningMoves[i] is None or not Input.player[i].usb.connected:
                 continue
             if self.playerRemaningMoves[i] <= 0 :
