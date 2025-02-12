@@ -27,7 +27,7 @@ class LightTracker(GameMode):
         self.minPlayingSpeed = 30
         self.maxPlayingSpeed = 500
         self.minPlayingAcceleration = self.minPlayingSpeed * 10
-        self.maxPlayingSpeed = self.maxPlayingSpeed * 0.1
+        self.maxPlayingAcceleration = self.maxPlayingSpeed * 0.1
         self.playingSpeed = self.minPlayingSpeed
         self.playingAcceleration = self.minPlayingAcceleration
 
@@ -35,7 +35,7 @@ class LightTracker(GameMode):
     def updateDifficulty(self, Input):
         if Input.UICorner.level is not None:
             self.playingSpeed = self.minPlayingSpeed + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingSpeed))
-            self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingAcceleration))
+            self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingAcceleration - self.minPlayingAcceleration))
             Input.UICorner.level = None
             
 
