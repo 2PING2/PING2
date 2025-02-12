@@ -36,7 +36,7 @@ class SerialCom:
         self.failed_attempts = 0
         logger.write_in_log("INFO", __name__, "__init__", f"SerialCom constructed for port {self.symlink}")
 
-    def setup(self):
+    def setup(self, arg = None):
         """Try to open the serial port."""
         if self.ser:
             return
