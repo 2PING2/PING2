@@ -67,6 +67,7 @@ class LightTracker(GameMode):
 
     
     def compute(self, input, output):
+        self.updateDifficulty(input)
         if self.currentState == "setup":
             self.setup(input, output)
             self.currentState = "setupIDLE"
@@ -197,8 +198,8 @@ class LightTracker(GameMode):
         for i in range(4):
             if not Input.player[i].usb.connected:
                continue
-            Output.player[i].linearActuator.setMaxSpeed = 100
-            Output.player[i].linearActuator.setMaxAccel = 300
+            Output.player[i].linearActuator.setMaxSpeed = 300
+            Output.player[i].linearActuator.setMaxAccel = 500
             Output.player[i].linearActuator.moveTo = self.target
             
         # i = self.playerError.index(min(self.playerError)) # ok but ignore not connected players
