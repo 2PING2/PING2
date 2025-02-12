@@ -20,7 +20,9 @@ class AutoPlayerLightTracker:
     def randomize_target(self, target):
         self.target = uniform(-self.std, self.std)+target
 
-    def run(self, playerInput, playerOutput):
+    def run(self, playerInput, playerOutput, speed, accel):
+        playerOutput.linearActuator.setMaxSpeed = self.playingSpeed
+        playerOutput.linearActuator.setMaxAccel = self.playingAcceleration
         playerOutput.linearActuator.moveTo = self.target
     
 class LightTracker(GameMode):
@@ -183,7 +185,7 @@ class LightTracker(GameMode):
                 Output.player[i].playerLedStrip.color = RED
                 
             if Input.player[i].auto.mode == True:
-                self.autoplayer[i].run(Output.player[i], self.target)
+                self.autoplayer[i].run(Input.player[i], Output.player[i], self.target, self.playingSpeed, self.playingAcceleration)
 
 
         
