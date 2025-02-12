@@ -1,14 +1,10 @@
 try :
     from pingpy import ping
     import time
-
     ping.setup()
-
-
     while True:
         ping.run()
         time.sleep(0.01)
-    
 
   
 except Exception as e:
