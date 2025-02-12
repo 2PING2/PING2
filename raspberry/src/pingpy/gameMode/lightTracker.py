@@ -2,14 +2,14 @@ from abc import ABC, abstractmethod
 from ..input.input import Input
 from ..output.output import Output
 from .gameMode import GameMode
-from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_RED_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_BLUE_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_YELLOW_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_GREEN_PLAYER_WIN_ROUND
+from pingpy.config.config import BLUE, YELLOW, PATH_AUDIO_LIGHT_TRACKER_INTRO, WHITE, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, PATH_AUDIO_LIGHT_TRACKER_BEGIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_RED_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_BLUE_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_YELLOW_PLAYER_WIN_ROUND, PATH_AUDIO_LIGHT_TRACKER_GREEN_PLAYER_WIN_ROUND, RED
 import time
 from pingpy.debug import logger
 from random import uniform    
     
 class LightTracker(GameMode):
     def __init__(self):
-        self.color = BLUE
+        self.color = RED
         self.descriptionAudioPath = PATH_AUDIO_LIGHT_TRACKER_INTRO
         self.currentState = "setup"
         self.playerRemaningMoves = [None for _ in range(4)] # None is non_playing, if integer, it is the number of moves left, 0 is no more moves
