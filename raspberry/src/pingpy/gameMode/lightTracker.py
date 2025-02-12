@@ -24,6 +24,8 @@ class LightTracker(GameMode):
         self.minNewTargetDistance = 50 
         self.targetRange = [-100, 100]
         self.lightWith = 10
+        self.minLightWith = 5
+        self.maxLightWith = 40
         self.minPlayingSpeed = 30
         self.maxPlayingSpeed = 500
         self.minPlayingAcceleration = self.minPlayingSpeed * 10
@@ -36,6 +38,7 @@ class LightTracker(GameMode):
         if Input.UICorner.level is not None:
             self.playingSpeed = self.minPlayingSpeed + (Input.UICorner.level * (self.maxPlayingSpeed - self.minPlayingSpeed))
             self.playingAcceleration = self.minPlayingAcceleration + (Input.UICorner.level * (self.maxPlayingAcceleration - self.minPlayingAcceleration))
+            self.lightWith = self.minLightWith + (Input.UICorner.level * (self.maxLightWith - self.minLightWith))
             Input.UICorner.level = None
             
 
