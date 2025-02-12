@@ -2,7 +2,7 @@ from .gameMode import GameMode
 from ..output.output import Output
 import time
 from pingpy.debug import logger
-from pingpy.config.config import PURPLE, PATH_AUDIO_BEGIN_GAME
+from pingpy.config.config import PURPLE, PATH_AUDIO_BEGIN_GAME, MAX_BRIGHTNESS
 import time
 
 class WaitingRoom(GameMode):
@@ -47,7 +47,7 @@ class WaitingRoom(GameMode):
             
         for i in range(4):
             output.player[i].playerLedStrip.area = [-200, 200]
-            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness) for x in self.currentColor)
+            output.player[i].playerLedStrip.color = tuple(round(x * self.currentLed_brightness*MAX_BRIGHTNESS) for x in self.currentColor)
         ####### end of blinking effect
             
         

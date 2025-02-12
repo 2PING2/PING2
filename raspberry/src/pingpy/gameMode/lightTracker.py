@@ -14,7 +14,7 @@ class LightTracker(GameMode):
         self.currentState = "setup"
         self.playerRemaningMoves = [None for _ in range(4)] # None is non_playing, if integer, it is the number of moves left, 0 is no more moves
         self.beginRoundTime = 0
-        self.roundTimeOut = 5
+        self.roundTimeOut = 8
         self.endRoundTempo = 2 # Time before the end of the round, to show the result
         self.evaluateTime = 0
         self.winningRound = 3
