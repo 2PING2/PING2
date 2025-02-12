@@ -27,7 +27,7 @@ class LightTracker(GameMode):
         self.minPlayingSpeed = 30
         self.maxPlayingSpeed = 500
         self.minPlayingAcceleration = self.minPlayingSpeed * 10
-        self.maxPlayingSpeed = self.maxPlayingSpeed * 0.5
+        self.maxPlayingSpeed = self.maxPlayingSpeed * 0.1
         self.playingSpeed = self.minPlayingSpeed
         self.playingAcceleration = self.minPlayingAcceleration
 

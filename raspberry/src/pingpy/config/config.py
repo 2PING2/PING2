@@ -140,7 +140,7 @@ LED_STRIP_PIN = 10
 NUMBER_OF_LEDS = 176
 FREQUENCY = 800000
 DMA_CHANNEL = 10
-MAX_BRIGHTNESS = 0.45
+MAX_BRIGHTNESS = 0.40
 PLAYER_LED_STRIP_OFFSETS = {
     1: (132, 176),
     2: (88, 132),
@@ -165,7 +165,7 @@ AUTO_PIN = {"switch" : [5,23,24,16], "led" : [6,27,21,20]}
 ####################################
 # AUDIO SETTINGS
 ####################################
-MAX_VOLUME = 0.80
+MAX_VOLUME = 0.90
 PATH_AUDIO = ("raspberry/src/pingpy/audio/")
 
 PATH_AUDIO_BEGIN_GAME = PATH_AUDIO + "C_est_partie.wav"
