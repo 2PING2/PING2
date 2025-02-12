@@ -55,7 +55,10 @@ class LedStrip:
         current = 0
         for i in range(self.n):
             color = self.strip.getPixelColor(i)
-            current += color.r + color.g + color.b
+            red = (color >> 16) & 0xFF
+            green = (color >> 8) & 0xFF
+            blue = color & 0xFF
+            current += red + green + blue
         if current > self.maxCurrent:
             coeff = self.maxCurrent / current
             for i in range(self.n):
