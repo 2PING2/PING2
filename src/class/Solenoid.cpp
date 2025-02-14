@@ -15,6 +15,7 @@ Solenoid::~Solenoid()
 
 void Solenoid::setup()
 {
+    // pinMode(this->solenoidPin, OUTPUT);
     ledcAttachPin(this->solenoidPin, channel);
     ledcSetup(channel, 100000, ANALOG_WRITE_RESOLUTION);
     deactivate();
@@ -23,13 +24,18 @@ void Solenoid::setup()
 void Solenoid::activate()
 {
     state = true;
+    // digitalWrite(this->solenoidPin, HIGH); 
     int pwm = (this->power * (1 - MIN_SOLENOID_MIN_POWER) + MIN_SOLENOID_MIN_POWER) * ((1 << ANALOG_WRITE_RESOLUTION)-1);
+    // Serial.println(pwm);
+    // analogWrite(this->solenoidPin, power);
     ledcWrite(channel, pwm);
 }
 
 void Solenoid::deactivate()
 {
     state = false;
+    // digitalWrite(this->solenoidPin, LOW);
+    // analogWrite(this->solenoidPin, 0);
     ledcWrite(channel, 0);
 }
 
@@ -40,7 +46,7 @@ bool Solenoid::over_temp_protect(uint64_t currentTime)
 
     if (state>0)
     {
-        currentTemp += state * dt * 5;  // 5°C/s
+        currentTemp += state * dt * 5;  // 0.1°C/s
         if (currentTemp > maxTemp)
         {
             deactivate();
@@ -49,7 +55,7 @@ bool Solenoid::over_temp_protect(uint64_t currentTime)
     }
     else
     {
-        currentTemp -= dt * 5;  // -5°C/s
+        currentTemp -= dt * 5;  // 0.05°C/s
         if (currentTemp < 0.0)
             currentTemp = 0.0;
     }

@@ -1,6 +1,7 @@
 #ifndef LINEAR_ACTUATOR_HPP
 #define LINEAR_ACTUATOR_HPP
-#include <FastAccelStepper.h>
+// #include <AccelStepper.h>
+#include "FastAccelStepper.h"
 #include <TMCStepper.h>
 #include "config.h"
 #include "vector.hpp"
@@ -27,7 +28,9 @@ public:
     bool get_stall_result();
     void reset_right_limit() { rightLimit = -LINEAR_ACTUATOR_RAILHEAD; }
     void reset_left_limit() { leftLimit = LINEAR_ACTUATOR_RAILHEAD; }
+    // void invert(bool shaft) { motor->setPinsInverted(shaft); }
     void set_max_speed(float speed) { motor->setSpeedInHz(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
+    // void set_max_speed(float speed) { motor->setAbsoluteSpeedLimit(min(speed, LINEAR_ACTUATOR_MAX_SPEED) * MICRO_STEPS_PER_MM); }
     void set_acceleration(float acceleration) { motor->setAcceleration(min(acceleration, LINEAR_ACTUATOR_MAX_ACCELERATION) * MICRO_STEPS_PER_MM); }
     bool move_to(float position);
     bool move(float relativePosition);
@@ -41,11 +44,16 @@ public:
         reset_left_limit();
         calibrating = true;
     }
-    float current_position() { return motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
-    float current_speed() { return 1e6 / motor->getCurrentSpeedInMilliHz() / 1000.0 / MICRO_STEPS_PER_MM; }
-    float current_acceleration() { return motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
-    float max_speed() { return 1e6 / motor->getMaxSpeedInHz() / MICRO_STEPS_PER_MM; }
-    float max_acceleration() { return motor->getAcceleration() / MICRO_STEPS_PER_MM; }
+    float current_position() { return (float)motor->getCurrentPosition() / MICRO_STEPS_PER_MM; }
+    float current_speed() { 
+        if (abs(motor->getCurrentSpeedInUs()) < 2)
+            return 0;
+        return 1e6 / motor->getCurrentSpeedInUs() / MICRO_STEPS_PER_MM; }
+    float current_acceleration() { return (float)motor->getCurrentAcceleration() / MICRO_STEPS_PER_MM; }
+    float max_speed() { 
+
+        return 1e6 / motor->getSpeedInUs() / MICRO_STEPS_PER_MM; }
+    float max_acceleration() { return (float)motor->getAcceleration() / MICRO_STEPS_PER_MM; }
     float amplitude() { return rightLimit - leftLimit; }
     float get_right_limit() { return rightLimit; }
     float get_left_limit() { return leftLimit; }
@@ -54,9 +62,20 @@ public:
     bool is_calibrated() { return is_right_calibrated() && is_left_calibrated(); }
     bool is_calibrating() { return calibrating; }
     bool is_busy() { return is_calibrating(); }
-    bool consume_mvt_flag() { bool tmp = mvt_flag; mvt_flag = false; return tmp; }
+    bool consume_mvt_flag() {
+        if (begin_mvt_flag && !motor->isRunning())
+        {
+            begin_mvt_flag = false;
+            mvt_flag = true;
+        }
+        bool tmp = mvt_flag; mvt_flag = false; return tmp; }
     bool consume_cal_flag() { bool tmp = cal_flag; cal_flag = false; return tmp; }
     bool is_new_acceleration();
+    bool is_new_ramp_state() {
+        bool tmp = motor->rampState() != previousRampState;
+        previousRampState = motor->rampState();
+        return tmp;
+    }
 
 
 #ifndef EVERYTHING_PUBLIC
@@ -66,6 +85,7 @@ private:
     float previousSpeed = 0;
     float previousTime = 0;
     float currentAcceleration = 0, previousAcceleration = 0;
+    uint8_t previousRampState = RAMP_STATE_IDLE;
 
     static Vector<LinearActuator *> all;
     float rightLimit = -LINEAR_ACTUATOR_RAILHEAD;

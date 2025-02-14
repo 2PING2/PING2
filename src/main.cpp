@@ -5,6 +5,7 @@
 void setup()
 {
     Serial.begin(115200);
+    Serial.println("Setup done1");
     PING::setup();
 }
 

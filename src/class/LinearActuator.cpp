@@ -72,6 +72,7 @@ void LinearActuator::setup()
     all.push_back(this);
     set_max_speed(LINEAR_ACTUATOR_MAX_SPEED);           // set max speed
     set_acceleration(LINEAR_ACTUATOR_MAX_ACCELERATION); // set acceleration
+    // motor->enableOutputs();                              // enable motor outputs
     driver.begin();
     driver.senddelay(8); // not sure about this
     driver.toff(4);
