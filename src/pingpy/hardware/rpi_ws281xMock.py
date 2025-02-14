@@ -26,6 +26,9 @@ class PixelStrip:
         pass
         # print("Simulating PixelStrip.show()")
         # print("Current Pixel Colors:", self.pixels)
+        
+    def getPixelColor(self,i):
+        return 1000
 
     def setBrightness(self, brightness):
         if brightness < 0 or brightness > 255:

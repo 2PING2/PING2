@@ -26,6 +26,8 @@ class LedStrip:
     def __init__(self, LED_STRIP_PIN, NUMBER_OF_LEDS, FREQUENCY, DMA_CHANNEL, BRIGHTNESS):
         """Init the LED strip.""" 
         self.strip = PixelStrip(NUMBER_OF_LEDS, LED_STRIP_PIN, FREQUENCY, DMA_CHANNEL, invert=False, brightness=255)
+        self.n = NUMBER_OF_LEDS
+        self.maxCurrent = 3*255 * NUMBER_OF_LEDS * BRIGHTNESS
         logger.write_in_log("INFO", __name__, "__init__", "LED strip created")
      
     def setup(self):
@@ -39,15 +41,32 @@ class LedStrip:
                          
     def setLedStrip(self, color, OFFSET_MIN, OFFSET_MAX):
         """Set the LED strip between OFFSET_MIN and OFFSET_MAX to a color."""
-        if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN >= OFFSET_MAX:
+        if OFFSET_MIN < 0 or OFFSET_MAX > self.strip.numPixels() or OFFSET_MIN > OFFSET_MAX:
             logger.write_in_log("ERROR", __name__, f"Invalid offset : {OFFSET_MIN, OFFSET_MAX}")
             return
         try:
-            for i in range(OFFSET_MIN, OFFSET_MAX):
+            
+            for i in range(OFFSET_MIN, OFFSET_MAX+1):
                 self.strip.setPixelColor(i, color)
         except Exception as e:
                 logger.write_in_log("ERROR", __name__, "setLedStrip", f"Failed to set LED strip: {e}")
     def show(self):
+        # compute the current needed
+        current = 0
+        for i in range(self.n):
+            color = self.strip.getPixelColor(i)
+            red = (color >> 16) & 0xFF
+            green = (color >> 8) & 0xFF
+            blue = color & 0xFF
+            current += red + green + blue
+        if current > self.maxCurrent:
+            coeff = self.maxCurrent / current
+            for i in range(self.n):
+                color = self.strip.getPixelColor(i)
+                red = (color >> 16) & 0xFF
+                green = (color >> 8) & 0xFF
+                blue = color & 0xFF
+                self.strip.setPixelColor(i, Color(int(red*coeff), int(green*coeff), int(blue*coeff)))
         self.strip.show()
                    
     # def setBrightness(self, input_ptr):

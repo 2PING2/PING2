@@ -17,12 +17,13 @@ class UICornerSerial(SerialCom):
         self.modeButtonState = None
         self.longPressFlag = False
         
+        
     def setup(self, output_ptr):
         super().setup()        
         output_ptr.UICorner.askForStatusSettings = True
         output_ptr.UICorner.statusLed = True  
-              
         
+
     def manageResetButton(self, input_ptr, output_ptr, playerLedStrip):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
@@ -31,14 +32,21 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
-                    os.execv(sys.executable, ['python'] + sys.argv)
+                    output_ptr.speaker.stop = True
+                    try:
+                        subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                        logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+                    except subprocess.CalledProcessError as e:
+                        logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
                     exit(0)
+                    
                 else:
                     logger.write_in_log("INFO", __name__, "read", "SHUTDOWN Raspberry.py")                   
                     ledStrip.clear()
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
-                    subprocess.run(["sudo", "halt"])
+                    subprocess.run(['sudo', 'halt'], check=True)
+                    exit(0)
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY and not self.longPressFlag:
                 logger.write_in_log("INFO", __name__, "read", "long press")
@@ -104,7 +112,7 @@ class UICornerSerial(SerialCom):
             
         # light
         if new_line[0] == LIGHT_KEY:
-            input_ptr.UICorner.light = int(new_line[1])/1023.0*MAX_BRIGHTNESS     
+            input_ptr.UICorner.light = int(new_line[1])/1023.0     
             for playerOutput in output_ptr.player:
                 playerOutput.playerLedStrip.brightness = input_ptr.UICorner.light     
     

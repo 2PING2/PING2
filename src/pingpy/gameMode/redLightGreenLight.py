@@ -3,7 +3,7 @@ from ..output.output import Output
 from ..input.input import Input
 import time
 from pingpy.debug import logger
-from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME
+from pingpy.config.config import GREEN, ORANGE, RED, BLUE, PATH_AUDIO_123SOLEIL_INTRO, PATH_AUDIO_123SOLEIL_123, PATH_AUDIO_123SOLEIL_SOLEIL, PATH_AUDIO_GAGNE, PATH_AUDIO_PLAYER_BLEU, PATH_AUDIO_PLAYER_ROUGE, PATH_AUDIO_PLAYER_JAUNE, PATH_AUDIO_PLAYER_VERT, MAX_REACTION_TIME, WHITE, PATH_AUDIO_BEGIN_GAME
 from random import uniform
 
 class AutoPlayRedLightGreenLight:
@@ -14,16 +14,17 @@ class AutoPlayRedLightGreenLight:
         self.stopOrMoveSaid = None
         
     def set_skill(self, skill, reactionTime):
-        self.loosingProb = 0.6*(1-skill) # give a random aspect
+        self.loosingProb = 0.4*(1-skill) # give a random aspect
         self.minReactionTime = 0.5 * reactionTime 
         
-    def randomize_duration(self, greenLightDuration, reactionTime):
+    def randomize_duration(self, greenLightDuration, reactionTime, maxSpeed, accel):
         t0 = greenLightDuration + self.minReactionTime 
-        t1 = self.loosingProb/(1-self.loosingProb)*(reactionTime-self.minReactionTime)
+        t1 = (t0*self.loosingProb - greenLightDuration - reactionTime)/(self.loosingProb-1)  - maxSpeed/accel - 0.05 # 0.05s is transmission latency, in average
         self.shouldStopDelay = uniform(t0, t1)
 
     def run(self, playerInput, playerOutput, timeFromInitMatch):
-        
+        if self.shouldStopDelay is None :
+            return None
         if timeFromInitMatch<self.shouldStopDelay:
             if self.stopOrMoveSaid is not True:
                 playerOutput.linearActuator.setMaxSpeed = 10.0
@@ -49,13 +50,16 @@ class RedLightGreenLight(GameMode):
         self.isLightGreen = False
         self.timeInit = 0
         self.waitForStart = False
+        self.waitForAudioEnd = False
         self.durationGreenLight = None  # Time of green light
         self.durationRedLight = None # Time of red light
         self.reactionTime = 0.3  # Time of reaction
         self.currentDifficulty = 0
-        self.color = BLUE
+        self.color = WHITE
         self.descriptionAudioPath = PATH_AUDIO_123SOLEIL_INTRO
         self.autoPlayer = [AutoPlayRedLightGreenLight() for _ in range(4)]
+        self.playingSpeed = 10.0
+        self.playingAccel = 200.0
 
         logger.write_in_log("INFO", __name__, "__init__", "Game mode initialized.")
 
@@ -80,7 +84,7 @@ class RedLightGreenLight(GameMode):
                 playerOutput.playerLedStrip.area = [-200, 200] 
                 playerOutput.linearActuator.moveToLeft = True
                 playerOutput.linearActuator.setMaxSpeed = 200.0
-                playerOutput.linearActuator.setMaxAccel = 200.0
+                playerOutput.linearActuator.setMaxAccel = self.playingAccel
                 playerInput.gameController.inAction = None
         
             except IndexError:
@@ -88,11 +92,11 @@ class RedLightGreenLight(GameMode):
 
         self.timeInit = time.time()
         self.randomize_duration(Output)
-        Output.speaker.audioPiste = None 
+        # Output.speaker.audioPiste = None 
         self.inGame = True
         self.waitForStart = True
         self.standby = False
-        Output.speaker.stop = True
+        # Output.speaker.stop = True
 
         logger.write_in_log("INFO", __name__, "setup", "Setup complete.")
     
@@ -115,6 +119,8 @@ class RedLightGreenLight(GameMode):
                 return False
         
         self.waitForStart = False
+        output.speaker.audioPiste = PATH_AUDIO_BEGIN_GAME
+        self.waitForAudioEnd = True
         return True
     
     def randomize_duration(self, Output):
@@ -127,7 +133,8 @@ class RedLightGreenLight(GameMode):
             self.durationGreenLight = uniform(min_duration, max_duration)
             self.durationRedLight = uniform(2 * self.reactionTime, max_duration)
             for playerId in range(4):
-                self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime)
+                self.autoPlayer[playerId].randomize_duration(self.durationGreenLight, self.reactionTime, self.playingSpeed, self.playingAccel)
+                self.autoPlayer[playerId].set_skill(self.currentDifficulty, self.reactionTime)
             # logger.write_in_log("INFO", __name__, "randomize_duration", f"Green light duration: {self.durationGreenLight}, Red light duration: {self.durationRedLight}")
         except Exception as e:
             logger.write_in_log("ERROR", __name__, "randomize_duration", f"Failed to randomize durations: {e}")
@@ -168,7 +175,7 @@ class RedLightGreenLight(GameMode):
         
         if action:
             if canmove:
-                playerOutput.linearActuator.setMaxSpeed = 10.0
+                playerOutput.linearActuator.setMaxSpeed = self.playingSpeed
                 playerOutput.linearActuator.moveToRight = True
             else:
                 self.lose(playerOutput)  
@@ -187,7 +194,7 @@ class RedLightGreenLight(GameMode):
         Handles the player's loss by moving them back to the left at speed 200.
         """
         playerOutput.linearActuator.moveToLeft = True
-        playerOutput.linearActuator.setMaxSpeed = 200.0
+        playerOutput.linearActuator.setMaxSpeed = self.playingAccel
         playerOutput.playerRunningRedLightAt = time.time()
         playerOutput.playerLedStrip.color = ORANGE
 
@@ -246,7 +253,11 @@ class RedLightGreenLight(GameMode):
         if(not self.wait_for_start(Input, Output)):
             return
         
-        
+        if self.waitForAudioEnd:
+            if Output.speaker.isBusy:
+                return
+            self.waitForAudioEnd = False
+            
         if Input.UICorner.resetShortPress:
             Input.UICorner.resetShortPress = None
             self.setup(Input, Output)

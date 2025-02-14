@@ -90,6 +90,12 @@ class ESP32Serial(SerialCom):
         for i in range(len(output_ptr.player)):
             playerOutput = output_ptr.player[i]
             playerInput = input_ptr.player[i]
+            if playerOutput.linearActuator.setMaxSpeed:
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxSpeed) + PARAM_END_SEP)
+                playerOutput.linearActuator.setMaxSpeed = None
+            if playerOutput.linearActuator.setMaxAccel:
+                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_ACCELERATION_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxAccel) + PARAM_END_SEP)
+                playerOutput.linearActuator.setMaxAccel = None
             if playerOutput.linearActuator.moveToRight:
                 playerInput.linearActuator.moving = True
                 playerOutput.linearActuator.moveToRight = None
@@ -101,16 +107,11 @@ class ESP32Serial(SerialCom):
             if playerOutput.linearActuator.stop:
                 playerOutput.linearActuator.stop = None
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + STOP_KEY)
-            if playerOutput.linearActuator.setMaxSpeed:
-                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_SPEED_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxSpeed) + PARAM_END_SEP)
-                playerOutput.linearActuator.setMaxSpeed = None
-            if playerOutput.linearActuator.setMaxAccel:
-                self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + SET_MAX_ACCELERATION_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.setMaxAccel) + PARAM_END_SEP)
-                playerOutput.linearActuator.setMaxAccel = None
             if playerOutput.linearActuator.askForCalibration:
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + CALIBRATION_KEY)
                 playerOutput.linearActuator.askForCalibration = None
             if playerOutput.linearActuator.moveTo is not None:
+                playerInput.linearActuator.moving = True
                 self.send_data(PLAYER_KEY + PARAM_BEGIN_SEP + str(i+1) + PARAM_END_SEP + KEY_SEP + MOVE_TO_KEY + PARAM_BEGIN_SEP + str(playerOutput.linearActuator.moveTo) + PARAM_END_SEP)
                 playerOutput.linearActuator.moveTo = None
             if playerOutput.bumper.state is not None:

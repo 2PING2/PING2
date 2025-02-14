@@ -11,8 +11,9 @@ class SpeakerOutput:
         self.stop = False
         self.volume = None
         try:
-            pygame.mixer.pre_init(44100, -16, 2, 2048)  
+            pygame.mixer.pre_init(44100, -16, 2, 2048)
             pygame.mixer.init()
+            logger.write_in_log("INFO", __name__, "Audio initialized")
         except Exception as e:
             logger.write_in_log("ERROR", __name__ , "Error in initializing audio:{}".format(e))
         logger.write_in_log("INFO", __name__, "__init__")

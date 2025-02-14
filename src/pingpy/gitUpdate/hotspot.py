@@ -16,9 +16,10 @@ class Hotspot:
         logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self, app):
+        os.chdir(GIT_CLONE_PATH)
         if self.check_wifi():
             self.check_git_update()
-        else:
+        else:            
             self.start_services()
             Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port':80}).start()
         logger.write_in_log("INFO", __name__, "setup")
@@ -33,7 +34,6 @@ class Hotspot:
             return False
         
     def check_git_update(self):
-        os.chdir(GIT_CLONE_PATH)
         restartNeeded = False
         espFlashNeeded = False
         try:
@@ -71,11 +71,19 @@ class Hotspot:
             return
         if espFlashNeeded:
             self.update_esp()
-            os.execv(sys.executable, ['python'] + sys.argv)
+            try:
+                subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+            except subprocess.CalledProcessError as e:
+                logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
             exit(0)
         elif restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
-            os.execv(sys.executable, ['python'] + sys.argv)
+            try:
+                subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+            except subprocess.CalledProcessError as e:
+                logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
             exit(0)
 
     def build_backup(self):
