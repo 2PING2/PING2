@@ -16,9 +16,10 @@ class Hotspot:
         logger.write_in_log("INFO", __name__, "__init__")
         
     def setup(self, app):
+        os.chdir(GIT_CLONE_PATH)
         if self.check_wifi():
             self.check_git_update()
-        else:
+        else:            
             self.start_services()
             Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port':80}).start()
         logger.write_in_log("INFO", __name__, "setup")
@@ -33,7 +34,7 @@ class Hotspot:
             return False
         
     def check_git_update(self):
-        os.chdir(GIT_CLONE_PATH)
+        # os.chdir(GIT_CLONE_PATH)
         restartNeeded = False
         espFlashNeeded = False
         try:
