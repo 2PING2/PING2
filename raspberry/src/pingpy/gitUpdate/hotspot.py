@@ -34,7 +34,6 @@ class Hotspot:
             return False
         
     def check_git_update(self):
-        # os.chdir(GIT_CLONE_PATH)
         restartNeeded = False
         espFlashNeeded = False
         try:
