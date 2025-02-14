@@ -44,8 +44,8 @@ class UICornerSerial(SerialCom):
                     ledStrip.clear()
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
-                    # subprocess.run(['sudo', 'halt'], check=True)
-                    subprocess.call('sudo nohup shutdown -h now', shell=True)
+                    subprocess.run(['sudo', 'halt'], check=True)
+                    # subprocess.call('sudo nohup shutdown -h now', shell=True)
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY and not self.longPressFlag:
                 logger.write_in_log("INFO", __name__, "read", "long press")
