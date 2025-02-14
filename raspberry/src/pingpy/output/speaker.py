@@ -11,7 +11,6 @@ class SpeakerOutput:
         self.stop = False
         self.volume = None
         try:
-            pygame.mixer.init(devicename='default')
             pygame.mixer.pre_init(44100, -16, 2, 2048)  
             pygame.mixer.init()
         except Exception as e:
