@@ -32,6 +32,7 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
+                    # Output.speaker.stop = True
                     try:
                         subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
                         logger.write_in_log("INFO", __name__, "main", "Restarting app")    
@@ -45,7 +46,7 @@ class UICornerSerial(SerialCom):
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
                     subprocess.run(['sudo', 'halt'], check=True)
-                    # subprocess.call('sudo nohup shutdown -h now', shell=True)
+                    exit(0)
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY and not self.longPressFlag:
                 logger.write_in_log("INFO", __name__, "read", "long press")
