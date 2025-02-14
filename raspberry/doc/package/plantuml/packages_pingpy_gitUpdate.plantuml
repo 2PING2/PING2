@@ -1,8 +1,0 @@
-@startuml packages_pingpy_gitUpdate
-set namespaceSeparator none
-package "pingpy.gitUpdate" as pingpy.gitUpdate {
-}
-package "pingpy.gitUpdate.hotspot" as pingpy.gitUpdate.hotspot {
-}
-pingpy.gitUpdate --> pingpy.gitUpdate.hotspot
-@enduml

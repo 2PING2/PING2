@@ -1,8 +1,0 @@
-@startuml packages_pingpy_debug
-set namespaceSeparator none
-package "pingpy.debug" as pingpy.debug {
-}
-package "pingpy.debug.logFile" as pingpy.debug.logFile {
-}
-pingpy.debug --> pingpy.debug.logFile
-@enduml
