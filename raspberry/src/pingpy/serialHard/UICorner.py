@@ -32,7 +32,7 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
-                    # Output.speaker.stop = True
+                    output_ptr.speaker.stop = True
                     try:
                         subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
                         logger.write_in_log("INFO", __name__, "main", "Restarting app")    
