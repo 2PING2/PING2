@@ -31,7 +31,9 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
-                    os.execv(sys.executable, ['python'] + sys.argv)
+                    # os.execv(sys.executable, ['python'] + sys.argv)
+                    subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'])
+
                     exit(0)
                     
                 else:
