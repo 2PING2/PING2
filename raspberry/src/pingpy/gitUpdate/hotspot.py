@@ -71,15 +71,19 @@ class Hotspot:
             return
         if espFlashNeeded:
             self.update_esp()
-            # os.execv(sys.executable, ['python'] + sys.argv)
-            subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'])
-
+            try:
+                subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+            except subprocess.CalledProcessError as e:
+                logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
             exit(0)
         elif restartNeeded:
             logger.write_in_log("INFO", __name__, "check_git_update", "Restarting app")
-            # os.execv(sys.executable, ['python'] + sys.argv)
-            subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'])
-
+            try:
+                subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+            except subprocess.CalledProcessError as e:
+                logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
             exit(0)
 
     def build_backup(self):

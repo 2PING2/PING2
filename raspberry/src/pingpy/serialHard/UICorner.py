@@ -17,12 +17,13 @@ class UICornerSerial(SerialCom):
         self.modeButtonState = None
         self.longPressFlag = False
         
+        
     def setup(self, output_ptr):
         super().setup()        
         output_ptr.UICorner.askForStatusSettings = True
         output_ptr.UICorner.statusLed = True  
-              
         
+
     def manageResetButton(self, input_ptr, output_ptr, playerLedStrip):
         if self.resetButtonState is not None and not self.lastResetPressedTime is None:
             if self.resetButtonState and time.time() - self.lastResetPressedTime > RESET_DELAY_AFTER_BUTTON_PRESS:
@@ -31,9 +32,11 @@ class UICornerSerial(SerialCom):
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_BLINK)
                     ledStrip.clear()
                     ledStrip.show()
-                    # os.execv(sys.executable, ['python'] + sys.argv)
-                    subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'])
-
+                    try:
+                        subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+                        logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+                    except subprocess.CalledProcessError as e:
+                        logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
                     exit(0)
                     
                 else:
@@ -41,7 +44,8 @@ class UICornerSerial(SerialCom):
                     ledStrip.clear()
                     ledStrip.show()
                     self.send_data(STATUS_LED_KEY + SEP_KEY + STATUS_LED_FADEOUT)               
-                    subprocess.run(["sudo", "halt"])
+                    # subprocess.run(['sudo', 'halt'], check=True)
+                    subprocess.call('sudo nohup shutdown -h now', shell=True)
                 
             elif self.resetButtonState and time.time() - self.lastResetPressedTime > LONG_PRESS_DELAY and not self.longPressFlag:
                 logger.write_in_log("INFO", __name__, "read", "long press")

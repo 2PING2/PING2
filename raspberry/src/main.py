@@ -13,24 +13,26 @@ except Exception as e:
     print(traceback.format_exc())
 
     import os
-    import sys
     # restore from the backup
     import subprocess
+    import pingpy.logger as logger
 
     try:
         subprocess.run(['sudo', 'rm', '-rf', '/home/pi/Documents/PING2/*', '/home/pi/Documents/PING2/.*'], check=True)
-        print("PING2 folder deleted")
+        logger.write_in_log("INFO", __name__, "main", "PING2 folder deleted")
 
-    except subprocess.CalledProcessError as ee:
-        print(f"fail to delete PING2 : {ee}")
+    except subprocess.CalledProcessError as e:
+        logger.write_in_log("ERROR", __name__, "main", f'Error during deleting PING2 folder: {e}')
     
-    os.system(f'cp -r /home/pi/Documents/backup/. /home/pi/Documents/PING2/')
-    print("PING2 folder restored from the backup")
     try:
-        import pingpy.logger as logger
-        logger.write_in_log("ERROR", __name__, "main", str(e))
-    except:
-        pass
-    # os.execv(sys.executable, ['python'] + sys.argv)
-    subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'])
+        os.system(f'cp -r /home/pi/Documents/backup/. /home/pi/Documents/PING2/')
+        logger.write_in_log("INFO", __name__, "main", "PING2 folder restored from backup")    
+    except subprocess.CalledProcessError as e:
+        logger.write_in_log("ERROR", __name__, "main", f'Error during restoring PING2 folder from backup: {e}')
+
+    try:
+        subprocess.run(['python', '/home/pi/Documents/PING2/raspberry/src/main.py'], check=True)
+        logger.write_in_log("INFO", __name__, "main", "Restarting app")    
+    except subprocess.CalledProcessError as e:
+        logger.write_in_log("ERROR", __name__, "main", f'Error during restarting app: {e}')
     exit(0)
