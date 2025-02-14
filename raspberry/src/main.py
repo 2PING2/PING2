@@ -6,7 +6,6 @@ try :
         ping.run()
         time.sleep(0.01)
 
-  
 except Exception as e:
     print(f"Error: {e}")
     # print also the line where the error occured
